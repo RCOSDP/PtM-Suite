@@ -14,5 +14,8 @@
 # 本リポジトリの構成
 
 仕様書
+
+```
 +documentation/spec/ 仕様書置き場
  pptとChibiCHiLO のデータ項目のすり合わせなど。
+```
