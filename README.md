@@ -36,4 +36,5 @@ PowerPoint の中に、WebPageを表示させて、自分のコンピュータ�
 + README.md このファイル
 + documentation/spec/ 仕様書置き場
   pptとChibiCHiLO のデータ項目のすり合わせなど。
+  + import.md
 ```
