@@ -19,13 +19,9 @@ book.json
 |details.*||||series-information|rights||対応外|
 |details.*||||series-information|series-url||対応外|
 |details.*||||series-information|cover||対応外、画像は特に利用されない|
-|||||series-information|series-name||対応外|
-|||||series-information|series-introduction||対応外|
-|keywords[]|||||||xlsxには該当する項目がないため、任意の値を設定|
-|sections[]||true|||||1個以上のセクションが必要|
-|sections[].name||||vol-n|section|||
+|||||series-information|series-name||jsonには該当する項目がないため、無視される|
+|||||series-information|series-introduction||jsonには該当する項目がないため、無視される|
 |||||book-list|vol||jsonには該当する項目がないため、無視される|
-|||||book-list|book-summary||jsonには該当する項目がないため、無視される|
 |||||book-list|book-cover||jsonには該当する項目がないため、無視される|
 |||||book-list|identifier||jsonには該当する項目がないため、無視される|
 |||||book-list|community-url||jsonには該当する項目がないため、無視される|
@@ -34,6 +30,9 @@ book.json
 |||||book-list|publisher||jsonには該当する項目がないため、無視される|
 |||||book-list|editor||jsonには該当する項目がないため、無視される|
 |||||book-list|rights||jsonには該当する項目がないため、無視される|
+|keywords[]|||||||xlsxには該当する項目がないため、任意の値を設定|
+|sections[]||true|||||1個以上のセクションが必要|
+|sections[].name||||vol-n|section|||
 |sections[].topics[]||true|||||1個以上のトピックが必要|
 |sections[].topics[].name||true||vol-n|topic|||
 |sections[].topics[].description||||vol-n|text||ファイルの内容を展開する|
