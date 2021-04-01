@@ -4,8 +4,8 @@
 book.json
 |json|内容|required|default|CHiLO Book シート|CB 列|PPT プロパティ|備考|
 |-|-|-|-|-|-|-|-|
-|name||true||series-information|series-name|||
-|description||||series-information|series-introduction|||
+|name||true||book-list|book-title|||
+|description||||book-list|book-summary|||
 |language|||ja|series-information|language|||
 |timeRequired|||||||xlsxには該当する項目がないため、任意の値を設定|
 |shared|||true||||xlsxには該当する項目がないため、任意の値を設定|
@@ -19,9 +19,11 @@ book.json
 |details.*||||series-information|rights||対応外|
 |details.*||||series-information|series-url||対応外|
 |details.*||||series-information|cover||対応外、画像は特に利用されない|
+|||||series-information|series-name||対応外|
+|||||series-information|series-introduction||対応外|
 |keywords[]|||||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[]||true|||||1個以上のセクションが必要|
-|sections[].name||||book-list|book-title|||
+|sections[].name||||vol-n|section|||
 |||||book-list|vol||jsonには該当する項目がないため、無視される|
 |||||book-list|book-summary||jsonには該当する項目がないため、無視される|
 |||||book-list|book-cover||jsonには該当する項目がないため、無視される|
@@ -45,7 +47,6 @@ book.json
 |sections[].topics[].resource.url||true||vol-n|main|||
 |sections[].topics[].resource.providerUrl||true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
 |sections[].topics[].details.*||||vol-n|page-type||対応外|
-|sections[].topics[].details.*||||vol-n|section||対応外|
 |sections[].topics[].details.*||||vol-n|community||対応外|
 |sections[].topics[].details.*||||vol-n|video-image||対応外、画像は特に利用されない|
 |sections[].topics[].details.*||||vol-n|javascript-file||対応外|
