@@ -25,7 +25,7 @@ PowerPoint の中に、WebPageを表示させて、自分のコンピュータ�
 上記以外の下記は、本リポジトリで機能を提供する。
 
 - ppt-addin-vue
-- 
+- server
 
 
 # 本リポジトリの構成
@@ -37,4 +37,7 @@ PowerPoint の中に、WebPageを表示させて、自分のコンピュータ�
 + documentation/spec/ 仕様書置き場
   pptとChibiCHiLO のデータ項目のすり合わせなど。
   + import.md
++ ppt-addin-vue/ アドイン本体
++ server/ アドインを配布するサーバ兼 aws polly proxy
++ misc/ サンプルスクリプト、ファイルなど
 ```
