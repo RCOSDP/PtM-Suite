@@ -51,3 +51,7 @@ C:\Users\user\sapi> cscript haruka.js
 ```
 PS C:\Users\user\powershell> .\mkpng.ps1
 ```
+
+## sample1
+
+このディレクトリには、ffmpeg などを使ってマニュアル操作で作成したビデオファイルが含まれます。
