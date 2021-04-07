@@ -54,7 +54,8 @@ book.json
 |sections[].topics[].details.*||||vol-n|javascript-file||対応外|
 |sections[].topics[].details.*||||vol-n|video-id||対応外|
 
-例: chilo001_vol-1.json
+### インポートjsonの例:
+chilo001_vol-1.json
 ```
 {
     "name": "インターネットの歴史とビットの復習",
