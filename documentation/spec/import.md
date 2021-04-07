@@ -2,16 +2,16 @@
 
 ### インポートjsonとインポート元データとの対応
 book.json
-|json|内容|required|default|CHiLO Book シート|CB 列|PPT プロパティ|備考|
+|json|型|required|default|CHiLO Book シート|CB 列|PPT プロパティ|備考|
 |-|-|-|-|-|-|-|-|
-|name||true||book-list|book-title|||
-|description||||book-list|book-summary|||
-|language|||ja|series-information|language|||
-|timeRequired|||||||xlsxには該当する項目がないため、任意の値を設定|
-|shared|||true||||xlsxには該当する項目がないため、任意の値を設定|
-|publishedAt||true||series-information|published|||
-|createdAt||true||series-information|published||xlsxには該当する項目がないため、publishedを利用|
-|updatedAt||true||series-information|revised|||
+|name|String|true||book-list|book-title|||
+|description|String|||book-list|book-summary|||
+|language|String||ja|series-information|language|||
+|timeRequired|Int||||||xlsxには該当する項目がないため、任意の値を設定|
+|shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
+|publishedAt|DateTime|true||series-information|published|||
+|createdAt|DateTime|true||series-information|published||xlsxには該当する項目がないため、publishedを利用|
+|updatedAt|DateTime|true||series-information|revised|||
 |details.series.*||||series-information|version||対応外|
 |details.series.*||||series-information|author||対応外|
 |details.series.*||||series-information|publisher||対応外|
@@ -33,21 +33,21 @@ book.json
 |details.book.*||||book-list|published||対応外|
 |details.book.*||||book-list|revised||対応外|
 |details.book.*||||book-list|rights||対応外|
-|keywords[]|||||||xlsxには該当する項目がないため、任意の値を設定|
+|keywords[]|String[]||||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[]||true|||||1個以上のセクションが必要|
-|sections[].name||||vol-n|section|||
+|sections[].name|String|||vol-n|section|||
 |sections[].topics[]||true|||||1個以上のトピックが必要|
-|sections[].topics[].name||true||vol-n|topic|||
-|sections[].topics[].description||||vol-n|text||ファイルの内容を展開する|
-|sections[].topics[].language|||ja|book-list|language||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].timeRequired|||||||xlsxには該当する項目がないため、任意の値を設定|
-|sections[].topics[].shared|||true||||xlsxには該当する項目がないため、任意の値を設定|
-|sections[].topics[].createdAt||true||book-list|published||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].updatedAt||true||book-list|revised||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].licenses[]||true||vol-n|CC||`CC-BY-4.0`などの形式に沿った値|
-|sections[].topics[].keywords[]|||||||xlsxには該当する項目がないため、任意の値を設定|
-|sections[].topics[].resource.url||true||vol-n|main|||
-|sections[].topics[].resource.providerUrl||true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
+|sections[].topics[].name|String|true||vol-n|topic|||
+|sections[].topics[].description|String|||vol-n|text||ファイルの内容を展開する|
+|sections[].topics[].language|String||ja|book-list|language||空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].timeRequired|Int||||||xlsxには該当する項目がないため、任意の値を設定|
+|sections[].topics[].shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
+|sections[].topics[].createdAt|DateTime|true||book-list|published||空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].updatedAt|DateTime|true||book-list|revised||空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].licenses[]|String[]|true||vol-n|CC||`CC-BY-4.0`などの形式に沿った値|
+|sections[].topics[].keywords[]|String[]||||||xlsxには該当する項目がないため、任意の値を設定|
+|sections[].topics[].resource.url|String|true||vol-n|main|||
+|sections[].topics[].resource.providerUrl|String|true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
 |sections[].topics[].details.*||||vol-n|page-type||対応外|
 |sections[].topics[].details.*||||vol-n|community||対応外|
 |sections[].topics[].details.*||||vol-n|video-image||対応外、画像は特に利用されない|
