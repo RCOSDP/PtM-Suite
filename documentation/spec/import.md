@@ -9,9 +9,9 @@ book.json
 |language|String||ja|series-information|language|||
 |timeRequired|Int||||||xlsxには該当する項目がないため、任意の値を設定|
 |shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
-|publishedAt|DateTime|true||series-information|published|||
-|createdAt|DateTime|true||series-information|published||xlsxには該当する項目がないため、publishedを利用|
-|updatedAt|DateTime|true||series-information|revised|||
+|publishedAt|DateTime||現時刻|series-information|published|||
+|createdAt|DateTime||現時刻|series-information|published||xlsxには該当する項目がないため、publishedを利用|
+|updatedAt|DateTime||現時刻|series-information|revised|||
 |details.series.*||||series-information|version||対応外|
 |details.series.*||||series-information|author||対応外|
 |details.series.*||||series-information|publisher||対応外|
@@ -42,9 +42,9 @@ book.json
 |sections[].topics[].language|String||ja|book-list|language||空白の場合は、series-informationのものを設定すること|
 |sections[].topics[].timeRequired|Int||||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
-|sections[].topics[].createdAt|DateTime|true||book-list|published||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].updatedAt|DateTime|true||book-list|revised||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].licenses[]|String[]|true||vol-n|CC||`CC-BY-4.0`などの形式に沿った値|
+|sections[].topics[].createdAt|DateTime||現時刻|book-list|published||空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised||空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].licenses[]|String[]|||vol-n|CC||`CC-BY-4.0`などの形式に沿った値|
 |sections[].topics[].keywords[]|String[]||||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].resource.url|String|true||vol-n|main|||
 |sections[].topics[].resource.providerUrl|String|true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
