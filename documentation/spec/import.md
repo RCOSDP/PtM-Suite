@@ -7,7 +7,6 @@ book.json
 |name|String|true||book-list|book-title|||
 |description|String|||book-list|book-summary|||
 |language|String||ja|series-information|language|||
-|timeRequired|Int||||||xlsxには該当する項目がないため、任意の値を設定|
 |shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
 |publishedAt|DateTime||現時刻|series-information|published|||
 |createdAt|DateTime||現時刻|series-information|published||xlsxには該当する項目がないため、publishedを利用|
@@ -40,7 +39,7 @@ book.json
 |sections[].topics[].name|String|true||vol-n|topic|||
 |sections[].topics[].description|String|||vol-n|text||ファイルの内容を展開する|
 |sections[].topics[].language|String||ja|book-list|language||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].timeRequired|Int||||||xlsxには該当する項目がないため、任意の値を設定|
+|sections[].topics[].timeRequired|Int||0||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].createdAt|DateTime||現時刻|book-list|published||空白の場合は、series-informationのものを設定すること|
 |sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised||空白の場合は、series-informationのものを設定すること|
@@ -61,11 +60,37 @@ chilo001_vol-1.json
     "name": "インターネットの歴史とビットの復習",
     "description": "",
     "language": "ja",
-    "timeRequired": 60,
     "shared": true,
     "publishedAt": "2013-09-13T00:00:00",
     "createdAt": "2013-09-13T00:00:00",
     "updatedAt": "2018-07-10T00:00:00",
+    "details": {
+        "series": {
+            "version": "2.4",
+            "author": "日置慎治",
+            "publisher": "NPO CCC-TIES",
+            "editor": "NPO CCC-TIES",
+            "rights": "2013 NPO CCC-TIES",
+            "series-name": "はじめての情報ネットワークⅠ",
+            "series-introduction": "本書の主題と目標は、インターネットを主体としたネットワークについて深く理解をすることです。\n今やインターネットは地球規模のネットワークに成長しています。例えば、パソコンなど小さなコンピュータから、サーバと言われる大規模で強力なコンピュータまでネットワークにつながっています。また最近では、携帯電話や一般の電話もネットワークにつながっている時代です。さらに最近では、家電製品までもがインターネットにつながるようになりつつあります。\nまずは、ネットワークを理解して、セキュリティについても学習しましょう。",
+            "series-url": "http://proxy.chilos.jp/p001",
+            "cover": "001_inside_cover.png"
+        },
+        "book": {
+            "vol": "vol-1",
+            "book-cover": "001_cover_image_1.png",
+            "identifier": "41fe5bb9-686f-47dd-8197-61fc9f817bcd",
+            "community-url": "http://chilos.jp/en/c/?c=1",
+            "version": "",
+            "language": "",
+            "author": "",
+            "publisher": "",
+            "editor": "",
+            "published": "",
+            "revised": "",
+            "rights": ""
+        }
+    },
     "keywords": [],
     "sections": [
         {
@@ -162,9 +187,7 @@ chilo001_vol-1.json
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
                     "updatedAt": "2018-07-10T00:00:00",
-                    "licenses": [
-                        "CC-BY-4.0"
-                    ],
+                    "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
                         "url": "001m_0110.mp4",
@@ -182,33 +205,6 @@ chilo001_vol-1.json
                 }
             ]
         }
-    ],
-    "details": {
-        "series": {
-            "version": "2.4",
-            "author": "日置慎治",
-            "publisher": "NPO CCC-TIES",
-            "editor": "NPO CCC-TIES",
-            "rights": "2013 NPO CCC-TIES",
-            "series-name": "はじめての情報ネットワークⅠ",
-            "series-introduction": "本書の主題と目標は、インターネットを主体としたネットワークについて深く理解をすることです。\n今やインターネットは地球規模のネットワークに成長しています。例えば、パソコンなど小さなコンピュータから、サーバと言われる大規模で強力なコンピュータまでネットワークにつながっています。また最近では、携帯電話や一般の電話もネットワークにつながっている時代です。さらに最近では、家電製品までもがインターネットにつながるようになりつつあります。\nまずは、ネットワークを理解して、セキュリティについても学習しましょう。",
-            "series-url": "http://proxy.chilos.jp/p001",
-            "cover": "001_inside_cover.png"
-        },
-        "book": {
-            "vol": "vol-1",
-            "book-cover": "001_cover_image_1.png",
-            "identifier": "41fe5bb9-686f-47dd-8197-61fc9f817bcd",
-            "community-url": "http://chilos.jp/en/c/?c=1",
-            "version": "",
-            "language": "",
-            "author": "",
-            "publisher": "",
-            "editor": "",
-            "published": "",
-            "revised": "",
-            "rights": ""
-        }
-    }
+    ]
 }
 ```
