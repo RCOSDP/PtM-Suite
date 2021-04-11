@@ -44,7 +44,7 @@ book.json
 |sections[].topics[].shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].createdAt|DateTime||現時刻|book-list|published||空白の場合は、series-informationのものを設定すること|
 |sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].licenses[]|String[]|||vol-n|CC||`CC-BY-4.0`などの形式に沿った値|
+|sections[].topics[].license|String|||vol-n|CC||https://spdx.org/licenses/ のIdentifierと許容される括弧と演算子で構成され、spdxのチェックが通るもの<br>例:`CC-BY-4.0`|
 |sections[].topics[].keywords[]|String[]||||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].resource.url|String|true||vol-n|main|||
 |sections[].topics[].resource.providerUrl|String|true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
