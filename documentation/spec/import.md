@@ -4,13 +4,13 @@
 book.json
 |json|型|required|default|CHiLO Book シート|CB 列|PPT プロパティ|備考|
 |-|-|-|-|-|-|-|-|
-|name|String|true||book-list|book-title|||
-|description|String|||book-list|book-summary|||
-|language|String||ja|series-information|language|||
+|name|String|true||book-list|book-title|dc:title<br>dcterms:title|dcterms:titleは構造化が禁止されているため優先すべき|
+|description|String|||book-list|book-summary|dc:description|テキストのみ許容する。html/xmlの要素定義が入ってしまってもhtml/xmlとは解釈しない|
+|language|String||ja|series-information|language|dc:language|ISO 639-2のような3文字の言語コードは推奨しない|
 |shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
-|publishedAt|DateTime||現時刻|series-information|published|||
-|createdAt|DateTime||現時刻|series-information|published||xlsxには該当する項目がないため、publishedを利用|
-|updatedAt|DateTime||現時刻|series-information|revised|||
+|publishedAt|DateTime||現時刻|series-information|published|dcterms:issued||
+|createdAt|DateTime||現時刻|series-information|published|dcterms:created|xlsxには該当する項目がないため、publishedを利用|
+|updatedAt|DateTime||現時刻|series-information|revised|dcterms:modified||
 |details.series.*||||series-information|version||対応外|
 |details.series.*||||series-information|author||対応外|
 |details.series.*||||series-information|publisher||対応外|
@@ -32,7 +32,7 @@ book.json
 |details.book.*||||book-list|published||対応外|
 |details.book.*||||book-list|revised||対応外|
 |details.book.*||||book-list|rights||対応外|
-|keywords[]|String[]||||||xlsxには該当する項目がないため、任意の値を設定|
+|keywords[]|String[]|||||dc:subject<br>dcterms:subject<br>cp:keywords|xlsxには該当する項目がないため、任意の値を設定<br>dc:subjectは文字列だが、dcterms:subjectは構造化可能かつrdf:resource属性による外部参照が可能|
 |sections[]||true|||||1個以上のセクションが必要|
 |sections[].name|String|||vol-n|section|||
 |sections[].topics[]||true|||||1個以上のトピックが必要|
@@ -52,6 +52,13 @@ book.json
 |sections[].topics[].details.*||||vol-n|video-image||対応外、画像は特に利用されない|
 |sections[].topics[].details.*||||vol-n|javascript-file||対応外|
 |sections[].topics[].details.*||||vol-n|video-id||対応外|
+
+pptプロパティ参考:
+- https://ja.wikipedia.org/wiki/Office_Open_XML_ファイルフォーマット
+- https://ja.wikipedia.org/wiki/Dublin_Core
+- https://kanzaki.com/docs/sw/dublin-core.html
+- https://kanzaki.com/docs/sw/dc-domain-range.html
+- https://www.ndl.go.jp/jp/dlib/standards/meta/dcndl_examples.html
 
 ### インポートjsonの例:
 chilo001_vol-1.json
