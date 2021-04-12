@@ -34,18 +34,18 @@ book.json
 |details.book.*||||book-list|rights||対応外|
 |keywords[]|String[]|||||dc:subject<br>dcterms:subject<br>cp:keywords|xlsxには該当する項目がないため、任意の値を設定<br>dc:subjectは文字列だが、dcterms:subjectは構造化可能かつrdf:resource属性による外部参照が可能|
 |sections[]||true|||||1個以上のセクションが必要|
-|sections[].name|String|||vol-n|section|||
+|sections[].name|String|||vol-n|section|セクション区切りページのタイトル部分||
 |sections[].topics[]||true|||||1個以上のトピックが必要|
-|sections[].topics[].name|String|true||vol-n|topic|||
-|sections[].topics[].description|String|||vol-n|text||ファイルの内容を展開する|
-|sections[].topics[].language|String||ja|book-list|language||空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].name|String|true||vol-n|topic|スライドのタイトル部分||
+|sections[].topics[].description|String|||vol-n|text|スライド本文|ファイルの内容を展開する|
+|sections[].topics[].language|String||ja|book-list|language|dc:language<br>ノート.language|空白の場合は、series-informationのものを設定すること|
 |sections[].topics[].timeRequired|Int||0||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
-|sections[].topics[].createdAt|DateTime||現時刻|book-list|published||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised||空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].license|String|||vol-n|CC||https://spdx.org/licenses/ のIdentifierと許容される括弧と演算子で構成され、spdxのチェックが通るもの<br>例:`CC-BY-4.0`|
-|sections[].topics[].keywords[]|String[]||||||xlsxには該当する項目がないため、任意の値を設定|
-|sections[].topics[].resource.url|String|true||vol-n|main|||
+|sections[].topics[].createdAt|DateTime||現時刻|book-list|published|dcterms:created<br>ノート.createdAt|空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised|dcterms:modified<br>ノート.updatedAt|空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].license|String|||vol-n|CC|ノート.license|https://spdx.org/licenses/ のIdentifierと許容される括弧と演算子で構成され、spdxのチェックが通るもの<br>例:`CC-BY-4.0`|
+|sections[].topics[].keywords[]|String[]|||||ノート.keywords|xlsxには該当する項目がないため、任意の値を設定|
+|sections[].topics[].resource.url|String|true||vol-n|main|生成動画ファイル||
 |sections[].topics[].resource.providerUrl|String|true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
 |sections[].topics[].details.*||||vol-n|page-type||対応外|
 |sections[].topics[].details.*||||vol-n|community||対応外|
