@@ -4,11 +4,11 @@
 book.json
 |json|型|required|default|CHiLO Book シート|CB 列|PPT プロパティ|備考|
 |-|-|-|-|-|-|-|-|
-|name|String|true||book-list|book-title|dc:title<br>dcterms:title|dcterms:titleは構造化が禁止されているため優先すべき|
-|description|String|||book-list|book-summary|dc:description|テキストのみ許容する。html/xmlの要素定義が入ってしまってもhtml/xmlとは解釈しない|
-|language|String||ja|series-information|language|dc:language|ISO 639-2のような3文字の言語コードは推奨しない|
+|name|String|true||book-list|book-title|dc:title|dcterms:titleはpptにはない|
+|description|String|||book-list|book-summary|dc:description|テキストのみ許容する。改行は\nとする。html/xmlの要素定義が入ってしまってもhtml/xmlとは解釈しない|
+|language|String||ja|series-information|language|トピックを参照|ISO 639-2のような3文字の言語コードは推奨しない|
 |shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
-|publishedAt|DateTime||現時刻|series-information|published|dcterms:issued||
+|publishedAt|DateTime||現時刻|series-information|published|dcterms:created|dcterms:issuedはpptにはないため、dcterms:createdを利用|
 |createdAt|DateTime||現時刻|series-information|published|dcterms:created|xlsxには該当する項目がないため、publishedを利用|
 |updatedAt|DateTime||現時刻|series-information|revised|dcterms:modified||
 |details.series.*||||series-information|version||対応外|
@@ -32,18 +32,18 @@ book.json
 |details.book.*||||book-list|published||対応外|
 |details.book.*||||book-list|revised||対応外|
 |details.book.*||||book-list|rights||対応外|
-|keywords[]|String[]|||||dc:subject<br>dcterms:subject<br>cp:keywords|xlsxには該当する項目がないため、任意の値を設定<br>dc:subjectは文字列だが、dcterms:subjectは構造化可能かつrdf:resource属性による外部参照が可能|
+|keywords[]|String[]|||||dc:subject<br>cp:keywords|xlsxには該当する項目がないため、任意の値を設定<br>pptでは複数のキーワードの区切りが未定義？|
 |sections[]||true|||||1個以上のセクションが必要|
-|sections[].name|String|||vol-n|section|セクション区切りページのタイトル部分||
+|sections[].name|String|||vol-n|section|セクション区切りページのタイトル部分|pptではtikaで得られたリストが1行のみのスライドをセクション区切りとする|
 |sections[].topics[]||true|||||1個以上のトピックが必要|
-|sections[].topics[].name|String|true||vol-n|topic|スライドのタイトル部分||
-|sections[].topics[].description|String|||vol-n|text|スライド本文|ファイルの内容を展開する|
-|sections[].topics[].language|String||ja|book-list|language|dc:language<br>ノート.language|空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].name|String|true||vol-n|topic|スライドのタイトル部分|pptではtikaが抽出した1行目|
+|sections[].topics[].description|String|||vol-n|text|スライド本文|ファイルの内容を展開する。改行は\nとする<br>pptではtikaが抽出した2行目以降|
+|sections[].topics[].language|String||ja|book-list|language|ノート.language|空白の場合は、series-informationのものを設定すること<br>pptでは最初に検知したlanguageをブックと全トピックに適用する|
 |sections[].topics[].timeRequired|Int||0||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].createdAt|DateTime||現時刻|book-list|published|dcterms:created<br>ノート.createdAt|空白の場合は、series-informationのものを設定すること|
 |sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised|dcterms:modified<br>ノート.updatedAt|空白の場合は、series-informationのものを設定すること|
-|sections[].topics[].license|String|||vol-n|CC|ノート.license|https://spdx.org/licenses/ のIdentifierと許容される括弧と演算子で構成され、spdxのチェックが通るもの<br>例:`CC-BY-4.0`|
+|sections[].topics[].license|String|||vol-n|CC|ノート.license|https://spdx.org/licenses/ のIdentifierと許容される括弧と演算子で構成され、spdxのチェックが通るもの<br>例:`CC-BY-4.0`<br>pptでは最初に検知したlicenseを全トピックに適用する|
 |sections[].topics[].keywords[]|String[]|||||ノート.keywords|xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].resource.url|String|true||vol-n|main|生成動画ファイル||
 |sections[].topics[].resource.providerUrl|String|true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
@@ -52,6 +52,8 @@ book.json
 |sections[].topics[].details.*||||vol-n|video-image||対応外、画像は特に利用されない|
 |sections[].topics[].details.*||||vol-n|javascript-file||対応外|
 |sections[].topics[].details.*||||vol-n|video-id||対応外|
+
+時刻はISO-8601形式とし、末尾Zや+nnnnによるタイムゾーンの指定も可能とする。
 
 pptプロパティ参考:
 - https://ja.wikipedia.org/wiki/Office_Open_XML_ファイルフォーマット
