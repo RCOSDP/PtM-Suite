@@ -113,12 +113,10 @@ chilo001_vol-1.json
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
                     "updatedAt": "2018-07-10T00:00:00",
-                    "licenses": [
-                        "CC-BY-4.0"
-                    ],
+                    "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "001m_0101.mp4",
+                        "url": "./001m_0101.mp4",
                         "providerUrl": "https://www.youtube.com/",
                         "tracks": [],
                         "details": {}
@@ -139,12 +137,10 @@ chilo001_vol-1.json
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
                     "updatedAt": "2018-07-10T00:00:00",
-                    "licenses": [
-                        "CC-BY-4.0"
-                    ],
+                    "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "001m_0102.mp4",
+                        "url": "./001m_0102.mp4",
                         "providerUrl": "https://www.youtube.com/",
                         "tracks": [],
                         "details": {}
@@ -170,12 +166,10 @@ chilo001_vol-1.json
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
                     "updatedAt": "2018-07-10T00:00:00",
-                    "licenses": [
-                        "CC-BY-4.0"
-                    ],
+                    "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "001m_0109.mp4",
+                        "url": "./001m_0109.mp4",
                         "providerUrl": "https://www.youtube.com/",
                         "tracks": [],
                         "details": {}
@@ -199,7 +193,7 @@ chilo001_vol-1.json
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "001m_0110.mp4",
+                        "url": "./001m_0110.mp4",
                         "providerUrl": "https://www.youtube.com/",
                         "tracks": [],
                         "details": {}
