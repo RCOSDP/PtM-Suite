@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import axios from 'axios'
+import {SpeechMarkdown} from 'speechmarkdown-js'
 
 Vue.use(Vuex);
 Vue.config.productionTip = false
@@ -9,6 +10,7 @@ Vue.config.productionTip = false
 /* global Office, OfficeExtension */
 
 const audio = new Audio();
+const speech = new SpeechMarkdown();
 
 async function getSelectedText() {
   return new OfficeExtension.Promise(function (resolve, reject) {
@@ -36,14 +38,19 @@ const store = new Vuex.Store({
       }
     },
 
-    async onPolly() {
+    async onPolly(_, {TextType}) {
       try {
-        const text = await getSelectedText();
+        let text = await getSelectedText();
+        if (TextType == "markdown") {
+          text = speech.toSSML(text, {platform: 'amazon-alexa'});
+          TextType = "ssml";
+        }
+        console.log(text);
         const data = {
           OutputFormat: "mp3",
           SampleRate: "8000",
           Text: text,
-          TextType: "text",
+          TextType,
           VoiceId: "Takumi"
         };
         const config = {

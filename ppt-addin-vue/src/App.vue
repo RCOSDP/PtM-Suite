@@ -8,7 +8,9 @@
         </div>
         <div class="padding">
           <p>選択した文字列をAWS Pollyで音声合成します。</p>
-          <button @click="onPolly">AWS Polly</button>
+          <button @click="onText">AWS Polly</button>
+          <button @click="onSSML">SSML</button>
+          <button @click="onMarkdown">Markdown</button>
         </div>
       </div>
     </div>
@@ -24,7 +26,16 @@ export default {
     ...mapActions([
       'onSynthesis',
       'onPolly'
-    ])
+    ]),
+    onText(){
+      this.$store.dispatch('onPolly',{TextType: "text"});
+    },
+    onSSML(){
+      this.$store.dispatch('onPolly',{TextType: "ssml"});
+    },
+    onMarkdown(){
+      this.$store.dispatch('onPolly',{TextType: "markdown"});
+    }
   }
 }
 </script>
