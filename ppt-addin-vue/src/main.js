@@ -35,6 +35,7 @@ const store = new Vuex.Store({
         speechSynthesis.speak(ut);
       } catch(error) {
         console.log('error occured in onSynthesis')
+        speechSynthesis.cancel();
       }
     },
 
