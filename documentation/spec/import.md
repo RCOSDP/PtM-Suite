@@ -11,27 +11,8 @@ book.json
 |publishedAt|DateTime||現時刻|series-information|published|dcterms:created|dcterms:issuedはpptにはないため、dcterms:createdを利用|
 |createdAt|DateTime||現時刻|series-information|published|dcterms:created|xlsxには該当する項目がないため、publishedを利用|
 |updatedAt|DateTime||現時刻|series-information|revised|dcterms:modified||
-|details.series.*||||series-information|version||対応外|
-|details.series.*||||series-information|author||対応外|
-|details.series.*||||series-information|publisher||対応外|
-|details.series.*||||series-information|editor||対応外|
-|details.series.*||||series-information|rights||対応外|
-|details.series.*||||series-information|series-name||対応外|
-|details.series.*||||series-information|series-introduction||対応外|
-|details.series.*||||series-information|series-url||対応外|
-|details.series.*||||series-information|cover||対応外、画像は特に利用されない|
-|details.book.*||||book-list|vol||対応外|
-|details.book.*||||book-list|book-cover||対応外、画像は特に利用されない|
-|details.book.*||||book-list|identifier||対応外|
-|details.book.*||||book-list|community-url||対応外|
-|details.book.*||||book-list|version||対応外|
-|details.book.*||||book-list|language||対応外|
-|details.book.*||||book-list|author||対応外|
-|details.book.*||||book-list|publisher||対応外|
-|details.book.*||||book-list|editor||対応外|
-|details.book.*||||book-list|published||対応外|
-|details.book.*||||book-list|revised||対応外|
-|details.book.*||||book-list|rights||対応外|
+|details.series.*||||series-information|その他|||
+|details.book.*||||book-list|その他|||
 |keywords[]|String[]|||||dc:subject<br>cp:keywords|xlsxには該当する項目がないため、任意の値を設定<br>pptでは複数のキーワードの区切りが未定義？|
 |sections[]||true|||||1個以上のセクションが必要|
 |sections[].name|String|||vol-n|section|セクション区切りページのタイトル部分|pptではtikaで得られたリストが1行のみのスライドをセクション区切りとする|
@@ -47,11 +28,7 @@ book.json
 |sections[].topics[].keywords[]|String[]|||||ノート.keywords|xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].resource.url|String|true||vol-n|main|生成動画ファイル||
 |sections[].topics[].resource.providerUrl|String|true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
-|sections[].topics[].details.*||||vol-n|page-type||対応外|
-|sections[].topics[].details.*||||vol-n|community||対応外|
-|sections[].topics[].details.*||||vol-n|video-image||対応外、画像は特に利用されない|
-|sections[].topics[].details.*||||vol-n|javascript-file||対応外|
-|sections[].topics[].details.*||||vol-n|video-id||対応外|
+|sections[].topics[].details.*||||vol-n|その他|||
 
 時刻はISO-8601形式とし、末尾Zや+nnnnによるタイムゾーンの指定も可能とする。
 
