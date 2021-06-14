@@ -2,8 +2,6 @@ name: PPT2VIDEO
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/20 * * * *'
 
 jobs:
   test:
