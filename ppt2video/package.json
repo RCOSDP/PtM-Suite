@@ -1,0 +1,19 @@
+{
+  "name": "ppt2video",
+  "version": "1.0.0",
+  "private": true,
+  "main": "bin/ppt2video.js",
+  "scripts": {},
+  "bin": {
+    "ppt2video": "bin/ppt2video.js"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.922.0",
+    "execa": "^5.1.1",
+    "log4js": "^6.3.0",
+    "minimist": "^1.2.5",
+    "music-metadata": "^7.8.6",
+    "speechmarkdown-js": "github:npocccties/speechmarkdown-js#ties-with-dist",
+    "xml2js": "^0.4.23"
+  }
+}
