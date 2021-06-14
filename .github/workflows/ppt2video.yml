@@ -1,0 +1,50 @@
+name: PPT2VIDEO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: FedericoCarboni/setup-ffmpeg@v1
+        id: setup-ffmpeg
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: download
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ env.GITHUB_REPOSITORY }}
+        run: |
+          gh release download binary -p 'tika-app-1.26.jar' --dir ppt2video/lib
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: npm install
+        run: |
+          (cd ppt2video;npm install)
+
+      - name: run ppt2video
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-northeast-1'
+        run: |
+          mkdir output
+          mkdir temp
+          node ppt2video/bin/ppt2video.js test/vuca.pptx --outputDir output --tempDir temp
+      - uses: actions/upload-artifact@v2
+        with:
+          name: vuca
+          path: output
