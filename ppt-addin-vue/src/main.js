@@ -28,7 +28,8 @@ async function getSelectedText() {
 
 const store = new Vuex.Store({
   actions: {
-    async onSynthesis() {
+    async onSynthesis(_, vc) {
+      console.log(vc.voice, vc.samplerate);
       try {
         const text = await getSelectedText();
         let ut = new SpeechSynthesisUtterance(text);
