@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
 
 export default {
   name: 'App',
@@ -55,7 +54,8 @@ export default {
   },
   methods: {
     onSynthesis(){
-      this.$store.dispatch('onSynthesis', this);
+      const {voice, samplerate, engine} = this;
+      this.$store.dispatch('onSynthesis', {voice, samplerate, engine});
     }
   }
 }

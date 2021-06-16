@@ -26,47 +26,59 @@ async function getSelectedText() {
   });
 }
 
+async function engineLocal(text) {
+  try {
+    text = text.replace(/<\/?speak>/g,'');
+    text = speech.toText(text);
+    let ut = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(ut);
+  } catch (error) {
+    console.log('error occured in engineLocal')
+    speechSynthesis.cancel();
+  }
+}
+
+async function enginePolly(text, {voice, samplerate}) {
+  try {
+    text = text.replace(/<\/?speak>/g,'');
+    text = speech.toSSML(text, {platform: 'amazon-alexa'});
+    const data = {
+      OutputFormat: "mp3",
+      SampleRate: samplerate,
+      Text: text,
+      TextType: 'ssml',
+      VoiceId: voice,
+    };
+    const config = {
+      responseType: 'arraybuffer'
+    };
+    const res = await axios.post('/polly', data, config);
+    const blob = new Blob([res.data], { type: res.headers['content-type'] })
+    const objectUrl = URL.createObjectURL(blob);
+    audio.src = objectUrl;
+    audio.onload = function () {
+      URL.revokeObjectURL(objectUrl);
+    };
+    audio.play();
+  } catch (error) {
+    console.log('error occured in enginePolly')
+  }
+}
+
 const store = new Vuex.Store({
   actions: {
-    async onSynthesis(_, vc) {
-      console.log(vc.voice, vc.samplerate, vc.engine);
-      try {
-        const text = await getSelectedText();
-        let ut = new SpeechSynthesisUtterance(text);
-        speechSynthesis.speak(ut);
-      } catch(error) {
-        console.log('error occured in onSynthesis')
-        speechSynthesis.cancel();
-      }
-    },
-
-    async onPolly(_, {TextType}) {
+    async onSynthesis(_, {voice, samplerate, engine}) {
       try {
         let text = await getSelectedText();
-        if (TextType == "markdown") {
-          text = speech.toSSML(text, {platform: 'amazon-alexa'});
-          TextType = "ssml";
+        switch(engine) {
+          case 'local':
+            engineLocal(text);
+            break;
+          case 'polly':
+            enginePolly(text, {voice, samplerate});
+            break;
         }
-        console.log(text);
-        const data = {
-          OutputFormat: "mp3",
-          SampleRate: "8000",
-          Text: text,
-          TextType,
-          VoiceId: "Takumi"
-        };
-        const config = {
-          responseType: 'arraybuffer'
-        };
-        const res = await axios.post('/polly', data, config);
-        const blob = new Blob([res.data], { type: res.headers['content-type'] })
-        const objectUrl = URL.createObjectURL(blob);
-        audio.src = objectUrl;
-        audio.onload = function() {
-          URL.revokeObjectURL(objectUrl);
-        };
-        audio.play();
-      } catch(error) {
+      } catch (error) {
         console.log('error occured in onSynthesis')
       }
     }
