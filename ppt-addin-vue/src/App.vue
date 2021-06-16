@@ -22,7 +22,9 @@
               v-bind:key="sr.name" >
               {{sr.name}}
             </option>
-          </select>
+          </select><br>
+          <input type="checkbox" v-model="engine" true-value="local" false-value="polly" >
+          このマシンで音声合成する。
         </div>
       </div>
     </div>
@@ -47,7 +49,8 @@ export default {
         { name: '16000'},
         { name: '22050'},
         { name: '24000'},
-      ]
+      ],
+      engine: 'polly',
     }
   },
   methods: {
