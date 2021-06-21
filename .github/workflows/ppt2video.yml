@@ -17,12 +17,22 @@ jobs:
         with:
           node-version: '14.x'
 
-      - name: download
+      - name: download binaries
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ env.GITHUB_REPOSITORY }}
+          TIKA_JAR: tika-app-1.26.jar
+          LIBOPENH264: libopenh264-2.1.1-linux64.6.so.bz2
         run: |
-          gh release download binary -p 'tika-app-1.26.jar' --dir ppt2video/lib
+          cd ppt2video/lib
+          gh release download binary -p $TIKA_JAR
+          gh release download binary -p 'ffmpeg.bz2'
+          bunzip2 ffmpeg.bz2
+          chmod +x ffmpeg
+          gh release download binary -p ${LIBOPENH264}
+          bunzip2 ${LIBOPENH264}
+          ln -s $(basename ${LIBOPENH264} .bz2) libopenh264.so.6
+          LD_LIBRARY_PATH=. ./ffmpeg -version
 
       - uses: actions/cache@v2
         with:
@@ -40,10 +50,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'ap-northeast-1'
+          PPT2VIDEO_OUTPUT_DIR: output
+          PPT2VIDEO_TEMP_DIR: temp
         run: |
-          mkdir output
-          mkdir temp
-          node ppt2video/bin/ppt2video.js test/vuca.pptx --outputDir output --tempDir temp
+          mkdir $PPT2VIDEO_OUTPUT_DIR
+          mkdir $PPT2VIDEO_TEMP_DIR
+          node ppt2video/bin/ppt2video.js test/vuca.pptx
+
       - uses: actions/upload-artifact@v2
         with:
           name: vuca
