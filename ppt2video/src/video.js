@@ -118,13 +118,13 @@ function slideText(slide) {
   return [delay, text, pad].join('');
 }
 
-const polly_valid_samplerates = ["8000", "16000", "22050", "24000"];
+const polly_valid_samplerates = ['8000', '16000', '22050', '24000'];
 
 const polly_defaults = {
-  OutputFormat: "mp3",
-  SampleRate: "22050",
+  OutputFormat: 'mp3',
+  SampleRate: config.sampleRate,
   TextType: 'ssml',
-  VoiceId: "Takumi"
+  VoiceId: config.voice,
 };
 
 async function createAudioFiles(slides, speech) {
@@ -133,10 +133,14 @@ async function createAudioFiles(slides, speech) {
   const req = {
     ...polly_defaults
   };
+  if (!polly_valid_samplerates.includes(req.SampleRate)) {
+    req.SampleRate = '22050';
+  }
+
   let prev = {
-    delay: "1.0",
-    pad: "1.0",
-    fade: "0.5"
+    delay: config.delay,
+    pad: config.pad,
+    fade: config.fade,
   };
 
   for(slide of slides) {
@@ -153,9 +157,29 @@ async function createAudioFiles(slides, speech) {
   }
 }
 
+function ffmegLocation() {
+  if (config.vcodec === 'libopenh264') {
+    let ffmpeg = libDir + '/' + config.ffmpegCmd;
+    if (fs.existsSync(ffmpeg)) {
+      logger.info('use ' + ffmpeg);
+    } else {
+      logger.warn('can\'t find ' + ffmpeg);
+      ffmpeg = config.ffmpegCmd;
+    }
+    const libopenh264 = libDir + '/' + config.libopenh264;
+    if (fs.existsSync(libopenh264)) {
+      process.env.LD_LIBRARY_PATH = libDir;
+      logger.info('set LD_LIBRARY_PATH=', process.env.LD_LIBRARY_PATH);
+    }
+    return ffmpeg;
+  }
+  return config.ffmpegCmd;
+}
+
 const vfCommon = ['fps=25','format=yuv420p'];
-const vcodec = '-c:v libx264';
+const vcodec = `-c:v ${config.vcodec} ${config.voption}`;
 const acodec = '-c:a copy';
+const ffmpeg = ffmegLocation();
 
 function getVfOption(duration, option = {}) {
   const vf = [...vfCommon];
@@ -171,14 +195,14 @@ function getVfOption(duration, option = {}) {
 
 async function createVideo(slide, filename, option = {}) {
   const vfOption = getVfOption(slide.duration, option);
-  const cmd = `ffmpeg -y -loop 1 -t ${slide.duration} -i ${slide.imageFilename} -i ${slide.audioFilename} ${vcodec} ${vfOption} ${acodec} ${filename}`;
+  const cmd = `${ffmpeg} -y -loop 1 -t ${slide.duration} -i ${slide.imageFilename} -i ${slide.audioFilename} ${vcodec} ${vfOption} ${acodec} ${filename}`;
   logger.info(cmd);
   return execa.command(cmd);
 }
 
 async function concatenateVideo(topic, option = {}) {
   const vfOption = getVfOption(topic.duration, option);
-  const cmd = `ffmpeg -y -f concat -i ${topic.listFilename} ${vfOption} ${acodec} ${topic.outputFilename}`;
+  const cmd = `${ffmpeg} -y -f concat -i ${topic.listFilename} ${vcodec} ${vfOption} ${acodec} ${topic.outputFilename}`;
   logger.info(cmd);
   return execa.command(cmd);
 }
@@ -236,15 +260,21 @@ function removeTempFiles(sections) {
   });
 }
 
+function exitProcess(code) {
+  log4js.shutdown((e) => {
+    process.exit(code);
+  });
+}
+
 function fatalError(e, message, sections = null) {
-  logger.error(e);
+  if (e !== null){
+    logger.error(e);
+  }
   logger.fatal(message);
   if (sections !== null) {
     removeTempFiles(sections);
   }
-  log4js.shutdown((e) => {
-    process.exit(-1);
-  });
+  exitProcess(-1);
 }
 
 async function ppt2video(filename) {
@@ -252,6 +282,9 @@ async function ppt2video(filename) {
   const speech = new sm.SpeechMarkdown({platform: 'amazon-alexa'});
   let xml, data;
 
+  if (!fs.existsSync(filename)) {
+    fatalError(null, 'can\'t find ' + filename);
+  }
   logger.info('processing ' + filename);
 
   // getting tika xml output
@@ -320,9 +353,7 @@ async function ppt2video(filename) {
   // cleanup temp files
   removeTempFiles(sections);
 
-  log4js.shutdown((e) => {
-    process.exit(0);
-  });
+  exitProcess(0);
 }
 
 module.exports = {
