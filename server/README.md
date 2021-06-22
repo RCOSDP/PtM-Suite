@@ -5,6 +5,26 @@ AWS Polly への proxy 機能を含む web サーバです。次の 2つの方�
 - 単独でアドイン用サーバとして使用する
 - ppt-addin-vue 開発用サーバと共に使用する
 
+## Deploy on Vercel
+
+Vercel には次の手順でデプロイしてください。
+
+- Vercel デプロイのセットアップ
+  - `New Project` でこのリポジトリを `Import` する
+    - 同一リポジトリからデプロイできる数の制限に引っかかったらリポジトリをまず github でフォークし、フォークした先のリポジトリをインポートすること
+  - `Import Project` でこの `server` ディレクトリを選択する
+  - `PROJECT NAME` は `polly-server-test` など自由に設定
+  - `FRAMEWORK PRESET` = Other
+  - `ROOT DIRECTORY` = server (先ほど選んだもの)
+  - `Environment Variables` に次の三つを設定
+    - `AWS_REGION_POLLY`, `AWS_ACCESS_KEY_ID_POLLY`, `AWS_SECRET_ACCESS_KEY_POLLY`
+    - 標準の変数名は予約されているため末尾に `_POLLY` を付けたものを設定していることに注意
+- デプロイされたら `Settings` - `Domains` で `polly-server-test.vercel.app` となっていることを確認。別のものに変更したければ変更する
+- ここでデプロイしたサーバに対してアドオンから問い合わせを行うようにするため、ppt-addon-vue のデプロイ時に `POLLY_SERVER` 環境変数に `https://polly-server-test.vercel.app` を設定する (`src/main.js` で `server` 定数として読み込まれる) 必要があることに注意
+- 続けて ppt-addon-vue も Vercel デプロイしてオフィスにアドインとして読み込んで使う
+
+## Local Server
+
 以下の環境変数を適切に設定します。
 
 - AWS_REGION

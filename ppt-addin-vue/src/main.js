@@ -1,8 +1,8 @@
+import axios from 'axios'
+import { SpeechMarkdown } from 'speechmarkdown-js'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
-import axios from 'axios'
-import {SpeechMarkdown} from 'speechmarkdown-js'
 
 Vue.use(Vuex);
 Vue.config.productionTip = false
@@ -52,7 +52,14 @@ async function enginePolly(text, {voice, samplerate}) {
     const config = {
       responseType: 'arraybuffer'
     };
-    const res = await axios.post('/polly', data, config);
+    // select and request to local or remote polly endpoint
+    const remoteServer = process.env.POLLY_SERVER || "https://polly-server-one.vercel.app";
+    const endpoint = "/polly";
+    const pollyUrl =
+      document.location.host == "localhost"
+        ? endpoint
+        : `${remoteServer}${endpoint}`;
+    const res = await axios.post(pollyUrl, data, config);
     const blob = new Blob([res.data], { type: res.headers['content-type'] })
     const objectUrl = URL.createObjectURL(blob);
     audio.src = objectUrl;

@@ -13,9 +13,17 @@ var http = require('http');
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+if (process.env.VERCEL) {
+  // on vercel use 443 (standard https) port
+  port = 443;
+}
+app.set("port", port);
 
 var prot = process.env.PROT || 'https';
+if (process.env.VERCEL) {
+  // on vercel, https will be handled by front end proxy, not node app
+  prot = "http";
+}
 var server;
 
 /**
