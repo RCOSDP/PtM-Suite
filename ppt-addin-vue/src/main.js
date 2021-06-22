@@ -53,9 +53,7 @@ async function enginePolly(text, {voice, samplerate}) {
       responseType: 'arraybuffer'
     };
     // select and request to local or remote polly endpoint
-    const remoteServer = process.env.POLLY_SERVER
-      ? process.env.POLLY_SERVER
-      : "https://polly-server-one.vercel.app";
+    const remoteServer = process.env.POLLY_SERVER || "https://polly-server-one.vercel.app";
     const endpoint = "/polly";
     const pollyUrl =
       document.location.host == "localhost"
