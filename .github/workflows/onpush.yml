@@ -1,5 +1,8 @@
 name: ONPUSH
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
   changes:
     runs-on: ubuntu-latest
