@@ -47,7 +47,7 @@ async function enginePolly(text, {voice, samplerate}) {
     text = speech.toSSML(text, {platform: 'amazon-alexa'});
   } catch (error) {
     console.log('error occured in enginePolly: markdown')
-    throw error;
+    throw {message: error.type};
   }
 
   try {
@@ -116,7 +116,7 @@ const store = new Vuex.Store({
             break;
         }
       } catch (error) {
-        console.log('error occured in onSynthesis')
+        console.log('error occured in onSynthesis');
         this.commit('setMessage', error.message);
       }
     }
