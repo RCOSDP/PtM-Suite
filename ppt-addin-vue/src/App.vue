@@ -6,6 +6,9 @@
           <p>選択した文字列を音声合成します。</p>
           <button @click="onSynthesis">音声合成</button>
         </div>
+        <div class="padding" v-show="show_message">
+          エラー: {{message}}
+        </div>
         <div class="padding">
           音声名: 
           <select v-model="voice">
@@ -32,6 +35,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 
 export default {
   name: 'App',
@@ -57,7 +61,11 @@ export default {
       const {voice, samplerate, engine} = this;
       this.$store.dispatch('onSynthesis', {voice, samplerate, engine});
     }
-  }
+  },
+  computed: mapState([
+    'show_message',
+    'message',
+  ])
 }
 </script>
 

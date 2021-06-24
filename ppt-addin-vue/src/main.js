@@ -26,8 +26,9 @@ async function getSelectedText() {
   });
 }
 
-async function engineLocal(text) {
+function engineLocal(text) {
   try {
+    speechSynthesis.cancel();
     text = text.replace(/<\/?speak>/g,'');
     text = speech.toText(text);
     let ut = new SpeechSynthesisUtterance(text);
@@ -35,13 +36,21 @@ async function engineLocal(text) {
   } catch (error) {
     console.log('error occured in engineLocal')
     speechSynthesis.cancel();
+    throw error;
   }
 }
 
 async function enginePolly(text, {voice, samplerate}) {
+  let res;
   try {
     text = text.replace(/<\/?speak>/g,'');
     text = speech.toSSML(text, {platform: 'amazon-alexa'});
+  } catch (error) {
+    console.log('error occured in enginePolly: markdown')
+    throw error;
+  }
+
+  try {
     const data = {
       OutputFormat: "mp3",
       SampleRate: samplerate,
@@ -56,10 +65,19 @@ async function enginePolly(text, {voice, samplerate}) {
     const remoteServer = process.env.POLLY_SERVER || "https://polly-server-one.vercel.app";
     const endpoint = "/polly";
     const pollyUrl =
-      document.location.host == "localhost"
+      document.location.hostname == "localhost"
         ? endpoint
         : `${remoteServer}${endpoint}`;
-    const res = await axios.post(pollyUrl, data, config);
+    res = await axios.post(pollyUrl, data, config);
+  } catch (error) {
+    if (error.response) {
+      error.message = new TextDecoder().decode(new Uint8Array(error.response.data));
+    }
+    console.log('error occured in enginePolly: call polly')
+    throw error;
+  }
+
+  try {
     const blob = new Blob([res.data], { type: res.headers['content-type'] })
     const objectUrl = URL.createObjectURL(blob);
     audio.src = objectUrl;
@@ -68,13 +86,25 @@ async function enginePolly(text, {voice, samplerate}) {
     };
     audio.play();
   } catch (error) {
-    console.log('error occured in enginePolly')
+    console.log('error occured in enginePolly: play');
+    throw error;
   }
 }
 
 const store = new Vuex.Store({
+  state: {
+    show_message: false,
+    message: "",
+  },
+  mutations: {
+    setMessage(state, message) {
+      state.show_message = message.length > 0;
+      state.message = message;
+    }
+  },
   actions: {
     async onSynthesis(_, {voice, samplerate, engine}) {
+      this.commit('setMessage', "");
       try {
         let text = await getSelectedText();
         switch(engine) {
@@ -82,11 +112,12 @@ const store = new Vuex.Store({
             engineLocal(text);
             break;
           case 'polly':
-            enginePolly(text, {voice, samplerate});
+            await enginePolly(text, {voice, samplerate});
             break;
         }
       } catch (error) {
         console.log('error occured in onSynthesis')
+        this.commit('setMessage', error.message);
       }
     }
   }

@@ -1,8 +1,8 @@
-var express = require("express");
+const express = require("express");
 const cors = require("cors");
-var router = express.Router();
+const router = express.Router();
 
-var aws = require("aws-sdk");
+const aws = require("aws-sdk");
 
 // vercel don't allow to set AWS_REGION env etc.
 // so we use AWS_REGION_POLLY instead and update aws sdk config
@@ -26,11 +26,11 @@ router.options("*", cors());
 router.post("/", cors(), async function (req, res, next) {
   try {
     console.log(`req.body: ${req.body}`);
-    let data = await polly.synthesizeSpeech(req.body).promise();
+    const data = await polly.synthesizeSpeech(req.body).promise();
     res.setHeader("content-type", data.ContentType);
     res.send(data.AudioStream);
   } catch (error) {
-    next();
+    next(error);
   }
 });
 
