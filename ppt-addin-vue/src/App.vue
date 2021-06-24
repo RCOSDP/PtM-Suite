@@ -29,6 +29,28 @@
           <input type="checkbox" v-model="engine" true-value="local" false-value="polly" >
           このマシンで音声合成する。
         </div>
+        <hr>
+        <div class="padding">
+          参考リンク:<br>
+          <a href="https://www.speechmarkdown.org/" target="_blank" rel="noopener noreferrer">
+          Speech Markdown ホームページ</a>
+          <a href="https://www.speechmarkdown.org/basics/what/" target="_blank" rel="noopener noreferrer">
+          Speech Markdown ドキュメント</a>
+          <a href="https://docs.aws.amazon.com/polly/latest/dg/polly-dg.pdf" target="_blank" rel="noopener noreferrer">
+          Amazon Polly Developer Guide</a>
+          <a href="https://aws.amazon.com/jp/blogs/news/amazon-polly-japanese-text-optimization/" target="_blank" rel="noopener noreferrer">
+          Amazon Polly を使用した日本語テキスト読み上げの最適化</a>
+        </div>
+        <hr>
+        <div class="padding">
+          以下の形式のマークダウン記法をサポートしています。
+          <dl>
+            <dt>(日本橋)[ruby:"にっぽんばし"] ⇒</dt>
+            <dd>&lt;phoneme type="ruby" ph="にっぽんばし"&gt;日本橋&lt;/phoneme&gt;</dd>
+            <dt>(彼氏)[kana:"カレシ"] ⇒</dt>
+            <dd>&lt;phoneme alphabet="x-amazon-pron-kana" ph="カレシ"&gt;彼氏&lt;/phoneme&gt;</dd>
+          </dl>
+        </div>
       </div>
     </div>
   </div>
