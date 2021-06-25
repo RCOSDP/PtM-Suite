@@ -39,5 +39,17 @@ PowerPoint の中に、WebPageを表示させて、自分のコンピュータ�
   + import.md
 + ppt-addin-vue/ アドイン本体
 + server/ アドインを配布するサーバ兼 aws polly proxy
++ ppt2video/ パワーポイントを動画に変換するnode.jsプログラム
++ test/ サンプルパワーポイントファイル
 + misc/ サンプルスクリプト、ファイルなど
++ .github/workflows ワークフローファイル
 ```
+
+## ワークフロー
+
+レポジトリには、次の GitHub Actions ワークフローが定義されています。
+
+|名称|ファイル名|内容|
+|---|---|---|
+|PPT2VIDEO|ppt2video.yml|test/vuca.pptxファイルを動画に変換する|
+|ONPUSH|onpush.yml|mainブランチへのgit pushで動作し、変更されたパワーポイントファイルを動画に変換する|

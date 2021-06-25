@@ -1,6 +1,6 @@
 ## ppt2video
 
-ppt2video は、AWS Polly を使って PowerPoint 文書からビデオファイルを生成するコマンドです。
+ppt2video は、AWS Polly を使って PowerPoint 文書から動画を生成するコマンドです。
 
 実行時には、以下の環境変数を適切に設定します。
 
@@ -44,23 +44,25 @@ bin/ppt2video.js ファイル名
 ppt2video ファイル名
 ```
 
-以下のコマンドラインオプションをサポートしています。
+以下のコマンドラインオプション及び環境変数をサポートしています。
 
-|オプション|デフォルト値|
-|----------|------------|
-|-t,--tempDir|.|
-|-o,--outputDir|.|
-|--libDir|<インストール先>/lib|
-|--tikaJar|tika-app-1.26.jar|
-|--sampleRate|22010|
-|--voice|Takumi|
-|--delay|1.0|
-|--pad|1.0|
-|--fade|0.5|
-|-v,--vcodec|libopenh264|
-|--logfile|ppt2video.log|
-|--loglevel|info|
-|-n, --novideo|false|
+|オプション|デフォルト値|環境変数|
+|---------|-----------|-------|
+|-t,--tempDir|.|PPT2VIDEO_TEMP_DIR|
+|-o,--outputDir|.|PPT2VIDEO_OUTPUT_DIR|
+|--libDir|<インストール先>/lib|PPT2VIDEO_LIB_DIR|
+|--tikaJar|tika-app-1.26.jar|PPT2VIDEO_TIKA_JAR|
+|--ffmpegCmd|ffmpeg|PPT2VIDEO_FFMPEG_CMD|
+|--sampleRate|22010|PPT2VIDEO_SAMPLERATE|
+|--voice|Takumi|PPT2VIDEO_VOICE|
+|--delay|1.0|PPT2VIDEO_DELAY|
+|--pad|1.0|PPT2VIDEO_PAD|
+|--fade|0.5|PPT2VIDEO_FADE|
+|-v,--vcodec|libopenh264|PPT2VIDEO_VCODEC|
+|--voption||PPT2VIDEO_VOPTION|
+|--logfile|ppt2video.log|PPT2VIDEO_LOGFILE|
+|--loglevel|info|PPT2VIDEO_LOGLEVEL|
+|-n, --novideo|false||
 
 -t,--tempDir で一時ファイルを作成するディレクトリを指定します。.mp3 ファイルなどの一時ファイルは、コマンド終了時に削除されます。
 
@@ -74,7 +76,7 @@ ppt2video ファイル名
 
 --delay, --pad, --fade では、トピック毎のビデオに設定する無音区間や fade-in, fade-out の時間のデフォルト値を指定します。
 
--v,--vcodec では、ffmpeg でビデオを生成するときのビデオコーデックを指定します。libopenh264 と x264 を選択できます。
+-v,--vcodec では、ffmpeg でビデオを生成するときのビデオコーデックを指定します。libopenh264 と libx264 を選択できます。
 
 --logfile でログファイルの名前を指定します。ログは指定したファイルに追記されます。ファイル名のデフォルトは ppt2video.log です。
 
@@ -94,16 +96,17 @@ npm install
 
 lib ディレクトリに https://github.com/RCOSDP/GakuNinLMS-M-CMS-dev/releases/tag/binary の Assets から以下のファイルをダウンロードします。
 
-- ffmpeg.gz
-- libopenh264.so.6.gz
+- ffmpeg.bz2
+- libopenh264-2.1.1-linux64.6.so.bz2
 - tika-app-1.26.jar
 
 gz ファイルを展開し、ffmpeg に実行権を付与します。
 
 ```
-gunzip libopenh264.so.6.gz
-gunzip ffmpeg.gz
+bunzip2 ffmpeg.bz2
 chmod +x ffmpeg
+bunzip2 libopenh264-2.1.1-linux64.6.so.bz2
+ln -s libopenh264-2.1.1-linux64.6.so libopenh264.so.6
 ```
 
 この状態で、以下のいずれかの方法でコマンドを起動できます。
@@ -132,19 +135,15 @@ GitHub Actions で ppt2video コマンドを動作させる手順を示します
 
 GitHub Actions runner から以下のバイナリがダウンロードできるようにします。
 
+- ffmpeg.bz2
+- libopenh264-2.1.1-linux64.6.so.bz2
 - tika-app-1.26.jar
-- libopenh264.so.6.gz
-- ffmpeg.gz
 
-GitHub レポジトリの [Code]タブから、"binary" という Tag のリリースを作成し、上記のバイナリを Assets として登録します。リリース本体の Source code (zip)や Source code (tar.gz)は使用しません。
+GitHub レポジトリの [Code]タブで、"binary" という Tag のリリースを作成し、上記のバイナリを Assets として登録します。リリース本体の Source code (zip)や Source code (tar.gz)は使用しません。
 
 tika-app-1.26.jar は、https://tika.apache.org からダウンロードします。
 
-libopenh264.so.6.gz は以下の手順で作成します。
-
-1. https://github.com/cisco/openh264/releases から linux64バイナリをダウンロードする
-2. .so ファイルのファイル名を libopenh264.so.6 に変更する
-3. gzip libopenh264.so.6
+libopenh264-2.1.1-linux64.6.so.bz2 は、https://github.com/cisco/openh264/releases からダウンロードします。
 
 ffmpeg は、次の手順で作成します。
 
@@ -191,11 +190,11 @@ $ sudo rm /usr/local/lib/libopenh264.a
 ffmpeg をビルドする。
 
 ```
-$ sudo apt-get install libmp3lame-dev libopus-dev libvorbis-dev
+$ sudo apt-get install libmp3lame-dev
 
 $ git clone https://git.ffmpeg.org/ffmpeg.git
 $ git checkout n3.4.8
-$ ./configure --enable-libopenh264 --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libvpx
+$ ./configure --enable-libopenh264
 $ make
 
 $ ldd ffmpeg
