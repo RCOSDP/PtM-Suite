@@ -9,3 +9,4 @@ vuca.json
 *.mp4
 *.list
 *.log
+dist/

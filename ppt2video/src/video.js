@@ -2,7 +2,7 @@ const execa = require('execa');
 const fs = require('fs');
 const path = require('path');
 const sm = require('speechmarkdown-js');
-const AWS = require('aws-sdk');
+const AWSPolly = require('aws-sdk/clients/polly');
 const mm = require('music-metadata');
 const axios = require('axios');
 
@@ -129,7 +129,7 @@ const polly_defaults = {
 };
 
 async function createAudioFiles(slides, speech) {
-  const polly = new AWS.Polly();
+  const polly = new AWSPolly();
 
   const req = {
     ...polly_defaults
