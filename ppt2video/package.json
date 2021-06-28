@@ -1,7 +1,7 @@
 {
-  "name": "ppt2video",
+  "name": "@rcosdp/ppt2video",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "main": "bin/ppt2video.js",
   "scripts": {},
   "bin": {
@@ -16,5 +16,12 @@
     "music-metadata": "^7.8.6",
     "speechmarkdown-js": "github:npocccties/speechmarkdown-js#ties-with-dist",
     "xml2js": "^0.4.23"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/RCOSDP/GakuNinLMS-M-CMS-dev.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
