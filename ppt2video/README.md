@@ -202,3 +202,17 @@ $ ldd ffmpeg
       libopenh264.so.6 => /usr/local/lib/libopenh264.so.6 (0x00007fefa6070000)
 ...
 ```
+
+## GitHub Packages
+
+GitHub Packages にパッケージを登録する場合は、次のようにします。
+
+- Personal Access Token(PAT)) とレジストリを ~/.npmrc ファイルに登録する
+- または、レジストリにログインする
+- npm publish する
+
+詳細は、以下のページを参照してください。
+
+https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry
+
+パッケージは、Packages ページから削除できます。
