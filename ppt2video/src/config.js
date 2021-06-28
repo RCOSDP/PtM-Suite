@@ -13,6 +13,7 @@ const stringOptions = {
   logfile:     process.env.PPT2VIDEO_LOGFILE     || 'ppt2video.log',
   loglevel:    process.env.PPT2VIDEO_LOGLEVEL    || 'info',
   sampleRate:  process.env.PPT2VIDEO_SAMPLERATE  || '22050',
+  pollyProxy:  process.env.PPT2VIDEO_POLLY_PROXY,
 };
 
 const voption_default = {

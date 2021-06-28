@@ -4,6 +4,7 @@ const path = require('path');
 const sm = require('speechmarkdown-js');
 const AWS = require('aws-sdk');
 const mm = require('music-metadata');
+const axios = require('axios');
 
 const {config} = require('./config.js');
 const {log4js, logger} = require('./log.js');
@@ -149,9 +150,16 @@ async function createAudioFiles(slides, speech) {
     req.Text = speech.toSSML(slideText(slide));
 
     // call amazon polly
-    const data = await polly.synthesizeSpeech(req).promise();
-    slide.duration = (await mm.parseBuffer(data.AudioStream)).format.duration;
-    fs.writeFileSync(slide.audioFilename, data.AudioStream);
+    let stream;
+    if (config.pollyProxy) {
+      const res = await axios.post(config.pollyProxy, req, {responseType: 'arraybuffer'});
+      stream = res.data;
+    } else {
+      const data = await polly.synthesizeSpeech(req).promise();
+      stream = data.AudioStream;
+    }
+    slide.duration = (await mm.parseBuffer(stream)).format.duration;
+    fs.writeFileSync(slide.audioFilename, stream);
 
     prev = slide;
   }
