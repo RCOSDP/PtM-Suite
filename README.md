@@ -53,3 +53,6 @@ PowerPoint の中に、WebPageを表示させて、自分のコンピュータ�
 |---|---|---|
 |PPT2VIDEO|ppt2video.yml|test/vuca.pptxファイルを動画に変換する|
 |ONPUSH|onpush.yml|mainブランチへのgit pushで動作し、変更されたパワーポイントファイルを動画に変換する|
+
+PPT2VIDEOワークフローは、[Actionsページ](https://github.com/RCOSDP/GakuNinLMS-M-CMS-dev/actions/workflows/ppt2video.yml)の Run workflow ボタンから起動します。
+
