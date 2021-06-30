@@ -1,4 +1,5 @@
 const xml2js = require('xml2js');
+const {config} = require('./config.js');
 const {logger} = require('./log.js');
 
 function p2strings(p){
@@ -167,6 +168,29 @@ function parseSections(slides) {
   return sections;
 }
 
+function parseSectionsPerTopic(slides) {
+  const sections = [];
+  let currentTopic = null;
+
+  slides.forEach(slide => {
+    // check new topic
+    if (currentTopic !== null && currentTopic.name !== topicName(slide)) {
+      currentTopic = null;
+    }
+    // create new section and topic
+    if (currentTopic === null) {
+      const currentSection = newSection(slide);
+      currentTopic = newTopic(slide);
+      currentSection.topics.push(currentTopic);
+      sections.push(currentSection);
+      return;
+    }
+    currentTopic.slides.push(slide);
+  });
+
+  return sections;
+}
+
 async function parse(xml) {
   const option = {
     async: false,
@@ -177,7 +201,13 @@ async function parse(xml) {
   const slides = tika2slide(tika);
 
   slides.forEach(slide => parseNote(slide));
-  const sections = parseSections(slides);
+
+  let sections;
+  if (config.sectionPerTopic) {
+    sections = parseSectionsPerTopic(slides);
+  } else {
+    sections = parseSections(slides);
+  }
 
   return {tika, slides, sections};
 }
