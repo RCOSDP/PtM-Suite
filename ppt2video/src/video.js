@@ -51,8 +51,8 @@ function prepare(filepath, sections, vsuffix, asuffix) {
 
   sections.forEach(section => {
     section.topics.forEach(topic => {
-      topic.url = `${filepath.name}_${tnum}.${vsuffix}`;
-      topic.outputFilename = path.join(outputDir, topic.url);
+      topic.file = `${filepath.name}_${tnum}.${vsuffix}`;
+      topic.outputFilename = path.join(outputDir, topic.file);
       topic.slides.forEach(slide => {
         slide.audioFilename = path.join(tempDir, `${filepath.name}_${tnum}_${snum}.${asuffix}`);
         slide.videoFilename = path.join(tempDir, `${filepath.name}_${tnum}_${snum}.${vsuffix}`);
