@@ -74,7 +74,7 @@ function convertTopics(topics) {
       name: topic.name,
       description: getDescription(topic.slides),
       resource: {
-        url: topic.url
+        file: topic.file
       }
     };
     addTopicProperty(ret, topic.slides[0]);
