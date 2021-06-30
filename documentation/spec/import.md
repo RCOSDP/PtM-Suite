@@ -26,7 +26,8 @@ book.json
 |sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised|dcterms:modified<br>ノート.updatedAt|空白の場合は、series-informationのものを設定すること|
 |sections[].topics[].license|String|||vol-n|CC|ノート.license|https://spdx.org/licenses/ のIdentifierと許容される括弧と演算子で構成され、spdxのチェックが通るもの<br>例:`CC-BY-4.0`<br>pptでは最初に検知したlicenseを全トピックに適用する|
 |sections[].topics[].keywords[]|String[]|||||ノート.keywords|xlsxには該当する項目がないため、任意の値を設定|
-|sections[].topics[].resource.url|String|true||vol-n|main|生成動画ファイル||
+|sections[].topics[].resource.file|String|true||vol-n|main|生成動画ファイル名||
+|sections[].topics[].resource.url|String|true||vol-n|main|登録済み動画のurl|生成動画ファイルの指定がないときは必須|
 |sections[].topics[].resource.providerUrl|String|true|||||動画がローカルファイルの場合は、アップロード先のサイトを設定|
 |sections[].topics[].details.*||||vol-n|その他|||
 
@@ -93,8 +94,8 @@ chilo001_vol-1.json
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "./001m_0101.mp4",
-                        "providerUrl": "https://www.youtube.com/",
+                        "file": "./001m_0101.mp4",
+                        "providerUrl": "https://www.wowza.com/",
                         "tracks": [],
                         "details": {}
                     },
@@ -117,8 +118,8 @@ chilo001_vol-1.json
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "./001m_0102.mp4",
-                        "providerUrl": "https://www.youtube.com/",
+                        "file": "./001m_0102.mp4",
+                        "providerUrl": "https://www.wowza.com/",
                         "tracks": [],
                         "details": {}
                     },
@@ -146,8 +147,8 @@ chilo001_vol-1.json
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "./001m_0109.mp4",
-                        "providerUrl": "https://www.youtube.com/",
+                        "file": "./001m_0109.mp4",
+                        "providerUrl": "https://www.wowza.com/",
                         "tracks": [],
                         "details": {}
                     },
@@ -170,8 +171,8 @@ chilo001_vol-1.json
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
-                        "url": "./001m_0110.mp4",
-                        "providerUrl": "https://www.youtube.com/",
+                        "file": "./001m_0110.mp4",
+                        "providerUrl": "https://www.wowza.com/",
                         "tracks": [],
                         "details": {}
                     },
