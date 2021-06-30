@@ -34,8 +34,16 @@ const numberOptions = {
   fade:  numberOption(process.env.PPT2VIDEO_FADE, 0.5),
 };
 
+function boolOption(env, value) {
+  if (typeof env !== 'undefined') {
+    value = parseBoolean(env);
+  }
+  return value;
+}
+
 const boolOptions = {
   novideo: false,
+  sectionPerTopic: boolOption(process.env.PPT2VIDEO_SECTION_PER_TOPIC, true),
 };
 
 const config = minimist(process.argv.slice(2), {
