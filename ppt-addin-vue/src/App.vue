@@ -2,33 +2,39 @@
   <div id="app">
     <div class="content">
       <div class="content-main">
-        <div class="padding">
-          <p>選択した文字列を音声合成します。</p>
-          <button @click="onSynthesis">音声合成</button>
-        </div>
-        <div class="padding" v-show="show_message">
-          エラー: {{message}}
-        </div>
-        <div class="padding">
+        <el-row class="padding">
+          <el-button type="primary" size="large" @click="onSynthesis">音声合成</el-button>
+        </el-row>
+        <el-alert
+          v-if="show_message"
+          :closable="false">{{message}}
+        </el-alert>
+        <el-row class="padding">
           音声名: 
-          <select v-model="voice">
-            <option v-for="voice in optionVoice"
-              v-bind:value="voice.name"
-              v-bind:key="voice.name" >
-              {{voice.name}}
-            </option>
-          </select><br>
+          <el-select v-model="voice" style="width: 40%;padding: 6px;">
+            <el-option
+              v-for="voice in optionVoice"
+              :key="voice.name"
+              :label="voice.name"
+              :value="voice.name" >
+            </el-option>
+          </el-select><br>
+        </el-row>
+        <el-row class="padding">
           サンプルレート:
-          <select v-model="samplerate">
-            <option v-for="sr in optionSamplerate"
-              v-bind:value="sr.name"
-              v-bind:key="sr.name" >
-              {{sr.name}}
-            </option>
-          </select><br>
-          <input type="checkbox" v-model="engine" true-value="local" false-value="polly" >
+          <el-select v-model="samplerate" style="width: 40%;padding: 6px;">
+            <el-option v-for="sr in optionSamplerate"
+              :key="sr.name"
+              :label="sr.name"
+              :value="sr.name" >
+            </el-option>
+          </el-select><br>
+        </el-row>
+        <el-row class="padding">
+          <el-switch v-model="engine" active-value="local" inactive-value="polly">
+          </el-switch>
           このマシンで音声合成する。
-        </div>
+        </el-row>
         <hr>
         <div class="padding">
           参考リンク:<br>
@@ -103,6 +109,6 @@ export default {
   }
 
   .padding {
-    padding: 15px;
+    padding: 4px 10px;
   }
 </style>
