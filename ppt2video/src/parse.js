@@ -117,6 +117,8 @@ function newSection(slide) {
   }
   if (typeof slide.section !== 'undefined') {
     name = slide.section;
+  } else if (typeof slide.topic !== 'undefined') {
+    name = slide.topic;
   }
   return {name, topics: []};
 }
