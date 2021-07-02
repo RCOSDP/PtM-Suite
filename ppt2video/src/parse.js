@@ -117,8 +117,6 @@ function newSection(slide) {
   }
   if (typeof slide.section !== 'undefined') {
     name = slide.section;
-  } else if (typeof slide.topic !== 'undefined') {
-    name = slide.topic;
   }
   return {name, topics: []};
 }
@@ -182,6 +180,7 @@ function parseSectionsPerTopic(slides) {
     // create new section and topic
     if (currentTopic === null) {
       const currentSection = newSection(slide);
+      currentSection.name = '';
       currentTopic = newTopic(slide);
       currentSection.topics.push(currentTopic);
       sections.push(currentSection);
