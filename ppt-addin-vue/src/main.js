@@ -3,8 +3,12 @@ import { SpeechMarkdown } from 'speechmarkdown-js'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
+import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/ja'
+import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Vuex);
+Vue.use(ElementUI, {locale});
 Vue.config.productionTip = false
 
 /* global Office, OfficeExtension */
@@ -107,6 +111,9 @@ const store = new Vuex.Store({
       this.commit('setMessage', "");
       try {
         let text = await getSelectedText();
+        if (text.length === 0) {
+          throw {message: "文字列を選択してください。"};
+        }
         switch(engine) {
           case 'local':
             engineLocal(text);
