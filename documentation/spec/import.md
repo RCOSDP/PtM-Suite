@@ -10,6 +10,7 @@ book.json
 |shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
 |publishedAt|DateTime||現時刻|series-information|published|dcterms:created|dcterms:issuedはpptにはないため、dcterms:createdを利用|
 |createdAt|DateTime||現時刻|series-information|published|dcterms:created|xlsxには該当する項目がないため、publishedを利用|
+|updatedAt|DateTime||現時刻|series-information|revised|dcterms:modified|この値は無視され、現時刻が設定される|
 |details.series.*||||series-information|その他|||
 |details.book.*||||book-list|その他|||
 |keywords[]|String[]|||||dc:subject<br>cp:keywords|xlsxには該当する項目がないため、任意の値を設定<br>pptでは複数のキーワードの区切りが未定義？|
@@ -22,6 +23,7 @@ book.json
 |sections[].topics[].timeRequired|Int||0||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].shared|Boolean||true||||xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].createdAt|DateTime||現時刻|book-list|published|dcterms:created<br>ノート.createdAt|空白の場合は、series-informationのものを設定すること|
+|sections[].topics[].updatedAt|DateTime||現時刻|book-list|revised|dcterms:modified<br>ノート.updatedAt|この値は無視され、現時刻が設定される|
 |sections[].topics[].license|String|||vol-n|CC|ノート.license|https://spdx.org/licenses/ のIdentifierと許容される括弧と演算子で構成され、spdxのチェックが通るもの<br>例:`CC-BY-4.0`<br>pptでは最初に検知したlicenseを全トピックに適用する|
 |sections[].topics[].keywords[]|String[]|||||ノート.keywords|xlsxには該当する項目がないため、任意の値を設定|
 |sections[].topics[].resource.file|String|true||vol-n|main|生成動画ファイル名||
@@ -47,6 +49,7 @@ chilo001_vol-1.json
     "shared": true,
     "publishedAt": "2013-09-13T00:00:00",
     "createdAt": "2013-09-13T00:00:00",
+    "updatedAt": "2018-07-10T00:00:00",
     "details": {
         "series": {
             "version": "2.4",
@@ -60,7 +63,6 @@ chilo001_vol-1.json
             "cover": "001_inside_cover.png"
         },
         "book": {
-            "updatedAt": "2018-07-10T00:00:00",
             "vol": "vol-1",
             "book-cover": "001_cover_image_1.png",
             "identifier": "41fe5bb9-686f-47dd-8197-61fc9f817bcd",
@@ -87,6 +89,7 @@ chilo001_vol-1.json
                     "timeRequired": 1,
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
+                    "updatedAt": "2018-07-10T00:00:00",
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
@@ -95,7 +98,6 @@ chilo001_vol-1.json
                         "details": {}
                     },
                     "details": {
-                        "updatedAt": "2018-07-10T00:00:00",
                         "page-type": "document",
                         "community": true,
                         "video-image": "001m_0101.png",
@@ -110,6 +112,7 @@ chilo001_vol-1.json
                     "timeRequired": 1,
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
+                    "updatedAt": "2018-07-10T00:00:00",
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
@@ -118,7 +121,6 @@ chilo001_vol-1.json
                         "details": {}
                     },
                     "details": {
-                        "updatedAt": "2018-07-10T00:00:00",
                         "page-type": "document",
                         "community": true,
                         "video-image": "001m_0102.png",
@@ -138,6 +140,7 @@ chilo001_vol-1.json
                     "timeRequired": 1,
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
+                    "updatedAt": "2018-07-10T00:00:00",
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
@@ -146,7 +149,6 @@ chilo001_vol-1.json
                         "details": {}
                     },
                     "details": {
-                        "updatedAt": "2018-07-10T00:00:00",
                         "page-type": "document",
                         "community": true,
                         "video-image": "001m_0109.png",
@@ -161,6 +163,7 @@ chilo001_vol-1.json
                     "timeRequired": 1,
                     "shared": true,
                     "createdAt": "2013-09-13T00:00:00",
+                    "updatedAt": "2018-07-10T00:00:00",
                     "license": "CC-BY-4.0",
                     "keywords": [],
                     "resource": {
@@ -169,7 +172,6 @@ chilo001_vol-1.json
                         "details": {}
                     },
                     "details": {
-                        "updatedAt": "2018-07-10T00:00:00",
                         "page-type": "document",
                         "community": true,
                         "video-image": "001m_0110.png",
