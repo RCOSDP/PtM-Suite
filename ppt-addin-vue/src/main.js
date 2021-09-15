@@ -47,7 +47,7 @@ function engineLocal(text) {
 async function enginePolly(text, {voice, samplerate}) {
   let res;
   try {
-    text = text.replace(/<\/?speak>/g,'');
+    text = text.replace(/<\/?speak>/g,'').replace(/\v/g,'');
     text = speech.toSSML(text, {platform: 'amazon-alexa'});
   } catch (error) {
     console.log('error occured in enginePolly: markdown')
