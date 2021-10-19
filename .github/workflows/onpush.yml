@@ -1,0 +1,114 @@
+name: ONPUSH
+on:
+  push:
+    branches:
+      - main
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      files: '${{ steps.findpptx.outputs.result }}'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: trilom/file-changes-action@v1.2.4
+        id: file_changes
+
+      - name: find pptx files
+        uses: actions/github-script@v4
+        id: findpptx
+        env:
+          MODIFIED: '${{ steps.file_changes.outputs.files_modified }}'
+          ADDED: '${{ steps.file_changes.outputs.files_added }}'
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const {MODIFIED, ADDED} = process.env;
+            const list = JSON.parse(MODIFIED).concat(JSON.parse(ADDED));
+            const result = new Set();
+            for (file of list) {
+              const filepath = path.parse(file);
+              switch (filepath.ext.toLowerCase()) {
+              case '.png':
+                if (fs.existsSync(filepath.dir + '.pptx')) {
+                  result.add(filepath.dir + '.pptx');
+                }
+                break;
+              case '.pptx':
+                result.add(file);
+                break;
+              }
+            }
+            return Array.from(result);
+
+      - name: findpptx result
+        run: |
+          echo '${{ steps.findpptx.outputs.result }}'
+
+  generate:
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.files != '[]'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: download binaries
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ env.GITHUB_REPOSITORY }}
+          TIKA_JAR: tika-app-1.26.jar
+          LIBOPENH264: libopenh264-2.1.1-linux64.6.so.bz2
+        run: |
+          cd ppt2video/lib
+          gh release download binary -p $TIKA_JAR
+          gh release download binary -p 'ffmpeg.bz2'
+          bunzip2 ffmpeg.bz2
+          chmod +x ffmpeg
+          gh release download binary -p ${LIBOPENH264}
+          bunzip2 ${LIBOPENH264}
+          ln -s $(basename ${LIBOPENH264} .bz2) libopenh264.so.6
+          LD_LIBRARY_PATH=. ./ffmpeg -version
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: npm install
+        run: |
+          (cd ppt2video;npm install)
+
+      - name: ppt2video files
+        uses: actions/github-script@v4
+        id: ppt2video
+        env:
+          FILES: '${{ needs.changes.outputs.files }}'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-northeast-1'
+          PPT2VIDEO_OUTPUT_DIR: output
+          PPT2VIDEO_TEMP_DIR: temp
+        with:
+          script: |
+            const cp = require('child_process');
+            const fs = require('fs');
+            fs.mkdirSync(process.env.PPT2VIDEO_OUTPUT_DIR);
+            fs.mkdirSync(process.env.PPT2VIDEO_TEMP_DIR);
+            const files = JSON.parse(process.env.FILES);
+            for (file of files) {
+              cp.spawnSync('node',['ppt2video/bin/ppt2video.js',file],{stdio: 'inherit'});
+            }
+            return require('path').parse(files[0]).name;
+          result-encoding: string
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.ppt2video.outputs.result }}
+          path: output

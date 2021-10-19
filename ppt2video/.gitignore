@@ -1,0 +1,12 @@
+node_modules/
+.vscode/
+package-lock.json
+vuca/
+*.pptx
+*.xml
+vuca.json
+*.mp3
+*.mp4
+*.list
+*.log
+dist/
