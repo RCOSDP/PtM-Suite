@@ -94,7 +94,7 @@ ppt2video ファイル名
 npm install
 ```
 
-lib ディレクトリに https://github.com/RCOSDP/GakuNinLMS-M-CMS-dev/releases/tag/binary の Assets から以下のファイルをダウンロードします。
+lib ディレクトリに https://github.com/RCOSDP/GakuNinLMS-M-CMS/releases/tag/binary の Assets から以下のファイルをダウンロードします。
 
 - ffmpeg.bz2
 - libopenh264-2.1.1-linux64.6.so.bz2

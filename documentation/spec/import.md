@@ -2,7 +2,7 @@
 
 ### インポートjsonとインポート元データとの対応
 book.json
-|json|型|required|default|CHiLO Book シート|CB 列|PPT プロパティ|備考|
+|json|型|required|default|Book シート|B 列|PPT プロパティ|備考|
 |-|-|-|-|-|-|-|-|
 |name|String|true||book-list|book-title|dc:title|dcterms:titleはpptにはない|
 |description|String|||book-list|book-summary|dc:description|テキストのみ許容する。改行は\nとする。html/xmlの要素定義が入ってしまってもhtml/xmlとは解釈しない|
