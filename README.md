@@ -1,6 +1,6 @@
 # CHiLO-Speech
 
-## Introduction
+## 1. Introduction
 
 ### (1) CHiLO-Speechとは
 CHiLO-Speechは，[学習支援システムCHiBi-CHiLO](https://github.com/npocccties/chibichilo)に対応した，音声合成ビデオ作成ツールです．
@@ -26,7 +26,7 @@ CHiBi-CHiLOとは，LMSと外部接続する[LTIツールプロバイダー](htt
 
 CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io/chibichilo/)をご覧下さい．
 
-## Architecture
+## 2. Architecture
 
 ### (1) システム構成
 
@@ -39,7 +39,7 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 3. Amazon Polly　(https://aws.amazon.com/jp/polly/) 
     * AWSが提供するTTS（Text-to-Speech）エンジンのクラウドサービスです． あらかじめ，AWS Pollyのアクセスキーが必要です．
 4. GitHub専用レポジトリ (本レポジトリ)
-    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントを合成音声ビデオ（MP4）に変換します．[work/](work/)にパワーポイントをアップロードすると，ビデオとWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．[upload/](upload/)にアップロードすると，Vimeo用CHiBi-CHiLO登録ファイルが出力され，ビデオは，Vimeoに自動的登録される．
+    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントを合成音声ビデオ（MP4）に変換します．[workフォルダ](work/)にパワーポイントをアップロードすると，ビデオとWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．[uploadフォルダ](upload/)にアップロードすると，Vimeo用CHiBi-CHiLO登録ファイルが出力され，ビデオは，Vimeoに自動的登録される．
 5. LMS
     * CHiBi-CHiLOに登録したビデオ教材を配信するLTI対応のLMS（Learning Management Service）です．
 6. CHiBi-CHiLO　(https://github.com/npocccties/chibichilo)

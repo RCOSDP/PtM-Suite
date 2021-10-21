@@ -2,7 +2,7 @@
 
 パワーポイント用アドインについては，[../manifest](../manifest) を参照して下さい．
 
-## Deploy on Vercel
+## 1.  Deploy on Vercel
 
 Vercel にデプロイして使う場合、この ppt-addin-vue と server の 2 つのデプロイをペアで利用することに注意して、次の手順でデプロイしてください。
 
@@ -20,7 +20,7 @@ Vercel にデプロイして使う場合、この ppt-addin-vue と server の 2
 - 先ほどデプロイした先のドメインをアドオンフレームに読み込むようにするため `manifest.xml` の中の `http://localhost:3000/` を全て `http://polly-addon-test/` のように一括置き換えして `manifest-vercel.xml` のように別ファイルで保存する
 - 新しく作った manifest をオフィスに読み込む (手順はローカル開発時と同じ)
 
-## Local Development
+## 2. Local Development
 
 開発用サーバを使う場合は、keys ディレクトリに localhost証明書が必要です。localhost証明書は、以下のページの「アプリをセキュリティ保護する」の方法で入手します。
 
@@ -33,12 +33,12 @@ https://docs.microsoft.com/ja-jp/office/dev/add-ins/quickstarts/excel-quickstart
 - keys/localhost.crt
 - keys/ca.crt
 
-## Project setup
+## 3. Project setup
 ```
 npm install
 ```
 
-## Compiles and hot-reloads for development
+## 4. Compiles and hot-reloads for development
 
 開発用サーバは、次の方法で起動します。
 
@@ -46,7 +46,7 @@ npm install
 npm run serve
 ```
 
-## Compiles and minifies for production
+## 5. Compiles and minifies for production
 
 以下のコマンドで dist ディレクトリに production コードが生成されます。
 
@@ -54,10 +54,10 @@ npm run serve
 npm run build
 ```
 
-## Lints and fixes files
+## 6. Lints and fixes files
 ```
 npm run lint
 ```
 
-## Customize configuration
+## 7. Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

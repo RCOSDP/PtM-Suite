@@ -7,7 +7,7 @@ manifest.xmlは，ノートや本文で選択した文字列を、ブラウザ�
 
 
 # アーキテクチャ（システム管理者向け資料）
-## アドインのインストール
+## 1. アドインのインストール
 
 アドインは、システム管理者があらかじめ Vercel などにデプロイします。PowerPointのユーザーは、PowerPointファイルにアドインをインストールして使います。
 
@@ -18,7 +18,7 @@ PowerPointファイルへのアドインの挿入方法は、アドインのデ�
 
 システム管理者は、アドインの manifestファイルを PowerPoint ユーザーに配布します。
 
-### Windows版 PowerPoint アプリ
+### (1) Windows版 PowerPoint アプリ
 
 Windows版 PowerPoint アプリでは、次の方法でアドインを挿入します。
 
@@ -29,11 +29,13 @@ Windows版 PowerPoint アプリでは、次の方法でアドインを挿入し�
 
 [ホーム]-[Show Taskpane]をクリックすると、アドインが表示されます。
 
+### (2) macOS版 PowerPoint アプリ
+
 Macをお使いの場合は、次のページを参照してください。
 
 [ネットワーク共有Officeテスト用にアドインをサイドロードする](https://docs.microsoft.com/ja-jp/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins)
 
-### Web版 PowerPoint
+### (3) Web版 PowerPoint
 
 Office 365, Microsof 365 などで使える Web版 PowerPoint の場合は、次の方法で PowerPoint アプリにアドインを挿入します。
 
@@ -43,7 +45,7 @@ Office 365, Microsof 365 などで使える Web版 PowerPoint の場合は、次
 
 [ホーム]-[Show Taskpane]をクリックすると、アドインが表示されます。
 
-## アドインの操作
+## 2. アドインの操作
 
 アドインが表示されているとき、本文やノートの文字列を選択して[音声合成]をクリックすると、AWS Polly で合成した音声を再生します。音声名とサンプルレートを指定することができます。
 
