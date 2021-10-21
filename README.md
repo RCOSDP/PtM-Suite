@@ -2,24 +2,24 @@
 
 ## Introduction
 
-### （1）CHiLO-Speechとは
-CHiLO-Speechは，学習支援システム[CHiBi-CHiLO](https://github.com/npocccties/chibichilo)に対応した，音声合成ビデオ作成ツールです．
+### (1) CHiLO-Speechとは
+CHiLO-Speechは，[学習支援システムCHiBi-CHiLO](https://github.com/npocccties/chibichilo)に対応した，音声合成ビデオ作成ツールです．
 
 マイクロソフト社製パワーポイントにナレーション原稿を記載して，GitHubのCHiLO-Speechレポジトリにアップロードする，CHiBi-CHiLOに対応した合成音声付きビデオ教材が作成できます．
 
 ![CHiLO-Speech概要](docs/assets/image01.png)
 
-### （2）合成音声付きビデオ教材作成手順
+### (2) 合成音声付きビデオ教材作成手順
 
 CHiLO-Speechを利用してビデオ教材を作成する手順は次の通りとなっています．
 
-* Step1．パワーポイントにナレーションを記述する． 
-* Step2．パワーポイントをGithubにアップロードし音声合成ビデオに変換する． 
-* Step3．GitHubからダウンロードしたZIPファイルをCHiBi-CHiLOに登録する．
+* __Step1．__ パワーポイントにナレーションを記述する． 
+* __Step2．__ パワーポイントをGithubにアップロードし音声合成ビデオに変換する． 
+* __Step3．__ GitHubからダウンロードしたZIPファイルをCHiBi-CHiLOに登録する．
 
-ビデオ教材作成手順の詳細は，[CHiLO-Speech操作マニュアル](https://docs.cccties.org/chilo-speech/)　をご覧下さい．
+ビデオ教材作成手順の詳細は，[CHiLO-Speech操作マニュアル](https://docs.cccties.org/chilospeech/)　をご覧下さい．
 
-### （3）CHiBi-CHiLOとは
+### (3) CHiBi-CHiLOとは
 
 CHiBi-CHiLOとは，LMSと外部接続する[LTIツールプロバイダー](https://www.imsglobal.org/activity/learning-tools-interoperability) です．
 ビデオを共有・再利用することを目的に開発されました．YoutubeやVimeoなどのインターネット上のビデオを組み合わせ，「ブック」と呼ばれる形式のビデオ教材としてLMSで配信することができます．
@@ -28,7 +28,7 @@ CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io
 
 ## Architecture
 
-### （1）システム構成
+### (1) システム構成
 
 CHiLO-Speechのシステム構成は，以下の通りです．
 
@@ -50,7 +50,7 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 ![CHiLO-Speechのシステム構成](docs/assets/image02.png)
 
 
-### （2）本リポジトリの構成
+### (2) 本リポジトリの構成
 
 
 ```
@@ -71,7 +71,7 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 + .github/workflows ワークフローファイル
 ```
 
-### （3）ワークフロー
+### (3) ワークフロー
 
 レポジトリには、次の GitHub Actions ワークフローが定義されています。
 
