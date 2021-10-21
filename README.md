@@ -32,14 +32,14 @@ CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io
 
 CHiLO-Speechのシステム構成は，以下の通りです．
 
-1. 確認用アドイン ： [manifest/](manifest/) 
+1. 確認用アドイン ([manifest](manifest)) 
     *  パワーポイントに記述するナレーション原稿を確認するためのパワーポイントのアドインです． 
-2. 中継サーバー ： [ppt-addin-vue/](ppt-addin-vue/)，[server/](server/)
+2. 中継サーバー ([ppt-addin-vue](ppt-addin-vue/)，[server](server))
     *  確認用アドインとAmazon pollyを中継するサーバーです． 
 3. [Amazon Polly](https://aws.amazon.com/jp/polly/) 
     * AWSが提供するTTS（Text-to-Speech）エンジンのクラウドサービスです． あらかじめ，AWS Pollyのアクセスキーが必要です．
-4. GitHub専用レポジトリ ：本レポジトリ
-    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントを合成音声ビデオ（MP3）に変換します．[work/](work/)にパワーポイントをアップロードすると，ビデオとWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．[upload/](upload/)にアップロードすると，Vimeo用CHiBi-CHiLO登録ファイルが出力され，ビデオは，Vimeoに自動的登録される．
+4. GitHub専用レポジトリ (本レポジトリ)
+    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントを合成音声ビデオ（MP4）に変換します．[work/](work/)にパワーポイントをアップロードすると，ビデオとWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．[upload/](upload/)にアップロードすると，Vimeo用CHiBi-CHiLO登録ファイルが出力され，ビデオは，Vimeoに自動的登録される．
 5. LMS
     * CHiBi-CHiLOに登録したビデオ教材を配信するLTI対応のLMS（Learning Management Service）です．
 6. [CHiBi-CHiLO](https://github.com/npocccties/chibichilo)
@@ -65,7 +65,7 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 + test/ テスト用パワーポイントファイル
 + misc/ サンプルスクリプト、ファイルなど
 + manifest/ アドインをパワーポイントに登録するために必要なmanifestファイル
-+ work/ パワーポイントをアップロードすると合成音声ビデオ（MP3）とWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．
++ work/ パワーポイントをアップロードすると合成音声ビデオ（MP4）とWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．
   + sample/ ナレーション原稿が記載されたパワーポイントファイルのサンプル
 + upload/ パワーポイントをアップロードするとVimeo用CHiBi-CHiLO登録ファイルが出力される．
 + .github/workflows ワークフローファイル

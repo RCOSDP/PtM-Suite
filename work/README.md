@@ -1,12 +1,9 @@
 # work フォルダ
-ここに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，以下のファイルがartifactsに出力されます．
+このフォルダに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，以下のファイルがartifactsに出力されます．
 
-> 出力されるファイル
+__出力されるファイル__
 > * Vimeo用CHiBi-CHiLO登録ファイル（JSON）
-> * 合成音声ビデオ（MP3）
-
-
-合成音声ビデオ（MP3）とWowza用CHiBi-CHiLO登録ファイル（JSON）が出力されます．
+> * 合成音声ビデオ（MP4）
 
 詳しくは，[CHiLO-Speech操作マニュアル STEP2：ビデオ教材への変換](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
 
@@ -31,6 +28,3 @@ workフォルダに，利用者毎あるいは教材毎にフォルダを作成�
 フォルダの作成方法は，以下をご確認下さい．
 
 - [CHiLO-Speech操作マニュアル STEP2：[参考] GitHubのファイル操作](https://docs.cccties.org/ppt-width-audio/-MjY6ujcFWF_354padAe/githubwottedtani-1/githubnofairu#fairunodaunrdo)
-
-
-
