@@ -1,9 +1,9 @@
 # work フォルダ
 ## 1. workフォルダとは
-workフォルダに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，以下のファイルがartifactsに出力されます．
+workフォルダに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，以下のCHiBi-CHiLO登録データがartifactsにZIP形式で出力されます．
 
-__出力されるファイル__
-* __Wowza用CHiBi-CHiLO設定ファイル（JSON）__
+__出力されるCHiBi-CHiLO登録データ__
+* __Wowza用設定ファイル（JSON）__
 * __合成音声ビデオ（MP4）__
 
 詳しくは，[CHiLO-Speechマニュアル「STEP2：ビデオ教材への変換」](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．

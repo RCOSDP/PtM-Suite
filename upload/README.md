@@ -1,8 +1,8 @@
 # upload フォルダ
 ## 1. uploadフォルダとは
-ここに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，合成音声ビデオ（MP4）がVimeoに自動的に登録されると共に，以下のファイルがartifactsに出力されます．
+ここに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，合成音声ビデオ（MP4）がVimeoに自動的に登録されると共に，以下のCHiBi-CHiLO登録データがartifactsにZIP形式で出力されます．
 
-__出力されるファイル__
+__出力されるCHiBi-CHiLO登録データ__
 * __Vimeo用CHiBi-CHiLO設定ファイル（JSON）__
 
 詳しくは，[CHiLO-Speechマニュアル「STEP2：ビデオ教材への変換」](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
