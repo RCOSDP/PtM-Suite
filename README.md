@@ -7,7 +7,7 @@ CHiLO-Speechは，学習支援システム[CHiBi-CHiLO](https://github.com/npocc
 
 マイクロソフト社製パワーポイントにナレーション原稿を記載して，GitHubのCHiLO-Speechレポジトリにアップロードする，CHiBi-CHiLOに対応した合成音声付きビデオ教材が作成できます．
 
-![CHiLO-Speech概要](documentation/assets/image01.png)
+![CHiLO-Speech概要](docs/assets/image01.png)
 
 ### （2）合成音声付きビデオ教材作成手順
 
@@ -47,7 +47,7 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 7. VODサーバー
     * GitHub専用レポジトリからダウンロードしたZipファイルをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
 
-![CHiLO-Speechのシステム構成](documentation/assets/image02.png)
+![CHiLO-Speechのシステム構成](docs/assets/image02.png)
 
 
 ### （2）本リポジトリの構成
