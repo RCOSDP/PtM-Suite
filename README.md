@@ -1,30 +1,56 @@
-# GakuNinLMS-M-CMS
+# CHiLO-Speech
 
-## 何をするシステムか
+## Introduction
 
-全体としては、マイクロソフト社のパワーポイントの内容から、Note部分の読み上げをスピーチシンセサイザーに読み上げさせ、動画を作成します。その動画を、作成者が付与した著者、利用ライセンスなどのメタデータを付与して、マイクロコンテンツに自動的に登録する、一連の作業を自動化します。
+### （1）CHiLO-Speechとは
+CHiLO-Speechは，学習支援システム[CHiBi-CHiLO](https://github.com/npocccties/chibichilo)に対応した，音声合成ビデオ作成ツールです．
 
-# システムの全体像
+マイクロソフト社製パワーポイントにナレーション原稿を記載して，GitHubのCHiLO-Speechレポジトリにアップロードする，CHiBi-CHiLOに対応した合成音声付きビデオ教材が作成できます．
 
-下記の2つのリポジトリです。
+![CHiLO-Speech概要](documentation/assets/image01.png)
 
-- [RCOSDP/GakuNinLMS-LTI-MC](https://github.com/RCOSDP/GakuNinLMS-LTI-MC)
-- [RCOSDP/GakuNinLMS-M-CMS](https://github.com/RCOSDP/GakuNinLMS-M-CMS)
+### （2）合成音声付きビデオ教材作成手順
 
-## システムのコンポーネント
+CHiLO-Speechを利用してビデオ教材を作成する手順は次の通りとなっています．
 
-PowerPoint の中に、WebPageを表示させて、自分のコンピュータまたは、Amazon Polly などのサービスと連携させるために、下記の
-コンポーネントに分かれている。
+* Step1．パワーポイントにナレーションを記述する． 
+* Step2．パワーポイントをGithubにアップロードし音声合成ビデオに変換する． 
+* Step3．GitHubからダウンロードしたZIPファイルをCHiBi-CHiLOに登録する．
 
-- uplaoder(仮称) この機能は、 [RCOSDP/GakuNinLMS-LTI-MC: LTI for Micro contents](https://github.com/RCOSDP/GakuNinLMS-LTI-MC)  の中で、実装される。
+ビデオ教材作成手順の詳細は，[CHiLO-Speech操作マニュアル](https://docs.cccties.org/chilo-speech/)　をご覧下さい．
 
-上記以外の下記は、本リポジトリで機能を提供する。
+### （3）CHiBi-CHiLOとは
 
-- ppt-addin-vue
-- server
+CHiBi-CHiLOとは，LMSと外部接続する[LTIツールプロバイダー](https://www.imsglobal.org/activity/learning-tools-interoperability) です．
+ビデオを共有・再利用することを目的に開発されました．YoutubeやVimeoなどのインターネット上のビデオを組み合わせ，「ブック」と呼ばれる形式のビデオ教材としてLMSで配信することができます．
+
+CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io/chibichilo/)をご覧下さい．
+
+## Architecture
+
+### （1）システム構成
+
+CHiLO-Speechのシステム構成は，以下の通りです．
+
+1. 確認用アドイン ： [manifest/](manifest/) 
+    *  パワーポイントに記述するナレーション原稿を確認するためのパワーポイントのアドインです． 
+2. 中継サーバー ： [ppt-addin-vue/](ppt-addin-vue/)，[server/](server/)
+    *  確認用アドインとAmazon pollyを中継するサーバーです． 
+3. [Amazon Polly](https://aws.amazon.com/jp/polly/) 
+    * AWSが提供するTTS（Text-to-Speech）エンジンのクラウドサービスです． あらかじめ，AWS Pollyのアクセスキーが必要です．
+4. GitHub専用レポジトリ ：本レポジトリ
+    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントを合成音声ビデオ（MP3）に変換します．[work/](work/)にパワーポイントをアップロードすると，ビデオとWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．[upload/](upload/)にアップロードすると，Vimeo用CHiBi-CHiLO登録ファイルが出力され，ビデオは，Vimeoに自動的登録される．
+5. LMS
+    * CHiBi-CHiLOに登録したビデオ教材を配信するLTI対応のLMS（Learning Management Service）です．
+6. [CHiBi-CHiLO](https://github.com/npocccties/chibichilo)
+    * GitHub専用レポジトリからダウンロードしたZipファイルをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
+7. VODサーバー
+    * GitHub専用レポジトリからダウンロードしたZipファイルをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
+
+![CHiLO-Speechのシステム構成](documentation/assets/image02.png)
 
 
-# 本リポジトリの構成
+### （2）本リポジトリの構成
 
 
 ```
@@ -34,14 +60,18 @@ PowerPoint の中に、WebPageを表示させて、自分のコンピュータ�
   pptとマイクロコンテンツ のデータ項目のすり合わせなど。
   + import.md
 + ppt-addin-vue/ アドイン本体
-+ server/ アドインを配布するサーバ兼 aws polly proxy
++ server/ アドインを配布するサーバ兼 AWS Polly proxy
 + ppt2video/ パワーポイントを動画に変換するnode.jsプログラム
-+ test/ サンプルパワーポイントファイル
++ test/ テスト用パワーポイントファイル
 + misc/ サンプルスクリプト、ファイルなど
++ manifest/ アドインをパワーポイントに登録するために必要なmanifestファイル
++ work/ パワーポイントをアップロードすると合成音声ビデオ（MP3）とWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．
+  + sample/ ナレーション原稿が記載されたパワーポイントファイルのサンプル
++ upload/ パワーポイントをアップロードするとVimeo用CHiBi-CHiLO登録ファイルが出力される．
 + .github/workflows ワークフローファイル
 ```
 
-## ワークフロー
+### （3）ワークフロー
 
 レポジトリには、次の GitHub Actions ワークフローが定義されています。
 
