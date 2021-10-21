@@ -1,10 +1,10 @@
-name: ONPUSH
+name: VIDEO2VIMEO
 on:
   push:
     branches:
       - main
     paths:
-      - 'work/**'
+      - 'upload/**'
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -109,6 +109,18 @@ jobs:
             }
             return require('path').parse(files[0]).name;
           result-encoding: string
+
+      - name: video2vimeo
+        env:
+          VIMEO_CLIENT_ID: ${{ secrets.VIMEO_CLIENT_ID }}
+          VIMEO_CLIENT_SECRET: ${{ secrets.VIMEO_CLIENT_SECRET }}
+          VIMEO_ACCESS_TOKEN: ${{ secrets.VIMEO_ACCESS_TOKEN }}
+          VIMEO_PROJECT_ID: ${{ secrets.VIMEO_PROJECT_ID }}
+          PPT2VIDEO_OUTPUT_DIR: output
+        run: |
+          npm install vimeo
+          npm install node-dir
+          node ppt2video/bin/video2vimeo.js
 
       - uses: actions/upload-artifact@v2
         with:
