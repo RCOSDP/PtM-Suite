@@ -1,4 +1,4 @@
-# CHiLO-Speech
+# ![CHiLO-Speech概要](docs/assets/chilospeech.png)CHiLO-Speech
 
 ## 1. Introduction
 
@@ -51,7 +51,6 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 
 
 ### (2) 本リポジトリの構成
-
 
 ```
 /
