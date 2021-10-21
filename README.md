@@ -17,7 +17,7 @@ CHiLO-Speechを利用してビデオ教材を作成する手順は次の通り�
 * __Step2．__ パワーポイントをGithubにアップロードし音声合成ビデオに変換する． 
 * __Step3．__ GitHubからダウンロードしたZIPファイルをCHiBi-CHiLOに登録する．
 
-ビデオ教材作成手順の詳細は，[CHiLO-Speech操作マニュアル](https://docs.cccties.org/chilospeech/)　をご覧下さい．
+ビデオ教材作成手順の詳細は，[CHiLO-Speechマニュアル](https://docs.cccties.org/chilospeech/)　をご覧下さい．
 
 ### (3) CHiBi-CHiLOとは
 
@@ -32,17 +32,17 @@ CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io
 
 CHiLO-Speechのシステム構成は，以下の通りです．
 
-1. 確認用アドイン ([manifest](manifest)) 
+1. 確認用アドイン　([manifest](manifest)) 
     *  パワーポイントに記述するナレーション原稿を確認するためのパワーポイントのアドインです． 
-2. 中継サーバー ([ppt-addin-vue](ppt-addin-vue/)，[server](server))
+2. 中継サーバー　([ppt-addin-vue](ppt-addin-vue/)，[server](server))
     *  確認用アドインとAmazon pollyを中継するサーバーです． 
-3. [Amazon Polly](https://aws.amazon.com/jp/polly/) 
+3. Amazon Polly　(https://aws.amazon.com/jp/polly/) 
     * AWSが提供するTTS（Text-to-Speech）エンジンのクラウドサービスです． あらかじめ，AWS Pollyのアクセスキーが必要です．
 4. GitHub専用レポジトリ (本レポジトリ)
     * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントを合成音声ビデオ（MP4）に変換します．[work/](work/)にパワーポイントをアップロードすると，ビデオとWowza用CHiBi-CHiLO登録ファイル（JSON）が出力される．[upload/](upload/)にアップロードすると，Vimeo用CHiBi-CHiLO登録ファイルが出力され，ビデオは，Vimeoに自動的登録される．
 5. LMS
     * CHiBi-CHiLOに登録したビデオ教材を配信するLTI対応のLMS（Learning Management Service）です．
-6. [CHiBi-CHiLO](https://github.com/npocccties/chibichilo)
+6. CHiBi-CHiLO　(https://github.com/npocccties/chibichilo)
     * GitHub専用レポジトリからダウンロードしたZipファイルをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
 7. VODサーバー
     * GitHub専用レポジトリからダウンロードしたZipファイルをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．

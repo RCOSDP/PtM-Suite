@@ -1,12 +1,12 @@
 # upload フォルダ
-ここに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，合成音声ビデオ（MP3）がVimeoに自動的に登録されると共に，以下のファイルがartifactsに出力されます．
+ここに，ナレーション原稿付きにパワーポイントとスライド画像をアップロードすると，合成音声ビデオ（MP4）がVimeoに自動的に登録されると共に，以下のファイルがartifactsに出力されます．
 
-> 出力されるファイル
-> * Vimeo用CHiBi-CHiLO登録ファイル（JSON）
+__出力されるファイル__
+* __Vimeo用CHiBi-CHiLO設定ファイル（JSON）__
 
-詳しくは，[CHiLO-Speech操作マニュアル STEP2：ビデオ教材への変換](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
+詳しくは，[CHiLO-Speechマニュアル「STEP2：ビデオ教材への変換」](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
 
-なお，CHiBi-CHiLOに登録する前に合成音声ビデオを確認したい場合は，[/work フォルダ](../work)にパワーポイントをアップロードして下さい．　
+> なお，CHiBi-CHiLOに登録する前にビデオを確認したい，あるいはWowzaに対応した設定ファイルを入手したい場合は，[workフォルダ](../work)にパワーポイントをアップロードして下さい．　
 
 
 ## フォルダの管理
@@ -18,7 +18,5 @@ GitHubは仲間同士で共同作業をするためのレポジトリです．�
 ### (2) データ管理
 
 workフォルダに，利用者毎あるいは教材毎にフォルダを作成し，データ管理することをお勧めいたします．
-フォルダの作成方法は，以下をご確認下さい．
-
-- [CHiLO-Speech操作マニュアル STEP2：[参考] GitHubのファイル操作](https://docs.cccties.org/ppt-width-audio/-MjY6ujcFWF_354padAe/githubwottedtani-1/githubnofairu#fairunodaunrdo)
+フォルダの作成方法は，[CHiLO-Speechマニュアル「STEP2：[参考] GitHubのファイル操作」](https://docs.cccties.org/chilospeech/video/github#forudano)をご確認下さい．
 

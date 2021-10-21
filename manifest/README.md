@@ -1,10 +1,15 @@
-# manifest
+# manifest.xml
 
-ノートや本文で選択した文字列を、ブラウザの音声合成機能や AWS Polly を使って再生することができる、PowerPoint用 Officeアドインのサンプルです。
+manifest.xmlは，ノートや本文で選択した文字列を、ブラウザの音声合成機能や AWS Polly を使って再生することができる，マイクロソフト社製パワーポイント用アドインの設定ファイルです．ダウンロードして，パワーポイントにアドインをインストールして下さい．
 
-## アドインの挿入
+* ファイルのダウンロード方法は，[CHiLO-Speechマニュアル「STEP2：[参考] GitHubのファイル操作」](https://docs.cccties.org/chilospeech/video/github#fairunodaunrdo)をご確認下さい．
+* アドインのインストール方法は，[CHiLO-Speechマニュアル「パワーポイントの準備(1)」](https://docs.cccties.org/ppt-width-audio/-MjY6ujcFWF_354padAe/pawpointo/1adoinnoinsutru)　をご覧下さい．
 
-アドインは、システム管理者があらかじめ Vercel などにデプロイします。PowerPointのユーザーは、PowerPointファイルにアドインを挿入して使います。
+
+# アーキテクチャ（システム管理者向け資料）
+## アドインのインストール
+
+アドインは、システム管理者があらかじめ Vercel などにデプロイします。PowerPointのユーザーは、PowerPointファイルにアドインをインストールして使います。
 
 PowerPointファイルへのアドインの挿入方法は、アドインのデプロイ方法や PowerPointアプリの種類によって異なります。ここでは以下の方法でデプロイされたアドインを使う場合について説明します。
 
@@ -66,22 +71,4 @@ AWS Polly で使える SSML記法については、以下のページを参照�
 [Amazon Polly Developer Guide](https://docs.aws.amazon.com/polly/latest/dg/polly-dg.pdf)
 
 [Amazon Polly を使用した日本語テキスト読み上げの最適化](https://aws.amazon.com/jp/blogs/news/amazon-polly-japanese-text-optimization/)
-
-## Deploy on Vercel
-
-Vercel にデプロイして使う場合、この ppt-addin-vue と server の 2 つのデプロイをペアで利用することに注意して、次の手順でデプロイしてください。
-
-- `app-addin-vue/src/main.js` の `const server = 'https://polly-server-one.vercel.app'` で設定している URL を `server` をデプロイした先のサイトとする
-  - 変更するときはローカルだけで無く github に push が必要です。vercel の環境変数で上書きできるようにすると便利だろうが今のところそれは未対応
-- Vercel デプロイのセットアップ
-  - `New Project` でこのリポジトリを `Import` する
-  - `Import Project` で `ppt-addin-vue` ディレクトリを選択する
-  - `PROJECT NAME` は `polly-addon-test` など自由に設定
-  - `FRAMEWORK PRESET` = Vue.js (自動認識される)
-  - `ROOT DIRECTORY` = ppt-addin-vue (先ほど選んだもの)
-  - `Environment Variables` に次を設定
-    - `POLLY_SERVER` に server をデプロイしたサイト (`https://polly-server-test.vercel.app` など) を設定
-- デプロイされたら `Settings` - `Domains` で `polly-addon-test.vercel.app` となっていることを確認。別のものに変更したければ変更する
-- 先ほどデプロイした先のドメインをアドオンフレームに読み込むようにするため `manifest.xml` の中の `http://localhost:3000/` を全て `http://polly-addon-test/` のように一括置き換えして `manifest-vercel.xml` のように別ファイルで保存する
-- 新しく作った manifest をオフィスに読み込む (手順はローカル開発時と同じ)
 
