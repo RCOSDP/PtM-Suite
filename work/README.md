@@ -6,15 +6,15 @@ __出力されるCHiBi-CHiLO登録データ__
 * __Wowza用設定ファイル（JSON）__
 * __合成音声ビデオ（MP4）__
 
-詳しくは，[CHiLO-Speechマニュアル「STEP2：ビデオ教材への変換」](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
+詳しくは，[こちら](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
 
-> なお，Wowzaに対応した設定ファイルを入手したい場合は，[uploadフォルダ](../work)にパワーポイントをアップロードして下さい．
+> なお，Vimeoに対応した設定ファイルを入手したい場合は，[uploadフォルダ](../upload)にパワーポイントをアップロードして下さい．
 
 ## 2. サンプルのパワーポイントファイル
 
 [_sample/](_sample/) に，ナレーション原稿が記載されたパワーポイントファイルのサンプルがあります．ダウンロードして，ナレーション原稿の参考にして下さい．
 
-ファイルのダウンロード方法は，[CHiLO-Speechマニュアル「STEP2：[参考] GitHubのファイル操作」](https://docs.cccties.org/chilospeech/video/github#fairunodaunrdo)をご確認下さい．
+ファイルのダウンロード方法は，[こちら](https://docs.cccties.org/chilospeech/video/github#fairunodaunrdo)をご確認下さい．
 
 
 ## 3. フォルダの管理
@@ -26,6 +26,4 @@ GitHubは仲間同士で共同作業をするためのレポジトリです．�
 ### (2) データ管理
 
 workフォルダに，利用者毎あるいは教材毎にフォルダを作成し，データ管理することをお勧めいたします．
-フォルダの作成方法は，以下をご確認下さい．
-
-- [CHiLO-Speechマニュアル「STEP2：[参考] GitHubのファイル操作」](https://docs.cccties.org/ppt-width-audio/-MjY6ujcFWF_354padAe/githubwottedtani-1/githubnofairu#fairunodaunrdo)
+フォルダの作成方法は，[こちら](https://docs.cccties.org/chilospeech/video/github#forudano)をご確認下さい．

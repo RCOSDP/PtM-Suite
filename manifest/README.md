@@ -11,7 +11,7 @@ CHiLO-Speechアドインを登録すると，実際の人工音声を聞きな�
 
 CHiLO-Speechは，Speech MarkdownとSSMLに対応しています．パワーポイントのナレーションスクリプトは，Speech MarkdownあるいはSSMLで記述して下さい．
 
-* ナレーションスクリプトの記載方法は，[CHiLO-Speechマニュアル「STEP1:1．ナレーション原稿の記述」](https://docs.cccties.org/chilospeech/narration/describe)をご覧下さい．
+* ナレーションスクリプトの記載方法は，[こちら](https://docs.cccties.org/chilospeech/narration/describe#2narshonsukuriputono)をご覧下さい．
 
 
 ### (1) Speech Markdown 

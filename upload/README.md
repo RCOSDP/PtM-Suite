@@ -5,7 +5,7 @@
 __出力されるCHiBi-CHiLO登録データ__
 * __Vimeo用CHiBi-CHiLO設定ファイル（JSON）__
 
-詳しくは，[CHiLO-Speechマニュアル「STEP2：ビデオ教材への変換」](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
+詳しくは，[こちら](https://docs.cccties.org/chilospeech/video/2chibi-chilodtani)　をご覧下さい．
 
 > なお，CHiBi-CHiLOに登録する前にビデオを確認したい，あるいはWowzaに対応した設定ファイルを入手したい場合は，[workフォルダ](../work)にパワーポイントをアップロードして下さい．　
 
@@ -18,6 +18,6 @@ GitHubは仲間同士で共同作業をするためのレポジトリです．�
 
 ### (2) データ管理
 
-workフォルダに，利用者毎あるいは教材毎にフォルダを作成し，データ管理することをお勧めいたします．
-フォルダの作成方法は，[CHiLO-Speechマニュアル「STEP2：[参考] GitHubのファイル操作」](https://docs.cccties.org/chilospeech/video/github#forudano)をご確認下さい．
+uploadフォルダに，利用者毎あるいは教材毎にフォルダを作成し，データ管理することをお勧めいたします．
+フォルダの作成方法は，[こちら](https://docs.cccties.org/chilospeech/video/github#forudano)をご確認下さい．
 
