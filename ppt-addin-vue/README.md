@@ -47,12 +47,12 @@ https://docs.microsoft.com/ja-jp/office/dev/add-ins/quickstarts/excel-quickstart
 - keys/localhost.crt
 - keys/ca.crt
 
-### (1) Project setup
+__Project setup__
 ```
 npm install
 ```
 
-### (2) Compiles and hot-reloads for development
+__Compiles and hot-reloads for development__
 
 開発用サーバは、次の方法で起動します。
 
@@ -60,7 +60,7 @@ npm install
 npm run serve
 ```
 
-### (3) Compiles and minifies for production
+__Compiles and minifies for production__
 
 以下のコマンドで dist ディレクトリに production コードが生成されます。
 
@@ -68,10 +68,10 @@ npm run serve
 npm run build
 ```
 
-### (4) Lints and fixes files
+__Lints and fixes files__
 ```
 npm run lint
 ```
 
-### (5) Customize configuration
+__Customize configuration__
 See [Configuration Reference](https://cli.vuejs.org/config/).
