@@ -14,7 +14,7 @@ CHiLO-Speechは，[学習支援システムCHiBi-CHiLO](https://github.com/npocc
 CHiLO-Speechを利用してビデオ教材を作成する手順は次の通りとなっています．
 
 * __Step1：__ パワーポイントにナレーションを記述する． 
-* __Step2：__ パワーポイントをGithubにアップロードし，CHiBi-CHiLO登録データに変換する． 
+* __Step2：__ パワーポイントをGithubにアップロードし，CHiBi-CHiLO登録データを入手する． 
 * __Step3：__ GitHubからダウンロードしたデータをCHiBi-CHiLOに登録する．
 
 ビデオ教材作成手順の詳細は，[CHiLO-Speechマニュアル](https://docs.cccties.org/chilospeech/)　をご覧下さい．
