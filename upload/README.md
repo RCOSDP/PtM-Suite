@@ -5,7 +5,7 @@
 __出力されるCHiBi-CHiLO登録データ__
 * __Vimeo用CHiBi-CHiLO設定ファイル（JSON）__
 
-詳しくは，[こちら](https://docs.cccties.org/chilospeech/video/2chibi-chilodtani)　をご覧下さい．
+詳しくは，[こちら](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
 
 > なお，CHiBi-CHiLOに登録する前にビデオを確認したい，あるいはWowzaに対応した設定ファイルを入手したい場合は，[workフォルダ](../work)にパワーポイントをアップロードして下さい．　
 

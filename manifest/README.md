@@ -5,7 +5,7 @@ manifest.xmlは，マイクロソフト社製パワーポイントにCHiLO-Speec
 
 CHiLO-Speechアドインを登録すると，実際の人工音声を聞きながら，パワーポイントにナレーションスクリプトを記述することができます．
 
-* アドインの登録方法は，[CHiLO-Speechマニュアル「パワーポイントの準備(1)」](https://docs.cccties.org/ppt-width-audio/-MjY6ujcFWF_354padAe/pawpointo/1adoinnoinsutru)　をご覧下さい．
+* アドインの登録方法は，[こちら](https://docs.cccties.org/chilospeech/prepare/powerpoint-1)　をご覧下さい．
 
 ## 2. ナレーションスクリプト
 

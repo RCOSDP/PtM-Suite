@@ -6,7 +6,7 @@ __出力されるCHiBi-CHiLO登録データ__
 * __Wowza用設定ファイル（JSON）__
 * __合成音声ビデオ（MP4）__
 
-詳しくは，[こちら](https://docs.cccties.org/chilospeech/video/convert)　をご覧下さい．
+詳しくは，[こちら](https://docs.cccties.org/chilospeech/video/check)　をご覧下さい．
 
 > なお，Vimeoに対応した設定ファイルを入手したい場合は，[uploadフォルダ](../upload)にパワーポイントをアップロードして下さい．
 
