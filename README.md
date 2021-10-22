@@ -21,8 +21,9 @@ CHiLO-Speechを利用してビデオ教材を作成する手順は次の通り�
 
 ### (3) CHiBi-CHiLOとは
 
-CHiBi-CHiLOとは，LMSと外部接続する[LTIツールプロバイダー](https://www.imsglobal.org/activity/learning-tools-interoperability) です．
-ビデオを共有・再利用することを目的に開発されました．YoutubeやVimeoなどのインターネット上のビデオを組み合わせ，「ブック」と呼ばれる形式のビデオ教材としてLMSで配信することができます．
+CHiBi-CHiLOとは，Moodle，Blackboard，CanvasLMS等の[LTI](https://www.imsglobal.org/activity/learning-tools-interoperability) 準拠LMSと外部接続する学習支援システムです．ビデオを共有・再利用することを目的に開発されました．
+
+YoutubeやVimeoなどのインターネット上のビデオを管理し，それらを組み合わせ，「ブック」と呼ばれる形式のビデオ教材として配信することができます．
 
 CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io/chibichilo/)をご覧下さい．
 
@@ -39,13 +40,13 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 3. Amazon Polly　(https://aws.amazon.com/jp/polly/) 
     * AWSが提供するTTS（Text-to-Speech）エンジンのクラウドサービスです． あらかじめ，AWS Pollyのアクセスキーが必要です．
 4. GitHub専用レポジトリ (本レポジトリ)
-    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントをCHiBi-CHiLO登録データに変換します．
+    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントをCHiBi-CHiLO登録データ（ZIP）に変換します．
 5. LMS
     * CHiBi-CHiLOに登録したビデオ教材を配信するLTI対応のLMS（Learning Management Service）です．
 6. CHiBi-CHiLO　(https://github.com/npocccties/chibichilo)
-    * GitHub専用レポジトリからダウンロードしたZipファイルをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
+    * GitHub専用レポジトリからダウンロードした登録データをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
 7. VODサーバー
-    * GitHub専用レポジトリからダウンロードしたZipファイルをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
+    * GitHub専用レポジトリからダウンロードした登録データをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
 
 ![CHiLO-Speechのシステム構成](docs/assets/image02.png)
 
