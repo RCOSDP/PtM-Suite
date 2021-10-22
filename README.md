@@ -5,7 +5,7 @@
 ### (1) CHiLO-Speechとは
 CHiLO-Speechは，[学習支援システムCHiBi-CHiLO](https://github.com/npocccties/chibichilo)に対応した，音声合成ビデオ作成ツールです．
 
-マイクロソフト社製パワーポイントにナレーション原稿を記載して，GitHubのCHiLO-Speechレポジトリにアップロードする，CHiBi-CHiLOに対応した合成音声付きビデオ教材が作成できます．
+マイクロソフト社製パワーポイントにナレーション原稿を記載し，GitHubのCHiLO-Speechレポジトリにアップロードすると，CHiBi-CHiLOに対応した合成音声付きビデオ教材が作成できます．
 
 ![CHiLO-Speech概要](docs/assets/image01.png)
 
