@@ -216,3 +216,20 @@ GitHub Packages にパッケージを登録する場合は、次のようにし�
 https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry
 
 パッケージは、Packages ページから削除できます。
+
+## Vimeo Upload
+
+Vimeo に動画をアップロードする場合は，以下の環境変数を適切に設定します．
+
+- VIMEO_ACCESS_TOKEN
+- VIMEO_CLIENT_ID
+- VIMEO_CLIENT_SECRET
+- VIMEO_PROJECT_ID
+
+アクセストークンは，"Interact" "Upload" のスコープが必要です．
+
+PROJECT_IDは，アップロードするフォルダのIDを入力します．
+
+アクセストークンの生成方法については，以下のページを参照してください．
+
+https://vimeo.zendesk.com/hc/ja/articles/360042445032
