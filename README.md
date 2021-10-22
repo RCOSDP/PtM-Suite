@@ -39,7 +39,7 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 3. Amazon Polly　(https://aws.amazon.com/jp/polly/) 
     * AWSが提供するTTS（Text-to-Speech）エンジンのクラウドサービスです． あらかじめ，AWS Pollyのアクセスキーが必要です．
 4. GitHub専用レポジトリ (本レポジトリ)
-    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントをCHiBi-CHiLO登録データに変換します．[workフォルダ](work/)にパワーポイントをアップロードすると，ビデオ（MP4）とWowza用CHiBi-CHiLO設定ファイル（JSON）が出力される．[uploadフォルダ](upload/)にアップロードすると，Vimeo用CHiBi-CHiLO設定ファイルが出力され，ビデオはVimeoに自動的登録される．
+    * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントをCHiBi-CHiLO登録データに変換します．
 5. LMS
     * CHiBi-CHiLOに登録したビデオ教材を配信するLTI対応のLMS（Learning Management Service）です．
 6. CHiBi-CHiLO　(https://github.com/npocccties/chibichilo)
@@ -64,9 +64,9 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 + test/ テスト用パワーポイントファイル
 + misc/ サンプルスクリプト、ファイルなど
 + manifest/ アドインをパワーポイントに登録するために必要なmanifestファイル
-+ work/ パワーポイントをアップロードするとCHiBi-CHiLO登録データとして，合成音声ビデオ（MP4）とWowza用設定ファイル（JSON）が出力される．
++ work/ パワーポイントをアップロードすると，合成音声ビデオ（MP4）とWowza用設定ファイル（JSON）がパッケージ化された，ZIP形式のCHiBi-CHiLO登録データを出力
   + _sample/ ナレーション原稿が記載されたパワーポイントファイルのサンプル
-+ upload/ パワーポイントをアップロードするとCHiBi-CHiLO登録データとして，Vimeo用設定ファイルが出力される．
++ upload/ パワーポイントをアップロードするとCHiBi-CHiLO登録データとして，Vimeo用設定ファイルがパッケージ化された，ZIP形式のCHiBi-CHiLO登録データを出力
 + .github/workflows ワークフローファイル
 ```
 
