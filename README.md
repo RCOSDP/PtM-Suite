@@ -79,6 +79,6 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 |---|---|---|
 |PPT2VIDEO|ppt2video.yml|test/vuca.pptxファイルを動画に変換する|
 |ONPUSH|onpush.yml|mainブランチへのgit pushで動作し、work/ 以下で変更されたパワーポイントをアップロードすると，合成音声ビデオ（MP4）とWowza用設定ファイル（JSON）がパッケージ化された，ZIP形式のCHiBi-CHiLO登録データを出力する|
-|VIDEO2VIMEO|video2vimeo.yml|mainブランチへのgit pushで動作し、upload/ 以下で変更されたパワーポイントをアップロードするとCHiBi-CHiLO登録データとして，Vimeo用設定ファイルがパッケージ化された，ZIP形式のCHiBi-CHiLO登録データを出力する|
+|VIDEO2VIMEO|video2vimeo.yml|mainブランチへのgit pushで動作し、upload/ 以下で変更されたパワーポイントをアップロードするとCHiBi-CHiLO登録データとして，Vimeo用設定ファイルがパッケージ化された，ZIP形式のCHiBi-CHiLO登録データを出力する．さらに合成音声ビデオ（MP4）をVimeoへ，直接アップロードする．|
 
 PPT2VIDEOワークフローは、Actionsページの Run workflow ボタンから起動します。
