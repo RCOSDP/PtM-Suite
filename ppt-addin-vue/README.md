@@ -1,8 +1,15 @@
 # ppt-addin-vue
 
-パワーポイント用アドインについては，[../manifest](../manifest) を参照して下さい．
+CHiLO-Speechアドインを利用するには，システム管理者があらかじめppt-addin-vueを Vercel などに本プログラムをデプロイし，manifestファイルを利用者に配布します．
 
-## 1.  Deploy on Vercel
+manifestファイルのサンプルは，[../manifest](../manifest) を参照して下さい．
+
+ppt-addin-vueは，以下の2種類でデプロイできます．
+
+1. Vercelにデプロイした場合
+2. localhost で動作する開発用サーバを使う場合
+
+## 1. Deploy on Vercel
 
 Vercel にデプロイして使う場合、この ppt-addin-vue と server の 2 つのデプロイをペアで利用することに注意して、次の手順でデプロイしてください。
 
@@ -33,12 +40,12 @@ https://docs.microsoft.com/ja-jp/office/dev/add-ins/quickstarts/excel-quickstart
 - keys/localhost.crt
 - keys/ca.crt
 
-## 3. Project setup
+### (1) Project setup
 ```
 npm install
 ```
 
-## 4. Compiles and hot-reloads for development
+### (2) Compiles and hot-reloads for development
 
 開発用サーバは、次の方法で起動します。
 
@@ -46,7 +53,7 @@ npm install
 npm run serve
 ```
 
-## 5. Compiles and minifies for production
+### (3) Compiles and minifies for production
 
 以下のコマンドで dist ディレクトリに production コードが生成されます。
 
@@ -54,10 +61,10 @@ npm run serve
 npm run build
 ```
 
-## 6. Lints and fixes files
+### (4) Lints and fixes files
 ```
 npm run lint
 ```
 
-## 7. Customize configuration
+### (5) Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
