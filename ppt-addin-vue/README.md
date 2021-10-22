@@ -1,15 +1,22 @@
 # ppt-addin-vue
 
-CHiLO-Speechアドインを利用するには，システム管理者があらかじめppt-addin-vueを Vercel などに本プログラムをデプロイし，manifestファイルを利用者に配布します．
+## 1. CHiLO-Speechアドインの利用設定
 
-manifestファイルのサンプルは，[../manifest](../manifest) を参照して下さい．
+CHiLO-Speechアドインを利用するために，システム管理者は以下を行って下さい．
 
-ppt-addin-vueは，以下の2種類でデプロイできます．
+> 1. ppt-addin-vueを Vercel などにデプロイ
+> 2. manifestファイルの設定
+> 3. 利用者へmanifestファイルを配布
 
-1. Vercelにデプロイした場合
-2. localhost で動作する開発用サーバを使う場合
 
-## 1. Deploy on Vercel
+* manifestファイルのサンプルは，[../manifest](../manifest) にあります．
+
+
+## 2. ppt-addin-vueのデプロイとmanifestファイルの設定
+
+Vercelにデプロイした場合と，localhost で動作する開発用サーバを使う場合のppt-addin-vueデプロイ方法を紹介します．
+
+### (1) Deploy on Vercel
 
 Vercel にデプロイして使う場合、この ppt-addin-vue と server の 2 つのデプロイをペアで利用することに注意して、次の手順でデプロイしてください。
 
@@ -27,7 +34,7 @@ Vercel にデプロイして使う場合、この ppt-addin-vue と server の 2
 - 先ほどデプロイした先のドメインをアドオンフレームに読み込むようにするため `manifest.xml` の中の `http://localhost:3000/` を全て `http://polly-addon-test/` のように一括置き換えして `manifest-vercel.xml` のように別ファイルで保存する
 - 新しく作った manifest をオフィスに読み込む (手順はローカル開発時と同じ)
 
-## 2. Local Development
+### (2) Local Development
 
 開発用サーバを使う場合は、keys ディレクトリに localhost証明書が必要です。localhost証明書は、以下のページの「アプリをセキュリティ保護する」の方法で入手します。
 
