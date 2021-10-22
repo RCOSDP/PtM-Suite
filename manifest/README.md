@@ -1,8 +1,7 @@
 # manifest.xml
 
-manifest.xmlは，ノートや本文で選択した文字列を、ブラウザの音声合成機能や AWS Polly を使って再生することができる，マイクロソフト社製パワーポイント用アドインの設定ファイルです．ダウンロードして，パワーポイントにアドインをインストールして下さい．
+manifest.xmlは，ノートや本文で選択した文字列を、ブラウザの音声合成機能や AWS Polly を使って再生することができる，マイクロソフト社製パワーポイント用アドインの設定ファイルです．
 
-* ファイルのダウンロード方法は，[CHiLO-Speechマニュアル「STEP2：[参考] GitHubのファイル操作」](https://docs.cccties.org/chilospeech/video/github#fairunodaunrdo)をご確認下さい．
 * アドインのインストール方法は，[CHiLO-Speechマニュアル「パワーポイントの準備(1)」](https://docs.cccties.org/ppt-width-audio/-MjY6ujcFWF_354padAe/pawpointo/1adoinnoinsutru)　をご覧下さい．
 
 
