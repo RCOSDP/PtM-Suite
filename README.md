@@ -13,8 +13,8 @@ CHiLO-Speechは，[学習支援システムCHiBi-CHiLO](https://github.com/npocc
 
 CHiLO-Speechを利用してビデオ教材を作成する手順は次の通りとなっています．
 
-* __Step1：__ パワーポイントにナレーションを記述する． 
-* __Step2：__ パワーポイントをGithubにアップロードし，CHiBi-CHiLO登録データを入手する． 
+* __Step1：__ パワーポイントにナレーションを記述する．
+* __Step2：__ パワーポイントをGithubにアップロードし，CHiBi-CHiLO登録データを入手する．
 * __Step3：__ GitHubからダウンロードしたデータをCHiBi-CHiLOに登録する．
 
 ビデオ教材作成手順の詳細は，[CHiLO-Speechマニュアル](https://docs.cccties.org/chilospeech/)　をご覧下さい．
@@ -33,11 +33,11 @@ CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io
 
 CHiLO-Speechのシステム構成は，以下の通りです．
 
-1. 確認用アドイン　([manifest](manifest)) 
-    *  パワーポイントに記述するナレーション原稿を確認するパワーポイントのアドインです． 
+1. 確認用アドイン　([manifest](manifest))
+    *  パワーポイントに記述するナレーション原稿を確認するパワーポイントのアドインです．
 2. 中継サーバー　([ppt-addin-vue](ppt-addin-vue/)，[server](server))
-    *  確認用アドインとAmazon pollyを中継するサーバーです． 
-3. Amazon Polly　(https://aws.amazon.com/jp/polly/) 
+    *  確認用アドインとAmazon pollyを中継するサーバーです．
+3. Amazon Polly　(https://aws.amazon.com/jp/polly/)
     * AWSが提供するTTS（Text-to-Speech）エンジンのクラウドサービスです． あらかじめ，アクセスキーが必要です．
 4. GitHub専用レポジトリ (本レポジトリ)
     * 本レポジトリです．GitHub Actionsにより，アップロードしたパワーポイントをCHiBi-CHiLO登録データ（ZIP）に変換します．
