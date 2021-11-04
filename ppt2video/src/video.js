@@ -30,7 +30,7 @@ async function getTika(filename) {
 
 function listSlideImages(path) {
   const slides = {};
-  const re = /(?<page>\d+).(png|PNG)/;
+  const re = /(?<page>\d+).(png|PNG|jpg|JPG)/;
   const dir = fs.opendirSync(path);
   let dirent;
   while (dirent = dir.readSync()) {
