@@ -13,11 +13,11 @@
 
   <!--Version. Updates from the store only get triggered if there is a version change. -->
   <Version>1.0.0.0</Version>
-  <ProviderName>[Provider name]</ProviderName>
+  <ProviderName>NPO CCC-TIES</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
   <DisplayName DefaultValue="CHiLO-Speech" />
-  <Description DefaultValue="[Presentation Add-in description]"/>
+  <Description DefaultValue="Add-in for CHiLO-Speech"/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png" />
@@ -130,14 +130,14 @@
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>
-        <bt:String id="GetStarted.Title" DefaultValue="Get started with your sample add-in!" />
-        <bt:String id="CommandsGroup.Label" DefaultValue="Commands Group" />
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Show Taskpane" />
+        <bt:String id="GetStarted.Title" DefaultValue="Get started with your CHiLO-Speech add-in!" />
+        <bt:String id="CommandsGroup.Label" DefaultValue="cccties.org" />
+        <bt:String id="TaskpaneButton.Label" DefaultValue="CHiLO Speech" />
       </bt:ShortStrings>
       <!-- LongStrings max characters==250. -->
       <bt:LongStrings>
-        <bt:String id="GetStarted.Description" DefaultValue="Your sample add-in loaded succesfully. Go to the HOME tab and click the 'Show Taskpane' button to get started." />
-        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
+        <bt:String id="GetStarted.Description" DefaultValue="Your CHiLO-Speech add-in loaded succesfully. Go to the HOME tab and click the 'CHiLO Speech' button to get started." />
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to CHiLO Speech" />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
