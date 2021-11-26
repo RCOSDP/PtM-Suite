@@ -7,6 +7,10 @@ function p2strings(p){
     return [];
   }
 
+  if (typeof p === 'string'){
+    return [p];
+  }
+
   // empty object -> empty string
   const ret = p.map(s => typeof s === 'string'?s:'');
 
