@@ -146,7 +146,7 @@ const store = new Vuex.Store({
     async startLogin() {
       console.log('startLogin called');
       const option = {width: 50, height: 50};
-      Office.context.ui.displayDialogAsync(document.location.origin + '/login/start',option,dialogCallback);
+      Office.context.ui.displayDialogAsync(document.location.origin + '/dialog/start',option,dialogCallback);
     }
   }
 });
