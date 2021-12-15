@@ -18,6 +18,9 @@ if (process.env.VERCEL) {
         "/polly": {
           target: "http://localhost:3003",
         },
+        "/login": {
+          target: "http://localhost:3006",
+        },
       },
     },
   };

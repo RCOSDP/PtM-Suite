@@ -95,6 +95,22 @@ async function enginePolly(text, {voice, samplerate}) {
   }
 }
 
+let dialog = null;
+
+function processMessage(arg) {
+  console.log('processMessage called');
+  console.log(arg);
+  engineLocal("メッセージを受信しました");
+  store.commit('setMessage', arg.message);
+}
+
+function dialogCallback(asyncResult) {
+  console.log('dialogCallback called');
+  console.log(asyncResult);
+  dialog = asyncResult.value;
+  dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
+}
+
 const store = new Vuex.Store({
   state: {
     show_message: false,
@@ -126,6 +142,11 @@ const store = new Vuex.Store({
         console.log('error occured in onSynthesis');
         this.commit('setMessage', error.message);
       }
+    },
+    async startLogin() {
+      console.log('startLogin called');
+      const option = {width: 50, height: 50};
+      Office.context.ui.displayDialogAsync(document.location.origin + '/login/start',option,dialogCallback);
     }
   }
 });
