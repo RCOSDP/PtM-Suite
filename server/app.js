@@ -1,13 +1,13 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-var pollyRouter = require('./routes/polly');
+const pollyRouter = require('./routes/polly');
+const {loginRouter, check} = require('./routes/login');
+pollyRouter.use(check);
 
-var app = express();
+const app = express();
 
 function pollyErrorHandler (err, req, res, next) {
   try {
@@ -22,12 +22,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 app.use('/polly', pollyRouter);
+app.use('/login', loginRouter);
 app.use(pollyErrorHandler);
 
 module.exports = app;
