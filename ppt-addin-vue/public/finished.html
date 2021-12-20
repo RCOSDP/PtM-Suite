@@ -6,8 +6,11 @@
   <script src="./js.cookie.min.js"></script>
 </head>
 <body>
-  <h2>Hello</h2>
-  <button id="start" onclick="sendMessage()">メッセージ送信</button>
+  <h2>
+ログイン処理が終了しました。<br>
+終了ボタンを押してウィンドウを閉じてください。
+  </h2>
+  <button id="start" onclick="sendMessage()">終了</button>
   <script>
     function onMessageFromParent(arg) {
       console.log('onMessageFromParent called');
@@ -21,7 +24,8 @@
     });
 
     function sendMessage() {
-      Office.context.ui.messageParent("Some message", { targetOrigin: "*" });
+      Office.context.ui.messageParent(Cookies.get('session_cookie'), { targetOrigin: "*" });
+      window.close();
     }
 
     console.log(Cookies.get('session_cookie'));
