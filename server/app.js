@@ -5,7 +5,6 @@ const logger = require('morgan');
 
 const pollyRouter = require('./routes/polly');
 const {loginRouter, check} = require('./routes/login');
-pollyRouter.use(check);
 
 const app = express();
 
