@@ -27,7 +27,7 @@ router.post('/dialog/start', async function(req, res) {
   });
   console.log(cookies['session_cookie']);
 
-  res.cookie('session_cookie', cookies['session_cookie'], {
+  res.cookie('session_cookie', cookies['session_cookie'].value, {
     secure: false,
     httpOnly: false,
   });
