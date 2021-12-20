@@ -15,6 +15,7 @@ Vue.config.productionTip = false
 
 const audio = new Audio();
 const speech = new SpeechMarkdown();
+let token = null;
 
 async function getSelectedText() {
   return new OfficeExtension.Promise(function (resolve, reject) {
@@ -63,8 +64,13 @@ async function enginePolly(text, {voice, samplerate}) {
       VoiceId: voice,
     };
     const config = {
-      responseType: 'arraybuffer'
+      responseType: 'arraybuffer',
+      headers: {},
     };
+    if (token !== null) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
     // select and request to local or remote polly endpoint
     const remoteServer = process.env.POLLY_SERVER || "https://polly-server-one.vercel.app";
     const endpoint = "/polly";
@@ -99,9 +105,7 @@ let dialog = null;
 
 function processMessage(arg) {
   console.log('processMessage called');
-  console.log(arg);
-  engineLocal("メッセージを受信しました");
-  store.commit('setMessage', arg.message);
+  token = arg.message;
 }
 
 function dialogCallback(asyncResult) {
