@@ -25,7 +25,7 @@
         </el-row>
         <el-row class="padding">
           <div class="center">
-            <el-button class="btn" type="primary" size="large" @click="startLogin">ログイン</el-button>
+            <el-button class="btn" type="primary" size="large" v-bind:disabled="authorized" @click="startLogin">ログイン</el-button>
           </div>
         </el-row>
         <el-alert
@@ -116,6 +116,7 @@ export default {
   computed: mapState([
     'show_message',
     'message',
+    'authorized',
   ])
 }
 </script>

@@ -81,6 +81,9 @@ async function enginePolly(text, {voice, samplerate}) {
     res = await axios.post(pollyUrl, data, config);
   } catch (error) {
     if (error.response) {
+      if (error.response.status === 401) {
+        store.commit('setAuthorized', false);
+      }
       error.message = new TextDecoder().decode(new Uint8Array(error.response.data));
     }
     console.log('error occured in enginePolly: call polly')
@@ -106,6 +109,7 @@ let dialog = null;
 function processMessage(arg) {
   console.log('processMessage called');
   token = arg.message;
+  store.commit('setAuthorized', true);
 }
 
 function dialogCallback(asyncResult) {
@@ -119,11 +123,15 @@ const store = new Vuex.Store({
   state: {
     show_message: false,
     message: "",
+    authorized: false,
   },
   mutations: {
     setMessage(state, message) {
       state.show_message = message.length > 0;
       state.message = message;
+    },
+    setAuthorized(state, authorized) {
+      state.authorized = authorized;
     }
   },
   actions: {
