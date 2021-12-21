@@ -17,6 +17,14 @@ const audio = new Audio();
 const speech = new SpeechMarkdown();
 let token = null;
 
+// select and request to local or remote polly endpoint
+const remoteServer = process.env.POLLY_SERVER || "https://polly-server-one.vercel.app";
+const endpoint = "/polly";
+const pollyUrl =
+  document.location.hostname == "localhost"
+    ? endpoint
+    : `${remoteServer}${endpoint}`;
+
 async function getSelectedText() {
   return new OfficeExtension.Promise(function (resolve, reject) {
     Office.context.document.getSelectedDataAsync(
@@ -70,14 +78,6 @@ async function enginePolly(text, {voice, samplerate}) {
     if (token !== null) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
-
-    // select and request to local or remote polly endpoint
-    const remoteServer = process.env.POLLY_SERVER || "https://polly-server-one.vercel.app";
-    const endpoint = "/polly";
-    const pollyUrl =
-      document.location.hostname == "localhost"
-        ? endpoint
-        : `${remoteServer}${endpoint}`;
     res = await axios.post(pollyUrl, data, config);
   } catch (error) {
     if (error.response) {
@@ -110,6 +110,7 @@ function processMessage(arg) {
   console.log('processMessage called');
   token = arg.message;
   store.commit('setAuthorized', true);
+  saveToken(token);
 }
 
 function dialogCallback(asyncResult) {
@@ -117,6 +118,29 @@ function dialogCallback(asyncResult) {
   console.log(asyncResult);
   dialog = asyncResult.value;
   dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
+}
+
+const itemName = "pollyProxy";
+
+function saveToken(token) {
+  localStorage.setItem(itemName, token);
+}
+
+async function restoreToken() {
+  console.log("restoreToken called");
+  token = localStorage.getItem(itemName);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  };
+  try {
+    await axios.post(pollyUrl, {}, config);
+  } catch (error) {
+    token = null;
+  }
+  console.log("restoreToken token is " + token);
+  store.commit('setAuthorized', token !== null);
 }
 
 const store = new Vuex.Store({
@@ -166,6 +190,9 @@ const store = new Vuex.Store({
 window.Office.initialize = () => {
   new Vue({
     render: h => h(App),
-    store
+    store,
+    created: async function() {
+      await restoreToken();
+    }
   }).$mount('#app');
 };
