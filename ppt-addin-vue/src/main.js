@@ -6,24 +6,17 @@ import App from './App.vue'
 import ElementUI from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/ja'
 import 'element-ui/lib/theme-chalk/index.css'
+import {pollyUrl, dialogStartUrl} from './config.js'
 
 Vue.use(Vuex);
 Vue.use(ElementUI, {locale});
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* global Office, OfficeExtension */
 
 const audio = new Audio();
 const speech = new SpeechMarkdown();
 let token = null;
-
-// select and request to local or remote polly endpoint
-const remoteServer = process.env.POLLY_SERVER || "https://polly-server-one.vercel.app";
-const endpoint = "/polly";
-const pollyUrl =
-  document.location.hostname == "localhost"
-    ? endpoint
-    : `${remoteServer}${endpoint}`;
 
 async function getSelectedText() {
   return new OfficeExtension.Promise(function (resolve, reject) {
@@ -182,7 +175,7 @@ const store = new Vuex.Store({
     async startLogin() {
       console.log('startLogin called');
       const option = {width: 50, height: 50};
-      Office.context.ui.displayDialogAsync(document.location.origin + '/dialog/start',option,dialogCallback);
+      Office.context.ui.displayDialogAsync(dialogStartUrl, option,dialogCallback);
     }
   }
 });
