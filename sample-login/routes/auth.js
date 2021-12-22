@@ -5,6 +5,12 @@ const setCookie = require('set-cookie-parser');
 
 const router = express.Router();
 
+const redirectUrl = process.env.POLLY_DIALOG_FINISHED_URL || '/finished.html';
+
+function pollyUrl(req) {
+  return process.env.POLLY_LOGIN_URL || req.headers.origin + '/login';
+}
+
 router.get('/dialog/start', function(req, res) {
   const data = {
     title: 'Login Dialog',
@@ -15,7 +21,7 @@ router.get('/dialog/start', function(req, res) {
 router.post('/dialog/start', async function(req, res) {
   console.log(req.body);
   const httpsAgent = new https.Agent({ rejectUnauthorized: false });
-  const login = await axios.post(req.headers.origin + '/login',{
+  const login = await axios.post(pollyUrl(req),{
     user_id: req.body.user_id,
     password: process.env.POLLY_PASSWORD,
   },{
@@ -31,7 +37,7 @@ router.post('/dialog/start', async function(req, res) {
     secure: false,
     httpOnly: false,
   });
-  res.redirect('/finished.html');
+  res.redirect(redirectUrl);
 });
 
 module.exports = router;
