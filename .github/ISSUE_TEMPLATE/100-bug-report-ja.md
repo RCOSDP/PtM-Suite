@@ -1,10 +1,9 @@
 ---
 name: バグ報告
 about: バグ報告
-title: ''
+title: ""
 labels: bug
-assignees: ''
-
+assignees: ""
 ---
 
 ### そのバグについて

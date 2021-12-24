@@ -1,10 +1,9 @@
 ---
 name: 質問・議論
 about: やることのなかで、記録として質問や議論を残しておく事柄を書く
-title: ''
-labels: ''
-assignees: ''
-
+title: ""
+labels: ""
+assignees: ""
 ---
 
 ### 質問する内容、または議題
