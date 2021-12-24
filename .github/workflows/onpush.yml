@@ -85,7 +85,7 @@ jobs:
 
       - name: npm install
         run: |
-          (cd ppt2video;npm install)
+          (cd ppt2video;npm install;npm i boolean)
 
       - name: ppt2video files
         uses: actions/github-script@v4
