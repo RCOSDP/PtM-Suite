@@ -1,4 +1,5 @@
 const minimist = require('minimist');
+const { boolean } = require('boolean');
 
 const stringOptions = {
   tempDir:     process.env.PPT2VIDEO_TEMP_DIR    || './',
@@ -36,7 +37,7 @@ const numberOptions = {
 
 function boolOption(env, value) {
   if (typeof env !== 'undefined') {
-    value = parseBoolean(env);
+    value = boolean(env);
   }
   return value;
 }
