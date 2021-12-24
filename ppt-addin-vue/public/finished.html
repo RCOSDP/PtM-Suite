@@ -6,12 +6,24 @@
   <script src="./js.cookie.min.js"></script>
 </head>
 <body>
-  <h2>
+  <h2 id="ok-text">
 ログイン処理が終了しました。<br>
+終了ボタンを押してウィンドウを閉じてください。
+  </h2>
+  <h2 id="ng-text">
+ログインが失敗しました。<br>
 終了ボタンを押してウィンドウを閉じてください。
   </h2>
   <button id="start" onclick="sendMessage()">終了</button>
   <script>
+    var token = Cookies.get('session_cookie');
+
+    if (token) {
+      document.getElementById('ng-text').style.display = 'none';
+    } else {
+      document.getElementById('ok-text').style.display = 'none';
+    }
+
     function onMessageFromParent(arg) {
       console.log('onMessageFromParent called');
       console.log(arg);
@@ -24,11 +36,11 @@
     });
 
     function sendMessage() {
-      Office.context.ui.messageParent(Cookies.get('session_cookie'), { targetOrigin: "*" });
+      if (token) {
+        Office.context.ui.messageParent(token, { targetOrigin: "*" });
+      }
       window.close();
     }
-
-    console.log(Cookies.get('session_cookie'));
   </script>
 </body>
 </html>
