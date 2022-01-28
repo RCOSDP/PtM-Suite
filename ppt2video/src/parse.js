@@ -12,7 +12,7 @@ function p2strings(p){
   }
 
   // empty object -> empty string
-  const ret = p.map(s => typeof s === 'string'?s:'');
+  const ret = p.map(s => typeof s === 'string'?s.split('\n'):'').flat()
 
   // check total number of characters
   if (ret.reduce((ac,s) => ac + s.length,0) === 0){
