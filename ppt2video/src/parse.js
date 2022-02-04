@@ -39,7 +39,7 @@ function tika2slide(tika) {
   return ret;
 }
 
-const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords'];
+const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords','engine'];
 const headerRE = /^\s*(?<key>\w+)\s*:\s*(?<value>.*)$/;
 const blockNames = ['description','text','caption'];
 const blockRE = /```\s*(?<blockname>.*)\s*$/;
