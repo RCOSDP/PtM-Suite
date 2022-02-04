@@ -32,7 +32,7 @@ function numberOption(env, value) {
 const numberOptions = {
   delay: numberOption(process.env.PPT2VIDEO_DELAY, 1.0),
   pad:   numberOption(process.env.PPT2VIDEO_PAD, 1.0),
-  fade:  numberOption(process.env.PPT2VIDEO_FADE, 0.5),
+  fade:  numberOption(process.env.PPT2VIDEO_FADE, 0),
 };
 
 function boolOption(env, value) {

@@ -57,7 +57,7 @@ ppt2video ファイル名
 |--voice|Takumi|PPT2VIDEO_VOICE|
 |--delay|1.0|PPT2VIDEO_DELAY|
 |--pad|1.0|PPT2VIDEO_PAD|
-|--fade|0.5|PPT2VIDEO_FADE|
+|--fade|0|PPT2VIDEO_FADE|
 |-v,--vcodec|libopenh264|PPT2VIDEO_VCODEC|
 |--voption||PPT2VIDEO_VOPTION|
 |--logfile|ppt2video.log|PPT2VIDEO_LOGFILE|
