@@ -52,7 +52,7 @@
         <div class="padding footer">
           リンク <br>
           <ul>
-            <li><a href="https://docs.cccties.org/chilospeech/" target="_blank" rel="noopener noreferrer">CHiBi-CHiLOマニュアル</a></li>
+            <li><a href="https://docs.cccties.org/chilospeech/" target="_blank" rel="noopener noreferrer">マニュアル</a></li>
             <li><a href="https://docs.aws.amazon.com/ja_jp/polly/latest/dg/supportedtags.html" target="_blank" rel="noopener noreferrer">サポートされている SSML タグ</a></li>
             <li><a href="https://www.speechmarkdown.org/basics/what/" target="_blank" rel="noopener noreferrer">What Is Speech Markdown?</a></li>
           </ul>
