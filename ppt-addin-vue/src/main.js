@@ -63,7 +63,7 @@ async function enginePolly(text, {voice, samplerate}) {
       VoiceId: voice,
     };
     // Takumi default engine
-    if (data.VoiceId == 'Takumi') {
+    if (data.VoiceId == 'Takumi' || data.VoiceId == 'Joanna' || data.VoiceId == 'Matthew' ) {
       data.Engine = 'neural';
     }
     const config = {

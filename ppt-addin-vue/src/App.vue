@@ -73,6 +73,8 @@ export default {
       optionVoice: [
         { name: 'Mizuki'},
         { name: 'Takumi'},
+        { name: 'Joanna'},
+        { name: 'Matthew'},
       ],
       samplerate: '22050',
       optionSamplerate: [
