@@ -94,6 +94,8 @@ function updateParam(prev, slide, req) {
   // Takumi default engine
   if (req.VoiceId == 'Takumi') {
     req.Engine = 'neural';
+  } else {
+    delete req.Engine;
   }
   // engine
   if (typeof slide.engine !== 'undefined') {
