@@ -104,6 +104,9 @@ function processMessage(arg) {
   token = arg.message;
   store.commit('setAuthorized', true);
   saveToken(token);
+  if (dialog) {
+    dialog.close();
+  }
 }
 
 function dialogCallback(asyncResult) {

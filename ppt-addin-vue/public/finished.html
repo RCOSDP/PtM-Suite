@@ -28,18 +28,16 @@
       console.log('onMessageFromParent called');
       console.log(arg);
     }
-    Office.onReady()
-    .then(function() {
-        Office.context.ui.addHandlerAsync(
-            Office.EventType.DialogParentMessageReceived,
-            onMessageFromParent);
-    });
+    Office.onReady().then(function() {
+      Office.context.ui.addHandlerAsync(
+        Office.EventType.DialogParentMessageReceived,
+        onMessageFromParent);
+    });
 
     function sendMessage() {
       if (token) {
         Office.context.ui.messageParent(token, { targetOrigin: "*" });
       }
-      window.close();
     }
   </script>
 </body>
