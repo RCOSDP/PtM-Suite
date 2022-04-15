@@ -23,6 +23,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 
+const dialogStartUrl = process.env.POLLY_DIALOG_START_URL || 'https://localhost:3006/dialog/start';
+app.get('/dialog/start', function (req, res) {
+  res.redirect(dialogStartUrl);
+});
+
 app.use('/polly', pollyRouter);
 app.use('/login', loginRouter);
 app.use(pollyErrorHandler);

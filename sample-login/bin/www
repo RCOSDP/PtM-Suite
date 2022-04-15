@@ -15,11 +15,31 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+var prot = process.env.PROT || 'https';
+var server;
+
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+if (prot == 'http') {
+  server = http.createServer(app);
+}
+
+/**
+ * Create HTTPS server.
+ */
+
+ if (prot == 'https') {
+  var fs = require('fs');
+  var https = require('https');
+  var options = {
+    ca:   fs.readFileSync('keys/ca.crt'),
+    key:  fs.readFileSync('keys/localhost.key'),
+    cert: fs.readFileSync('keys/localhost.crt')
+  };
+  server = https.createServer(options,app);
+}
 
 /**
  * Listen on provided port, on all network interfaces.
