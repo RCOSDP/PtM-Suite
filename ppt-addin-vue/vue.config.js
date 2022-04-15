@@ -22,7 +22,7 @@ if (process.env.VERCEL) {
           target: "http://localhost:3003",
         },
         "/dialog": {
-          target: "http://localhost:3006",
+          target: "http://localhost:3003",
         },
       },
     },
