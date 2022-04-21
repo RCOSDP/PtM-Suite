@@ -40,7 +40,7 @@ function engineLocal(text) {
     let ut = new SpeechSynthesisUtterance(text);
     speechSynthesis.speak(ut);
   } catch (error) {
-    console.log('error occured in engineLocal')
+    console.log('error occurred in engineLocal')
     speechSynthesis.cancel();
     throw error;
   }
@@ -52,7 +52,7 @@ async function enginePolly(text, {voice, samplerate}) {
     text = text.replace(/<\/?speak>/g,'').replace(/\v/g,'');
     text = speech.toSSML(text, {platform: 'amazon-alexa'});
   } catch (error) {
-    console.log('error occured in enginePolly: markdown')
+    console.log('error occurred in enginePolly: markdown')
     throw {message: error.type};
   }
 
@@ -79,7 +79,7 @@ async function enginePolly(text, {voice, samplerate}) {
       }
       error.message = new TextDecoder().decode(new Uint8Array(error.response.data));
     }
-    console.log('error occured in enginePolly: call polly')
+    console.log('error occurred in enginePolly: call polly')
     throw error;
   }
 
@@ -92,7 +92,7 @@ async function enginePolly(text, {voice, samplerate}) {
     };
     audio.play();
   } catch (error) {
-    console.log('error occured in enginePolly: play');
+    console.log('error occurred in enginePolly: play');
     throw error;
   }
 }
@@ -171,7 +171,7 @@ const store = new Vuex.Store({
             break;
         }
       } catch (error) {
-        console.log('error occured in onSynthesis');
+        console.log('error occurred in onSynthesis');
         this.commit('setMessage', error.message);
       }
     },
