@@ -91,6 +91,16 @@ function updateParam(prev, slide, req) {
   if (typeof slide.voice !== 'undefined') {
     req.VoiceId = slide.voice.trim();
   }
+  // Takumi default engine
+  if (req.VoiceId == 'Takumi') {
+    req.Engine = 'neural';
+  } else {
+    delete req.Engine;
+  }
+  // engine
+  if (typeof slide.engine !== 'undefined') {
+    req.Engine = slide.engine.trim();
+  }
   // sampleRate
   if (typeof slide.sampleRate !== 'undefined') {
     const trimmed = slide.sampleRate.trim();

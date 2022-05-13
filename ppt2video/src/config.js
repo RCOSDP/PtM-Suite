@@ -1,4 +1,5 @@
 const minimist = require('minimist');
+const { boolean } = require('boolean');
 
 const stringOptions = {
   tempDir:     process.env.PPT2VIDEO_TEMP_DIR    || './',
@@ -31,12 +32,12 @@ function numberOption(env, value) {
 const numberOptions = {
   delay: numberOption(process.env.PPT2VIDEO_DELAY, 1.0),
   pad:   numberOption(process.env.PPT2VIDEO_PAD, 1.0),
-  fade:  numberOption(process.env.PPT2VIDEO_FADE, 0.5),
+  fade:  numberOption(process.env.PPT2VIDEO_FADE, 0),
 };
 
 function boolOption(env, value) {
   if (typeof env !== 'undefined') {
-    value = parseBoolean(env);
+    value = boolean(env);
   }
   return value;
 }

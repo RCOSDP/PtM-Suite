@@ -12,7 +12,7 @@ function p2strings(p){
   }
 
   // empty object -> empty string
-  const ret = p.map(s => typeof s === 'string'?s:'');
+  const ret = p.map(s => typeof s === 'string'?s.split('\n'):'').flat()
 
   // check total number of characters
   if (ret.reduce((ac,s) => ac + s.length,0) === 0){
@@ -39,7 +39,7 @@ function tika2slide(tika) {
   return ret;
 }
 
-const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords'];
+const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords','engine'];
 const headerRE = /^\s*(?<key>\w+)\s*:\s*(?<value>.*)$/;
 const blockNames = ['description','text','caption'];
 const blockRE = /```\s*(?<blockname>.*)\s*$/;

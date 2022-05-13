@@ -43,7 +43,7 @@ jobs:
 
       - name: npm install
         run: |
-          (cd ppt2video;npm install)
+          (cd ppt2video;npm install;npm i boolean)
 
       - name: run ppt2video
         env:
