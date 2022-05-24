@@ -8,15 +8,16 @@
 <body>
   <h2 id="ok-text">
 ログイン処理が終了しました。<br>
-終了ボタンを押してウィンドウを閉じてください。
+閉じるボタンを押してウィンドウを閉じてください。
   </h2>
   <h2 id="ng-text">
 ログインが失敗しました。<br>
-終了ボタンを押してウィンドウを閉じてください。
+閉じるボタンを押してウィンドウを閉じてください。
   </h2>
-  <button id="start" onclick="sendMessage()">終了</button>
+  <button id="start" onclick="sendClose()">閉じる</button>
   <script>
     var token = Cookies.get('session_cookie');
+    var sent = false;
 
     if (token) {
       document.getElementById('ng-text').style.display = 'none';
@@ -24,21 +25,34 @@
       document.getElementById('ok-text').style.display = 'none';
     }
 
-    function onMessageFromParent(arg) {
-      console.log('onMessageFromParent called');
-      console.log(arg);
-    }
-    Office.onReady().then(function() {
-      Office.context.ui.addHandlerAsync(
-        Office.EventType.DialogParentMessageReceived,
-        onMessageFromParent);
-    });
-
-    function sendMessage() {
+    function sendToken() {
       if (token) {
         Office.context.ui.messageParent(token, { targetOrigin: "*" });
       }
     }
+
+    function sendClose() {
+      if (token && !sent) {
+        sendToken();
+      }
+      Office.context.ui.messageParent("close", { targetOrigin: "*" });
+    }
+
+    function onMessageFromParent(arg) {
+      console.log('onMessageFromParent called');
+      console.log(arg);
+    }
+
+    Office.onReady().then(function() {
+      Office.context.ui.addHandlerAsync(
+        Office.EventType.DialogParentMessageReceived,
+        onMessageFromParent);
+      if (token && !sent) {
+        sendToken();
+        sent = true;
+      }
+    });
+
   </script>
 </body>
 </html>

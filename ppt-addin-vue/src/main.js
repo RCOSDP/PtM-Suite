@@ -105,17 +105,18 @@ let dialog = null;
 
 function processMessage(arg) {
   console.log('processMessage called');
-  token = arg.message;
-  store.commit('setAuthorized', true);
-  saveToken(token);
-  if (dialog) {
+  if (arg.message === 'close' && dialog) {
     dialog.close();
+  } else {
+    token = arg.message;
+    store.commit('setAuthorized', true);
+    saveToken(token);
   }
 }
 
 function dialogCallback(asyncResult) {
   console.log('dialogCallback called');
-  console.log(asyncResult);
+//  console.log(asyncResult);
   dialog = asyncResult.value;
   dialog.addEventHandler(Office.EventType.DialogMessageReceived, processMessage);
 }
@@ -139,7 +140,7 @@ async function restoreToken() {
   } catch (error) {
     token = null;
   }
-  console.log("restoreToken token is " + token);
+//  console.log("restoreToken token is " + token);
   store.commit('setAuthorized', token !== null);
 }
 
