@@ -53,7 +53,7 @@ async function enginePolly(text, {voice, samplerate}) {
     text = speech.toSSML(text, {platform: 'amazon-alexa'});
   } catch (error) {
     console.log('error occurred in enginePolly: markdown')
-    throw {message: error.type};
+    throw {message: `マークダウンに誤りがあります(${error.type})。`};
   }
 
   try {
@@ -80,8 +80,23 @@ async function enginePolly(text, {voice, samplerate}) {
     if (error.response) {
       if (error.response.status === 401) {
         store.commit('setAuthorized', false);
+        error.message = "ログインしてください。";
+      } else if (error.response.status === 400) {
+        const error_code = new TextDecoder().decode(new Uint8Array(error.response.data));
+        switch (error_code) {
+          case 'InvalidSsmlException':
+            error.message = "SSMLの書式が不正です。";
+            break;
+          case 'TextLengthExceededException':
+            error.message = "文字列が長すぎます。";
+            break;
+          default:
+            error.message = `システムエラーが発生しました(${error_code})`;
+            break;
+        }
+      } else {
+        error.message = `不明なエラーが発生しました(HTTP Status: ${error.response.status})。`;
       }
-      error.message = new TextDecoder().decode(new Uint8Array(error.response.data));
     }
     console.log('error occurred in enginePolly: call polly')
     throw error;
