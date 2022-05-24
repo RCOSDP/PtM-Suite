@@ -11,7 +11,7 @@ const app = express();
 function pollyErrorHandler (err, req, res, next) {
   try {
     res.setHeader('content-type', "text/plain");
-    res.status(err.statusCode).send(err.message);
+    res.status(err.statusCode).send(err.code);
   } catch(err) {
     next(err);
   }
