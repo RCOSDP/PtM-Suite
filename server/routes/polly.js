@@ -32,6 +32,7 @@ router.post("/", cors(), async function (req, res, next) {
   try {
     const data = await polly.synthesizeSpeech(req.body).promise();
     res.setHeader("content-type", data.ContentType);
+    req.locals.len = data.RequestCharacters;
     res.send(data.AudioStream);
   } catch (error) {
     next(error);
