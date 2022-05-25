@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
+const {customAlphabet} = require('nanoid');
+const nanoid = customAlphabet("1234567890abcdef", 10);
+
 const secret = process.env.POLLY_SECRET || "secret";
 const cPassword = process.env.POLLY_PASSWORD || "chilo";
 
@@ -13,14 +16,16 @@ const option = {
 router.post('/', function(req, res, next) {
   const {user_id, password} = req.body;
   if (password === cPassword) {
+    const id = nanoid();
     const token = jwt.sign({
       iss: issuer,
-      sub: user_id,
+      sub: id,
     }, secret, option);
     res.cookie('session_cookie', token, {
       secure: false,
       httpOnly: false,
     });
+    req.locals = {id, user_id};
     res.send('OK');
   } else {
     res.status(401).send('unauthorized');
@@ -28,8 +33,6 @@ router.post('/', function(req, res, next) {
 });
 
 function check(req, res, next) {
-  console.log('check called');
-
   // check token
   try {
     if (req.token) {
@@ -37,6 +40,7 @@ function check(req, res, next) {
         algorithms: ['HS256'],
         issuer,
       });
+      req.locals = {id: decoded.sub, len: 0};
       if (req.body.Text) {
         next();
       } else {
