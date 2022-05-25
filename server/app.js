@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const morgan = require('morgan');
 
 const pollyRouter = require('./routes/polly');
 const {loginRouter, check} = require('./routes/login');
@@ -17,7 +17,17 @@ function pollyErrorHandler (err, req, res, next) {
   }
 }
 
-app.use(logger('dev'));
+morgan.token('info', (req, res) => {
+  if (!req.locals) return "- -";
+  let {id, user_id, len} = req.locals;
+  if (!id) id = "-";
+  if (user_id) return `${id} ${user_id}`;
+  if (!len) len = 0;
+  return `${id} ${len}`;
+});
+
+app.use(morgan(':remote-addr :req[x-forwarded-for] :method :url :status :info :response-time'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
