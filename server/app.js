@@ -19,14 +19,15 @@ function pollyErrorHandler (err, req, res, next) {
 
 morgan.token('info', (req, res) => {
   if (!req.locals) return "- -";
-  let {id, user_id, len} = req.locals;
+  let {id, user_id, len, message} = req.locals;
+  if (message) return "- " + message;
   if (!id) id = "-";
   if (user_id) return `${id} ${user_id}`;
   if (!len) len = 0;
   return `${id} ${len}`;
 });
 
-app.use(morgan(':remote-addr :req[x-forwarded-for] :method :url :status :info :response-time'));
+app.use(morgan(':remote-addr :req[x-forwarded-for] :method :url :status :info'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

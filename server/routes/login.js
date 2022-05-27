@@ -49,7 +49,7 @@ function check(req, res, next) {
       return;
     }
   } catch (err) {
-    console.log(err);
+    req.locals = {message: err.message};
   }
   res.status(401).send('unauthorized');
 }
