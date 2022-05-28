@@ -8,6 +8,7 @@ const {loginRouter, check} = require('./login');
 router.use(check);
 
 const aws = require("aws-sdk");
+const access = require('../access');
 
 // vercel don't allow to set AWS_REGION env etc.
 // so we use AWS_REGION_POLLY instead and update aws sdk config
@@ -32,7 +33,9 @@ router.post("/", cors(), async function (req, res, next) {
   try {
     const data = await polly.synthesizeSpeech(req.body).promise();
     res.setHeader("content-type", data.ContentType);
-    req.locals.len = data.RequestCharacters;
+    const len = data.RequestCharacters;
+    req.locals.len = len;
+    access.processed(len);
     res.send(data.AudioStream);
   } catch (error) {
     next(error);
