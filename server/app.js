@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 
+const {dialogStartUrl} = require('./config');
 const pollyRouter = require('./routes/polly');
 const {loginRouter, check} = require('./routes/login');
 
@@ -34,7 +35,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 
-const dialogStartUrl = process.env.POLLY_DIALOG_START_URL || 'https://localhost:3006/dialog/start';
 app.get('/dialog/start', function (req, res) {
   res.redirect(dialogStartUrl);
 });
