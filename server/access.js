@@ -1,5 +1,6 @@
 const config = require('./config');
 const fs = require('fs');
+const path = require('path');
 
 let year, month, date;
 const usage = [];
@@ -58,11 +59,46 @@ function clear_usage() {
 
 function readlog() {
   console.log('readlog called');
+  const filename = path.join(config.logdir, log_filename());
+  if (!fs.existsSync(filename)) {
+    return;
+  }
+  try {
+    const str = fs.readFileSync(filename);
+    const data = JSON.parse(str);
+    total = data.total;
+    for (let i = 0;i < 31;i++) {
+      usage[i] = data.usage[i];
+    }
+  } catch(err) {
+    console.log('readlog: error');
+  }
 }
+
+const temp_filename = "tempfile";
 
 function writelog() {
   console.log('writelog called ' + total);
   console.log(usage);
+  const data = {
+    total,
+    usage,
+  };
+  try {
+    const temp = path.join(config.logdir, temp_filename);
+    fs.writeFileSync(temp, JSON.stringify(data));
+    fs.renameSync(temp, path.join(config.logdir, log_filename()));
+  } catch(err) {
+    console.log('writelog: error');
+  }
+}
+
+function log_filename() {
+  let m = String(month + 1);
+  if (m.length === 1) {
+    m = '0' + m;
+  }
+  return String(year) + m + '.log';
 }
 
 // access control
