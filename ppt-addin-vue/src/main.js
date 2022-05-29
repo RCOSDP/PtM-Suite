@@ -94,6 +94,8 @@ async function enginePolly(text, {voice, samplerate}) {
             error.message = `システムエラーが発生しました(${error_code})`;
             break;
         }
+      } else if (error.response.status === 503) {
+        error.message = `サービスが停止中です。`;
       } else {
         error.message = `不明なエラーが発生しました(HTTP Status: ${error.response.status})。`;
       }

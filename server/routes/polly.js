@@ -31,6 +31,7 @@ router.options("*", cors());
 
 router.post("/", cors(), async function (req, res, next) {
   try {
+    access.validate();
     const data = await polly.synthesizeSpeech(req.body).promise();
     res.setHeader("content-type", data.ContentType);
     const len = data.RequestCharacters;

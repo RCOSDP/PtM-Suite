@@ -67,8 +67,12 @@ function writelog() {
 
 // access control
 
-function valid() {
-  return limit > total;
+function validate() {
+  if (limit > total) return;
+  throw {
+    statusCode: 503,
+    code: "Service Unavailable",
+  };
 }
 
 function processed(n) {
@@ -92,6 +96,6 @@ function getNow() {
 
 module.exports = {
   init,
-  valid,
+  validate,
   processed,
 };
