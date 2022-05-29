@@ -14,7 +14,7 @@ function init() {
 }
 
 function check() {
-  console.log('check called');
+//  console.log('check called');
   const now = getNow();
   if (now.getTime() - last_update.getTime() > config.updateInterval * 1000) {
     update(now);
@@ -22,7 +22,7 @@ function check() {
 }
 
 function update(now) {
-  console.log('update called');
+//  console.log('update called');
   writelog();
   last_update = now;
   const cal = getCalendar(now);
@@ -58,7 +58,7 @@ function clear_usage() {
 }
 
 function readlog() {
-  console.log('readlog called');
+//  console.log('readlog called');
   const filename = path.join(config.logdir, log_filename());
   if (!fs.existsSync(filename)) {
     return;
@@ -78,8 +78,8 @@ function readlog() {
 const temp_filename = "tempfile";
 
 function writelog() {
-  console.log('writelog called ' + total);
-  console.log(usage);
+//  console.log('writelog called ' + total);
+//  console.log(usage);
   const data = {
     total,
     usage,
@@ -125,6 +125,15 @@ function getCalendar(now) {
     date:  now.getUTCDate()
   }
 }
+
+//const offset = Date.UTC(2022, 4, 29, 23, 59, 40) - Date.now();
+//const offset = Date.UTC(2022, 4, 31, 23, 59, 40) - Date.now();
+
+//function getNow() {
+//  const d = new Date(Date.now() + offset);
+//  console.log('getNow: ' + d);
+//  return d;
+//}
 
 function getNow() {
   return new Date();
