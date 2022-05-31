@@ -16,20 +16,23 @@ function init() {
 function check() {
 //  console.log('check called');
   const now = getNow();
-  if (now.getTime() - last_update.getTime() > config.updateInterval * 1000) {
-    update(now);
-  }
-}
-
-function update(now) {
-//  console.log('update called');
-  writelog();
-  last_update = now;
   const cal = getCalendar(now);
+
+  // check for next month
   if (cal.year !== year || cal.month !== month) {
+    writelog();
+    last_update = now;
     update_month(cal);
-  } else {
-    date = cal.date;
+    return;
+  }
+
+  // advance date
+  date = cal.date;
+
+  // check for update
+  if (now.getTime() - last_update.getTime() > config.updateInterval * 1000) {
+    writelog();
+    last_update = now;
   }
 }
 
