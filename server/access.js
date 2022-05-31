@@ -126,16 +126,12 @@ function getCalendar(now) {
   }
 }
 
-//const offset = Date.UTC(2022, 4, 29, 23, 59, 40) - Date.now();
-//const offset = Date.UTC(2022, 4, 31, 23, 59, 40) - Date.now();
-
-//function getNow() {
-//  const d = new Date(Date.now() + offset);
-//  console.log('getNow: ' + d);
-//  return d;
-//}
-
 function getNow() {
+  if (config.fakeOffset) {
+    const d = new Date(Date.now() + config.fakeOffset);
+    console.log(d);
+    return d;
+  }
   return new Date();
 }
 
