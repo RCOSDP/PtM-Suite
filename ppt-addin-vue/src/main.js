@@ -126,7 +126,7 @@ function processMessage(arg) {
     dialog.close();
   } else {
     token = arg.message;
-    store.commit('setAuthorized', true);
+    store.commit('setAuthorized', 'authorized');
     saveToken(token);
   }
 }
@@ -152,13 +152,15 @@ async function restoreToken() {
       Authorization: `Bearer ${token}`
     },
   };
+  let auth_state = "unauthorized";
   try {
-    await axios.post(pollyUrl, {}, config);
+    const res = await axios.post(pollyUrl, {}, config);
+    auth_state = res.data;
   } catch (error) {
     token = null;
   }
 //  console.log("restoreToken token is " + token);
-  store.commit('setAuthorized', token !== null);
+  store.commit('setAuthorized', auth_state);
 }
 
 const store = new Vuex.Store({
@@ -166,14 +168,28 @@ const store = new Vuex.Store({
     show_message: false,
     message: "",
     authorized: false,
+    show_login: true,
   },
   mutations: {
     setMessage(state, message) {
       state.show_message = message.length > 0;
       state.message = message;
     },
-    setAuthorized(state, authorized) {
-      state.authorized = authorized;
+    setAuthorized(state, auth_state) {
+      switch (auth_state) {
+        case 'authorized':
+          state.authorized = true;
+          state.show_login = true;
+          break;
+        case 'unauthorized':
+          state.authorized = false;
+          state.show_login = true;
+          break;
+        case 'noauthorize':
+          state.authorized = true;
+          state.show_login = false;
+          break;
+      }
     }
   },
   actions: {
