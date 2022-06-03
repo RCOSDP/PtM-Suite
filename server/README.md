@@ -5,6 +5,8 @@ AWS Polly への proxy 機能を含む web サーバです。次の 2つの方�
 - 単独でアドイン用サーバとして使用する
 - ppt-addin-vue 開発用サーバと共に使用する
 
+アクセス制限機能については、[こちらのファイル](../docs/spec/access.md)を参照してください。
+
 ## Deploy on Vercel
 
 Vercel には次の手順でデプロイしてください。
