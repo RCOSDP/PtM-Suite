@@ -8,6 +8,7 @@ const {loginRouter, check} = require('./login');
 router.use(check);
 
 const aws = require("aws-sdk");
+const config = require('../config');
 const access = require('../access');
 
 // vercel don't allow to set AWS_REGION env etc.
@@ -31,12 +32,12 @@ router.options("*", cors());
 
 router.post("/", cors(), async function (req, res, next) {
   try {
-    access.validate();
+    if (config.authorization) access.validate();
     const data = await polly.synthesizeSpeech(req.body).promise();
     res.setHeader("content-type", data.ContentType);
     const len = data.RequestCharacters;
     req.locals.len = len;
-    access.processed(len);
+    if (config.authorization) access.processed(len);
     res.send(data.AudioStream);
   } catch (error) {
     next(error);

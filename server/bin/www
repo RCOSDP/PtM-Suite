@@ -11,7 +11,9 @@ var debug = require('debug')('server:server');
 var http = require('http');
 
 /* initialize access */
-access.init();
+if (config.authorization) {
+  access.init();
+}
 
 /**
  * Get port from environment and store in Express.

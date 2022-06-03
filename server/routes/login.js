@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const {customAlphabet} = require('nanoid');
 const nanoid = customAlphabet("1234567890abcdef", 10);
 
+const config = require('../config');
+
 const secret = process.env.POLLY_SECRET || "secret";
 const cPassword = process.env.POLLY_PASSWORD || "chilo";
 
@@ -33,6 +35,16 @@ router.post('/', function(req, res, next) {
 });
 
 function check(req, res, next) {
+  if (!config.authorization) {
+    req.locals = {id: '-', len: 0};
+    if (req.body.Text) {
+      next();
+    } else {
+      res.send('noauthorize');
+    }
+    return;
+  }
+
   // check token
   try {
     if (req.token) {
