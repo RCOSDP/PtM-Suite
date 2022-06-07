@@ -4,33 +4,18 @@
  * Module dependencies.
  */
 
-var config = require('../config');
-var access = require('../access');
 var app = require('../app');
-var debug = require('debug')('server:server');
+var debug = require('debug')('sample-login:server');
 var http = require('http');
-
-/* initialize access */
-if (config.authorization) {
-  access.init();
-}
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(config.port);
-if (process.env.VERCEL) {
-  // on vercel use 443 (standard https) port
-  port = 443;
-}
-app.set("port", port);
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
-var prot = config.prot;
-if (process.env.VERCEL) {
-  // on vercel, https will be handled by front end proxy, not node app
-  prot = "http";
-}
+var prot = process.env.PROT || 'https';
 var server;
 
 /**
@@ -45,7 +30,7 @@ if (prot == 'http') {
  * Create HTTPS server.
  */
 
-if (prot == 'https') {
+ if (prot == 'https') {
   var fs = require('fs');
   var https = require('https');
   var options = {

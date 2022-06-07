@@ -61,6 +61,7 @@ CHiLO-Speechのシステム構成は，以下の通りです．
   + import.md
 + ppt-addin-vue/ アドイン本体
 + server/ アドインを配布するサーバ兼 AWS Polly proxy
++ sample-login/ アクセス制限機能開発用サンプルプログラム
 + ppt2video/ パワーポイントを動画に変換するnode.jsプログラム
 + test/ テスト用パワーポイントファイル
 + misc/ サンプルスクリプト、ファイルなど
