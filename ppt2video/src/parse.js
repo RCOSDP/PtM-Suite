@@ -79,7 +79,7 @@ function parseNote(slide) {
       const kv = parseHeader(line);
       if (kv !== null) {
         if (kv.key === 'keywords') {
-          slide[kv.key] = kv.value.split(/\W+/).filter(s => s.length > 0);
+          slide[kv.key] = kv.value.split(/[,\s]+/).filter(s => s.length > 0);
         } else if (typeof kv.key !== 'undefined'){
           slide[kv.key] = kv.value;
         }

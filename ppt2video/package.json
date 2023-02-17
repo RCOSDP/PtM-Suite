@@ -14,12 +14,12 @@
     "log4js": "^6.3.0",
     "minimist": "^1.2.5",
     "music-metadata": "^7.8.6",
-    "speechmarkdown-js": "github:npocccties/speechmarkdown-js#ties-with-dist",
+    "speechmarkdown-js": "https://github.com/npocccties/speechmarkdown-js#ties-with-dist",
     "xml2js": "^0.4.23"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/RCOSDP/GakuNinLMS-M-CMS-dev.git"
+    "url": "https://github.com/RCOSDP/GakuNinLMS-M-CMS-dev.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
