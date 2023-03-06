@@ -2,7 +2,7 @@ const execa = require('execa');
 const fs = require('fs');
 const path = require('path');
 const sm = require('speechmarkdown-js');
-const AWSPolly = require('aws-sdk/clients/polly');
+const {PollyClient, SynthesizeSpeechCommand} = require('@aws-sdk/client-polly');
 const mm = require('music-metadata');
 const axios = require('axios');
 
@@ -139,7 +139,7 @@ const polly_defaults = {
 };
 
 async function createAudioFiles(slides, speech) {
-  const polly = new AWSPolly();
+  const polly = new PollyClient();
 
   const req = {
     ...polly_defaults
@@ -165,8 +165,13 @@ async function createAudioFiles(slides, speech) {
       const res = await axios.post(config.pollyProxy, req, {responseType: 'arraybuffer'});
       stream = res.data;
     } else {
-      const data = await polly.synthesizeSpeech(req).promise();
-      stream = data.AudioStream;
+      const command = new SynthesizeSpeechCommand(req);
+      const res = await polly.send(command);
+      const chunks = []
+      for await (let chunk of res.AudioStream) {
+        chunks.push(chunk)
+      }
+      stream = Buffer.concat(chunks);
     }
     slide.duration = (await mm.parseBuffer(stream)).format.duration;
     fs.writeFileSync(slide.audioFilename, stream);
