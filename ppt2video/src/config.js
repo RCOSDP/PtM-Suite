@@ -1,5 +1,10 @@
-const minimist = require('minimist');
-const { boolean } = require('boolean');
+import minimist from 'minimist';
+import { boolean } from 'boolean';
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const stringOptions = {
   tempDir:     process.env.PPT2VIDEO_TEMP_DIR    || './',
@@ -47,7 +52,7 @@ const boolOptions = {
   sectionPerTopic: boolOption(process.env.PPT2VIDEO_SECTION_PER_TOPIC, true),
 };
 
-const config = minimist(process.argv.slice(2), {
+export const config = minimist(process.argv.slice(2), {
   string: Object.keys(stringOptions),
   boolean: Object.keys(boolOptions),
   alias: {
@@ -77,8 +82,4 @@ const validLoglevel = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 if (!validLoglevel.includes(config.loglevel)) {
   console.log('invalid loglevel: ' + config.loglevel);
   process.exit(-1);
-}
-
-module.exports = {
-  config
 }

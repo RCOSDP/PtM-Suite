@@ -16,7 +16,7 @@ function adjustMetaKey(slides, book) {
     updatedAt: book.updatedAt
   };
   for (const slide of slides) {
-    for (key of reuseKeys) {
+    for (const key of reuseKeys) {
       if (typeof slide[key] === 'undefined' && typeof prev[key] !== 'undefined') {
         slide[key] = prev[key];
       }
@@ -36,7 +36,7 @@ function getPropertyAll(tika, name) {
 }
 
 function getLanguage(slides) {
-  for (slide of slides) {
+  for (const slide of slides) {
     if (typeof slide.language !== 'undefined') {
       return slide.language;
     }
@@ -82,7 +82,7 @@ function convertTopics(topics) {
   });
 }
 
-function convert(tika, slides, sections) {
+export function convert(tika, slides, sections) {
   const book = {};
   const language = getLanguage(slides);
 
@@ -107,8 +107,4 @@ function convert(tika, slides, sections) {
   });
 
   return book;
-}
-
-module.exports = {
-  convert
 }

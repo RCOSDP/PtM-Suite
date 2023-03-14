@@ -1,6 +1,6 @@
-const xml2js = require('xml2js');
-const {config} = require('./config.js');
-const {logger} = require('./log.js');
+import xml2js from 'xml2js';
+import {config} from './config.js';
+import {logger} from './log.js';
 
 function p2strings(p){
   if (typeof p === 'undefined'){
@@ -47,7 +47,7 @@ const blockRE = /```\s*(?<blockname>.*)\s*$/;
 function parseHeader(line) {
   const result = line.match(headerRE);
   if (result !== null) {
-    for (key of metaKeys) {
+    for (const key of metaKeys) {
       if (key.toLowerCase() === result.groups.key.toLowerCase()) {
         return {
           key,
@@ -196,7 +196,7 @@ function parseSectionsPerTopic(slides) {
   return sections;
 }
 
-async function parse(xml) {
+export async function parse(xml) {
   const option = {
     async: false,
     explicitArray: false,
@@ -215,8 +215,4 @@ async function parse(xml) {
   }
 
   return {tika, slides, sections};
-}
-
-module.exports = {
-  parse
 }

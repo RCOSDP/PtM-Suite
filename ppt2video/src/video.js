@@ -1,15 +1,15 @@
-const execa = require('execa');
-const fs = require('fs');
-const path = require('path');
-const sm = require('speechmarkdown-js');
-const {PollyClient, SynthesizeSpeechCommand} = require('@aws-sdk/client-polly');
-const mm = require('music-metadata');
-const axios = require('axios');
+import execa from 'execa';
+import fs from 'fs';
+import path from 'path';
+import sm from 'speechmarkdown-js';
+import {PollyClient, SynthesizeSpeechCommand} from '@aws-sdk/client-polly';
+import mm from 'music-metadata';
+import axios from 'axios';
 
-const {config} = require('./config.js');
-const {log4js, logger} = require('./log.js');
-const parse = require('./parse.js');
-const convert = require('./convert.js');
+import {config} from './config.js';
+import {log4js, logger} from './log.js';
+import {parse} from './parse.js';
+import {convert} from './convert.js';
 
 const {libDir, tikaJar, outputDir, tempDir} = config;
 
@@ -154,7 +154,7 @@ async function createAudioFiles(slides, speech) {
     fade: config.fade,
   };
 
-  for(slide of slides) {
+  for(const slide of slides) {
     // update request
     updateParam(prev, slide, req);
     req.Text = speech.toSSML(slideText(slide));
@@ -239,12 +239,12 @@ function videoOption(slide) {
 }
 
 async function createVideoFiles(sections) {
-  for (section of sections) {
-    for (topic of section.topics) {
+  for (const section of sections) {
+    for (const topic of section.topics) {
       const option = videoOption(topic.slides[0]);
       if (topic.slides.length > 1) {
         let duration = 0.0;
-        for (slide of topic.slides) {
+        for (const slide of topic.slides) {
           duration = duration + slide.duration;
           const result = await createVideo(slide, slide.videoFilename);
         }
@@ -300,7 +300,7 @@ function fatalError(e, message, sections = null) {
   exitProcess(-1);
 }
 
-async function ppt2video(filename) {
+export async function ppt2video(filename) {
   const filepath = path.parse(filename);
   const speech = new sm.SpeechMarkdown({platform: 'amazon-alexa'});
   let xml, data;
@@ -323,7 +323,7 @@ async function ppt2video(filename) {
   // parse
   logger.trace('call parse');
   try {
-    data = await parse.parse(xml);
+    data = await parse(xml);
   } catch(e) {
     fatalError(e, 'parse error');
     return;
@@ -342,7 +342,7 @@ async function ppt2video(filename) {
   // convert to import-json
   logger.trace('call convert');
   try {
-    const ij = convert.convert(tika, slides, sections);
+    const ij = convert(tika, slides, sections);
     fs.writeFileSync(path.join(outputDir, filepath.name + '.json'), JSON.stringify(ij,null,2));
   } catch(e) {
     fatalError(e, 'failed to create import json file', sections);
@@ -377,8 +377,4 @@ async function ppt2video(filename) {
   removeTempFiles(sections);
 
   exitProcess(0);
-}
-
-module.exports = {
-  ppt2video
 }
