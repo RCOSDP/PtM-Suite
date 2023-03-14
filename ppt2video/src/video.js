@@ -11,22 +11,7 @@ import {log4js, logger} from './log.js';
 import {parse} from './parse.js';
 import {convert} from './convert.js';
 
-const {libDir, tikaJar, outputDir, tempDir} = config;
-
-async function getTika(filename) {
-  const filepath = path.parse(filename);
-  const cmd = `java -jar ${libDir}/${tikaJar} -x ${filename}`;
-
-  let xml;
-  if (filepath.ext === '.xml') {
-    xml = fs.readFileSync(filename, 'utf8');
-  } else {
-    logger.info(cmd);
-    const result = await execa.command(cmd);
-    xml = result.stdout;
-  }
-  return xml;
-}
+const {libDir, outputDir, tempDir} = config;
 
 function listSlideImages(path) {
   const slides = {};
@@ -300,10 +285,10 @@ function fatalError(e, message, sections = null) {
   exitProcess(-1);
 }
 
-export async function ppt2video(filename) {
+export async function ppt2video(filename, pp) {
   const filepath = path.parse(filename);
   const speech = new sm.SpeechMarkdown({platform: 'amazon-alexa'});
-  let xml, data;
+  let pptx, data;
 
   if (!fs.existsSync(filename)) {
     fatalError(null, 'can\'t find ' + filename);
@@ -311,24 +296,24 @@ export async function ppt2video(filename) {
   logger.info('processing ' + filename);
 
   // getting tika xml output
-  logger.trace('call getTika');
+  logger.trace('call getPptx');
   try {
-    xml = await getTika(filename);
+    pptx = await pp.getPptx(filename);
   } catch(e) {
     fatalError(e, 'can\'t get tika xml output.');
     return;
   }
-  logger.trace(xml);
+  logger.trace(pptx.xml);
 
   // parse
   logger.trace('call parse');
   try {
-    data = await parse(xml);
+    data = await parse(pptx, pp);
   } catch(e) {
     fatalError(e, 'parse error');
     return;
   }
-  const {tika, slides, sections} = data;
+  const {slides, sections} = data;
   logger.trace(JSON.stringify(sections,null,2));
 
   // prepare output filename
@@ -342,7 +327,7 @@ export async function ppt2video(filename) {
   // convert to import-json
   logger.trace('call convert');
   try {
-    const ij = convert(tika, slides, sections);
+    const ij = convert(pptx, slides, sections, pp);
     fs.writeFileSync(path.join(outputDir, filepath.name + '.json'), JSON.stringify(ij,null,2));
   } catch(e) {
     fatalError(e, 'failed to create import json file', sections);

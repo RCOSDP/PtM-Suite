@@ -1,43 +1,5 @@
-import xml2js from 'xml2js';
 import {config} from './config.js';
 import {logger} from './log.js';
-
-function p2strings(p){
-  if (typeof p === 'undefined'){
-    return [];
-  }
-
-  if (typeof p === 'string'){
-    return [p];
-  }
-
-  // empty object -> empty string
-  const ret = p.map(s => typeof s === 'string'?s.split('\n'):'').flat()
-
-  // check total number of characters
-  if (ret.reduce((ac,s) => ac + s.length,0) === 0){
-    return [];
-  }
-  return ret;
-}
-
-function tika2slide(tika) {
-  const ret = [];
-  const {div} = tika.html.body;
-  let content, note;
-  for (const e of div){
-    switch(e.class){
-      case 'slide-content':
-        content = p2strings(e.p);
-        break;
-      case 'slide-notes':
-        note = p2strings(e.p);
-        ret.push({content, note});
-        break;
-    }
-  }
-  return ret;
-}
 
 const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords','engine'];
 const headerRE = /^\s*(?<key>\w+)\s*:\s*(?<value>.*)$/;
@@ -196,14 +158,8 @@ function parseSectionsPerTopic(slides) {
   return sections;
 }
 
-export async function parse(xml) {
-  const option = {
-    async: false,
-    explicitArray: false,
-    mergeAttrs: true,
-  };
-  const tika = await xml2js.parseStringPromise(xml, option);
-  const slides = tika2slide(tika);
+export async function parse(pptx, pp) {
+  const slides = await pp.pptx2slide(pptx);
 
   slides.forEach(slide => parseNote(slide));
 
@@ -214,5 +170,5 @@ export async function parse(xml) {
     sections = parseSections(slides);
   }
 
-  return {tika, slides, sections};
+  return {slides, sections};
 }

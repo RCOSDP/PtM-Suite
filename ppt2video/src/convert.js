@@ -1,6 +1,6 @@
 const reuseKeys = ['section','license','createdAt','updatedAt'];
 
-const bookProperties = {
+export const bookProperties = {
   name: "dc:title",
   description: "dc:description",
   publishedAt: "dcterms:created",
@@ -24,15 +24,6 @@ function adjustMetaKey(slides, book) {
     slide.language = book.language;
     prev = slide;
   }
-}
-
-function getProperty(tika, name) {
-  const prop = tika.html.head.meta.find(e => e.name === bookProperties[name]);
-  return typeof prop !== 'undefined'?prop.content:'';
-}
-
-function getPropertyAll(tika, name) {
-  return tika.html.head.meta.filter(e => e.name === name).map(e => e.content);
 }
 
 function getLanguage(slides) {
@@ -82,19 +73,19 @@ function convertTopics(topics) {
   });
 }
 
-export function convert(tika, slides, sections) {
+export function convert(pptx, slides, sections, pp) {
   const book = {};
   const language = getLanguage(slides);
 
   // book properties
   Object.keys(bookProperties).forEach(key => {
-    book[key] = getProperty(tika, key);
+    book[key] = pp.getProperty(pptx, key);
   });
   if (language !== null){
     book.language = language;
   }
-  const keywords = getPropertyAll(tika, 'dc:subject');
-  book.keywords = keywords.concat(getPropertyAll(tika, 'cp:keywords'));
+  const keywords = pp.getPropertyAll(pptx, 'dc:subject');
+  book.keywords = keywords.concat(pp.getPropertyAll(pptx, 'cp:keywords'));
 
   adjustMetaKey(slides, book);
 
