@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import sm from 'speechmarkdown-js';
 import {PollyClient, SynthesizeSpeechCommand} from '@aws-sdk/client-polly';
-import mm from 'music-metadata';
+import mm from 'music-metadata-browser';
 import axios from 'axios';
 
 import {config} from './config.js';
