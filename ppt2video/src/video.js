@@ -295,12 +295,12 @@ export async function ppt2video(filename, getPptx) {
   }
   logger.info('processing ' + filename);
 
-  // getting tika xml output
+  // getting pptx file
   logger.trace('call getPptx');
   try {
     pptx = await getPptx(filename);
   } catch(e) {
-    fatalError(e, 'can\'t get tika xml output.');
+    fatalError(e, 'can\'t get pptx file.');
     return;
   }
   logger.trace(pptx.xml);

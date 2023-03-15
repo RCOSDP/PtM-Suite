@@ -50,6 +50,7 @@ function boolOption(env, value) {
 const boolOptions = {
   novideo: false,
   sectionPerTopic: boolOption(process.env.PPT2VIDEO_SECTION_PER_TOPIC, true),
+  usetika: false,
 };
 
 export const config = minimist(process.argv.slice(2), {
