@@ -1,4 +1,4 @@
-import execa from 'execa';
+import {execaCommand} from 'execa';
 import fs from 'fs';
 import path from 'path';
 import xml2js from 'xml2js';
@@ -18,7 +18,7 @@ export async function getPptx(filename) {
     xml = fs.readFileSync(filename, 'utf8');
   } else {
     logger.info(cmd);
-    const result = await execa.command(cmd);
+    const result = await execaCommand(cmd);
     xml = result.stdout;
   }
   return {xml, getProperty, getPropertyAll, pptx2slide};

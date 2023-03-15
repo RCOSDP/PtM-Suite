@@ -1,4 +1,4 @@
-import execa from 'execa';
+import {execaCommand} from 'execa';
 import fs from 'fs';
 import path from 'path';
 import sm from 'speechmarkdown-js';
@@ -205,14 +205,14 @@ async function createVideo(slide, filename, option = {}) {
   const vfOption = getVfOption(slide.duration, option);
   const cmd = `${ffmpeg} -y -loop 1 -t ${slide.duration} -i ${slide.imageFilename} -i ${slide.audioFilename} ${vcodec} ${vfOption} ${acodec} ${filename}`;
   logger.info(cmd);
-  return execa.command(cmd);
+  return execaCommand(cmd);
 }
 
 async function concatenateVideo(topic, option = {}) {
   const vfOption = getVfOption(topic.duration, option);
   const cmd = `${ffmpeg} -y -f concat -i ${topic.listFilename} ${vcodec} ${vfOption} ${acodec} ${topic.outputFilename}`;
   logger.info(cmd);
-  return execa.command(cmd);
+  return execaCommand(cmd);
 }
 
 function videoOption(slide) {
