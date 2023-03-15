@@ -21,16 +21,16 @@ export async function getPptx(filename) {
     const result = await execa.command(cmd);
     xml = result.stdout;
   }
-  return {xml};
+  return {xml, getProperty, getPropertyAll, pptx2slide};
 }
 
-export function getProperty({tika}, name) {
-  const prop = tika.html.head.meta.find(e => e.name === bookProperties[name]);
+function getProperty(name) {
+  const prop = this.tika.html.head.meta.find(e => e.name === bookProperties[name]);
   return typeof prop !== 'undefined'?prop.content:'';
 }
 
-export function getPropertyAll({tika}, name) {
-  return tika.html.head.meta.filter(e => e.name === name).map(e => e.content);
+function getPropertyAll(name) {
+  return this.tika.html.head.meta.filter(e => e.name === name).map(e => e.content);
 }
 
 function p2strings(p){
@@ -70,14 +70,13 @@ function tika2slide(tika) {
   return ret;
 }
 
-export async function pptx2slide(pptx) {
-  const {xml} = pptx;
+async function pptx2slide() {
   const option = {
     async: false,
     explicitArray: false,
     mergeAttrs: true,
   };
-  const tika = await xml2js.parseStringPromise(xml, option);
-  pptx.tika = tika;
+  const tika = await xml2js.parseStringPromise(this.xml, option);
+  this.tika = tika;
   return tika2slide(tika);
 }

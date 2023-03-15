@@ -285,7 +285,7 @@ function fatalError(e, message, sections = null) {
   exitProcess(-1);
 }
 
-export async function ppt2video(filename, pp) {
+export async function ppt2video(filename, getPptx) {
   const filepath = path.parse(filename);
   const speech = new sm.SpeechMarkdown({platform: 'amazon-alexa'});
   let pptx, data;
@@ -298,7 +298,7 @@ export async function ppt2video(filename, pp) {
   // getting tika xml output
   logger.trace('call getPptx');
   try {
-    pptx = await pp.getPptx(filename);
+    pptx = await getPptx(filename);
   } catch(e) {
     fatalError(e, 'can\'t get tika xml output.');
     return;
@@ -308,7 +308,7 @@ export async function ppt2video(filename, pp) {
   // parse
   logger.trace('call parse');
   try {
-    data = await parse(pptx, pp);
+    data = await parse(pptx);
   } catch(e) {
     fatalError(e, 'parse error');
     return;
@@ -327,7 +327,7 @@ export async function ppt2video(filename, pp) {
   // convert to import-json
   logger.trace('call convert');
   try {
-    const ij = convert(pptx, slides, sections, pp);
+    const ij = convert(pptx, slides, sections);
     fs.writeFileSync(path.join(outputDir, filepath.name + '.json'), JSON.stringify(ij,null,2));
   } catch(e) {
     fatalError(e, 'failed to create import json file', sections);

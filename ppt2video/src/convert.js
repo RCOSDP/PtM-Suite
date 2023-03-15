@@ -73,19 +73,19 @@ function convertTopics(topics) {
   });
 }
 
-export function convert(pptx, slides, sections, pp) {
+export function convert(pptx, slides, sections) {
   const book = {};
   const language = getLanguage(slides);
 
   // book properties
   Object.keys(bookProperties).forEach(key => {
-    book[key] = pp.getProperty(pptx, key);
+    book[key] = pptx.getProperty(key);
   });
   if (language !== null){
     book.language = language;
   }
-  const keywords = pp.getPropertyAll(pptx, 'dc:subject');
-  book.keywords = keywords.concat(pp.getPropertyAll(pptx, 'cp:keywords'));
+  const keywords = pptx.getPropertyAll('dc:subject');
+  book.keywords = keywords.concat(pptx.getPropertyAll('cp:keywords'));
 
   adjustMetaKey(slides, book);
 

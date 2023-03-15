@@ -158,8 +158,8 @@ function parseSectionsPerTopic(slides) {
   return sections;
 }
 
-export async function parse(pptx, pp) {
-  const slides = await pp.pptx2slide(pptx);
+export async function parse(pptx) {
+  const slides = await pptx.pptx2slide();
 
   slides.forEach(slide => parseNote(slide));
 
