@@ -1,5 +1,5 @@
-import {config} from './config.js';
-import {logger} from './log.js';
+import {config} from '#target/config.js';
+import {logger} from '#target/log.js';
 
 const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords','engine'];
 const headerRE = /^\s*(?<key>\w+)\s*:\s*(?<value>.*)$/;

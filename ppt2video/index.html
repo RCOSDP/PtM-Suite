@@ -9,6 +9,8 @@
   <button onclick="file1()">opendir</button>
   <button onclick="file3()">ppt2video</button>
   <button onclick="file4()">list files</button>
+  <button onclick="file5()">prepare</button>
+  <button onclick="file6()">import json</button>
   <br><br>
   <a id="down">download</a>
   <br><br>
@@ -21,6 +23,8 @@
 
 <script>
 let dirHandle;
+let pptx;
+let p2v;
 
 async function readFile(filename) {
   const fh = await dirHandle.getFileHandle(filename);
@@ -50,7 +54,7 @@ async function file1() {
 
 async function file3() {
   const buf = await readFile('vuca.pptx');
-  const pptx = await ppt2video.getPptxData(buf);
+  pptx = await ppt2video.getPptxData(buf);
   const slides = await pptx.pptx2slide();
   console.log(slides);
 }
@@ -61,5 +65,14 @@ async function file4() {
   for await (const e of it) {
     console.log(e);
   }
+}
+
+async function file5() {
+  p2v = await ppt2video.prepare(pptx);
+}
+
+async function file6() {
+  const ij = ppt2video.createImportJson(p2v);
+  console.log(ij);
 }
 </script>

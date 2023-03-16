@@ -5,6 +5,7 @@ const cmd_config = {
     filename: "ppt2video.js"
   },
 
+  name: "node",
   target: "node",
   mode: "production",
 
@@ -33,8 +34,15 @@ const lib_config = {
     library: "ppt2video",
   },
 
+  name: "web",
   target: "web",
   mode: "production",
+
+  resolve: {
+    alias: {
+      "#target": "./browser"
+    }
+  },
 
   devServer: {
     static: "./",
