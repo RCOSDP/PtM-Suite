@@ -6,11 +6,11 @@
 </head>
 
 <body>
-  <button onclick="file1()">opendir</button>
-  <button onclick="file3()">ppt2video</button>
+  <button onclick="file1()">open directory</button>
+  <button onclick="file3()">getPptx</button>
   <button onclick="file4()">list files</button>
   <button onclick="file5()">prepare</button>
-  <button onclick="file6()">import json</button>
+  <button onclick="file6()">createImportJson</button>
   <br><br>
   <a id="down">download</a>
   <br><br>
@@ -22,39 +22,22 @@
 <script src="browser.js"></script>
 
 <script>
-let dirHandle;
 let pptx;
-let p2v;
 
-async function readFile(filename) {
-  const fh = await dirHandle.getFileHandle(filename);
-  const file = await fh.getFile();
-  return file.arrayBuffer();
-}
-
-async function writeFile(filename, data) {
-  const fh = await dirHandle.getFileHandle(filename,{create:true});
-  const ws = await fh.createWritable();
-  await ws.write(data);
-  await ws.close();
-}
-
-async function openDir(dirname) {
-  return dirHandle.getDirectoryHandle(dirname);
-}
+const {setRoot, readFile, writeFile, openDir} = ppt2video;
 
 function arraybuffer2string(buf) {
   return String.fromCharCode.apply("", new Uint8Array(buf));
 }
 
 async function file1() {
-  dirHandle = await window.showDirectoryPicker();
+  const dirHandle = await window.showDirectoryPicker();
+  setRoot(dirHandle);
   console.log(dirHandle);
 }
 
 async function file3() {
-  const buf = await readFile('vuca.pptx');
-  pptx = await ppt2video.getPptxData(buf);
+  pptx = await ppt2video.getPptx('vuca.pptx');
   const slides = await pptx.pptx2slide();
   console.log(slides);
 }
@@ -68,11 +51,11 @@ async function file4() {
 }
 
 async function file5() {
-  p2v = await ppt2video.prepare(pptx);
+  await pptx.prepare();
 }
 
 async function file6() {
-  const ij = ppt2video.createImportJson(p2v);
+  const ij = pptx.createImportJson();
   console.log(ij);
 }
 </script>

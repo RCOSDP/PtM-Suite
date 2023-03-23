@@ -4,13 +4,49 @@ import {convert} from './convert.js';
 
 export {getPptxData}
 
-export async function prepare(pptx) {
-  const p2v = await parse(pptx);
-  p2v.pptx = pptx;
-  return p2v;
+//
+// File System Access API
+//
+
+let dirHandle;
+
+export function setRoot(root) {
+  dirHandle = root;
 }
 
-export function createImportJson(p2v) {
-  const {pptx, slides, sections} = p2v;
-  return convert(pptx, slides, sections);
+export async function readFile(filename) {
+  const fh = await dirHandle.getFileHandle(filename);
+  const file = await fh.getFile();
+  return file.arrayBuffer();
+}
+
+export async function writeFile(filename, data) {
+  const fh = await dirHandle.getFileHandle(filename,{create:true});
+  const ws = await fh.createWritable();
+  await ws.write(data);
+  await ws.close();
+}
+
+export async function openDir(dirname) {
+  return dirHandle.getDirectoryHandle(dirname);
+}
+
+//
+// ppt2video API
+//
+
+export async function getPptx(filename) {
+  const buf = await readFile(filename);
+  const pptx = await getPptxData(buf);
+  return {...pptx, prepare, createImportJson};
+}
+
+async function prepare() {
+  const {slides, sections} = await parse(this);
+  this.slides = slides;
+  this.sections = sections;
+}
+
+function createImportJson() {
+  return convert(this, this.slides, this.sections);
 }
