@@ -9,9 +9,11 @@
   <button onclick="file1()">open directory</button>
   <button onclick="file2()">getPptx</button>
   <button onclick="file3()">createImportJson</button>
-  <button onclick="file4()">open slide</button>
+  <button onclick="file4()">test</button>
   <br><br>
   <a id="down">download</a>
+  <br><br>
+  <canvas id="canvas" width="240" height="240"></canvas>
   <br><br>
   <textarea id="msgbox" rows=5 cols=80></textarea>
   <br><br>
@@ -21,6 +23,10 @@
 <script src="browser.js"></script>
 
 <script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const down = document.getElementById('down');
+
 let pptx;
 
 const {setRoot, readFile, writeFile, openDir} = ppt2video;
@@ -32,7 +38,6 @@ function arraybuffer2string(buf) {
 async function file1() {
   const dirHandle = await window.showDirectoryPicker();
   setRoot(dirHandle);
-  console.log(dirHandle);
 }
 
 async function file2() {
@@ -45,8 +50,17 @@ async function file3() {
   console.log(ij);
 }
 
+async function test1() {
+  const ib = await ppt2video.imageFile2ImageBitmap("スライド1.PNG", "vuca");
+  const vf = new VideoFrame(ib,{timestamp: 0});
+  await ctx.drawImage(vf,0,0);
+}
+
 async function file4() {
-  const data = await ppt2video.readFile("スライド1.PNG", "vuca");
-  console.log(data);
+  const chunks = await ppt2video.encodeTopic(pptx.sections[2].topics[0]);
+  const blob = new Blob(chunks, {type: "application/octet-stream"})
+  const url = URL.createObjectURL(blob);
+  down.href = url;
+  down.download = "down.h264";
 }
 </script>

@@ -101,3 +101,88 @@ async function prepare(filename, sections, vsuffix, asuffix) {
     });
   });
 }
+
+//
+// encode
+//
+
+export async function encodeTopic(topic) {
+  const {audioFilename, imageFilename} = topic.slides[0];
+  const ib = await imageFile2ImageBitmap(imageFilename, "vuca");
+  const {encoder, chunks} = init_encoder(ib);
+  await encode(encoder, ib, 25, 25 * 4.5);
+  return chunks;
+}
+
+export async function imageFile2ImageBitmap(filename, dirname) {
+  const data = await readFile(filename, dirname);
+  const blob = new Blob([data], {type: "image/png"})
+  return await createImageBitmap(blob);
+}
+
+function init_encoder(ib) {
+  const chunks = [];
+
+  const encoder = new VideoEncoder({
+    output: function(chunk, meta) {
+      const buf = new ArrayBuffer(chunk.byteLength);
+      chunk.copyTo(buf);
+      chunks.push(buf);
+    },
+    error: function(e) {
+      console.log(e);
+    }
+  });
+
+  encoder.configure({
+    codec: 'avc1.42001f',
+    avc: {
+      format: 'annexb',
+    },
+    width: ib.width,
+    height: ib.height,
+    bitrate: 250000,
+    framerate: 25,
+  });
+
+  return {encoder, chunks};
+}
+
+async function encode(encoder, ib, fps, frames) {
+  console.log('start encode', frames);
+  let cur = 0;
+  async function next() {
+    console.log('next called',frames,cur);
+    const limit = cur + fps > frames ? frames : cur + fps;
+    for (; cur < limit; cur++) {
+      const keyFrame = (cur % fps === 0);
+      const vf = new VideoFrame(ib, {
+        timestamp: cur * 1000000 / fps,
+        duration:  1000000 / fps
+      });
+      console.log(vf.timestamp);
+      encoder.encode(vf, {keyFrame});
+      vf.close();
+    }
+    if (cur >= frames) {
+      flush();
+    }
+  }
+  encoder.addEventListener("dequeue",(ev) => {
+    console.log(encoder.encodeQueueSize, ev.type, ev.timeStamp, ev.eventPhase, ev.target.encodeQueueSize);
+    if (encoder.encodeQueueSize === 0 && cur < frames){
+       next();
+    }
+  });
+  let saved_resolve;
+  async function flush() {
+    console.log('flush called');
+    await encoder.flush();
+    saved_resolve();
+  }
+  setTimeout(next, 0);
+  console.log('end encode');
+  return new Promise(async (resolve) => {
+    saved_resolve = resolve;
+  });
+}
