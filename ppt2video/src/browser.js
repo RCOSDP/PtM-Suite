@@ -14,8 +14,14 @@ export function setRoot(root) {
   dirHandle = root;
 }
 
-export async function readFile(filename) {
-  const fh = await dirHandle.getFileHandle(filename);
+export async function readFile(filename, dirname) {
+  let dir;
+  if (dirname) {
+    dir = await dirHandle.getDirectoryHandle(dirname);
+  } else {
+    dir = dirHandle;
+  }
+  const fh = await dir.getFileHandle(filename);
   const file = await fh.getFile();
   return file.arrayBuffer();
 }
@@ -43,6 +49,7 @@ export async function getPptx(filename) {
 
 async function init() {
   const {slides, sections} = await parse(this);
+  await prepare("vuca", sections, "mp4", "mp3");
   this.slides = slides;
   this.sections = sections;
 }
@@ -55,7 +62,7 @@ function createImportJson() {
 // preparation
 //
 
-export async function listSlideImages(path) {
+async function listSlideImages(path) {
   const slides = {};
   const re = /(?<page>\d+).(png|PNG|jpg|JPG)/;
   const dir = await openDir(path);
@@ -68,31 +75,27 @@ export async function listSlideImages(path) {
   return slides;
 }
 
-function prepare(filepath, sections, vsuffix, asuffix) {
-  const imageDir = path.join(filepath.dir, filepath.name);
-  const imageFiles = listSlideImages(imageDir);
+async function prepare(filename, sections, vsuffix, asuffix) {
+  const imageFiles = await listSlideImages(filename);
   let tnum = 1;
   let snum = 1;
 
   sections.forEach(section => {
     section.topics.forEach(topic => {
-      topic.file = `${filepath.name}_${tnum}.${vsuffix}`;
-      topic.outputFilename = path.join(outputDir, topic.file);
+      topic.outputFilename = `${filename}_${tnum}.${vsuffix}`;
       topic.slides.forEach(slide => {
-        slide.audioFilename = path.join(tempDir, `${filepath.name}_${tnum}_${snum}.${asuffix}`);
-        slide.videoFilename = path.join(tempDir, `${filepath.name}_${tnum}_${snum}.${vsuffix}`);
+        slide.audioFilename = `${filename}_${tnum}_${snum}.${asuffix}`;
         const imageFilename = imageFiles[snum];
         if (typeof imageFilename !== 'undefined') {
-          slide.imageFilename = path.join(imageDir, imageFilename);
+          slide.imageFilename = imageFilename;
         } else {
           throw "can't find slide image file for slide number " + snum;
         }
         snum = snum + 1;
       });
       if (topic.slides.length > 1) {
-        topic.listFilename = path.join(tempDir, `${filepath.name}_${tnum}.list`);
-        const list = topic.slides.map(slide => 'file ' + path.relative(tempDir, slide.videoFilename));
-        fs.writeFileSync(topic.listFilename, list.join('\n'));
+        topic.listFilename = `${filename}_${tnum}.list`;
+        topic.list = topic.slides.map(slide => 'file ' + slide.audioFilename);
       }
       tnum = tnum + 1;
     });
