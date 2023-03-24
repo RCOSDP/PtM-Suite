@@ -1,5 +1,4 @@
 import {Buffer} from 'buffer';
-import process from 'process';
 import mm from 'music-metadata-browser';
 
 import {getPptxData} from '../src/pptx.js';
@@ -111,11 +110,14 @@ async function prepare(filename, sections, vsuffix, asuffix) {
 //
 
 export async function encodeTopic(topic) {
-  const slide = topic.slides[0];
-  const {imageFilename, duration} = slide;
-  const ib = await imageFile2ImageBitmap(imageFilename, "vuca");
-  const {encoder, chunks} = init_encoder(ib);
-  await encode(encoder, ib, 25, 25 * duration);
+  const ibarray = [];
+  const darray = [];
+  for (const slide of topic.slides) {
+    ibarray.push(await imageFile2ImageBitmap(slide.imageFilename, "vuca"));
+    darray.push(slide.duration);
+  }
+  const {encoder, chunks} = init_encoder(ibarray[0], 25);
+  await encode(encoder, ibarray, 25, darray);
   return chunks;
 }
 
@@ -125,7 +127,7 @@ export async function imageFile2ImageBitmap(filename, dirname) {
   return await createImageBitmap(blob);
 }
 
-function init_encoder(ib) {
+function init_encoder(ib, fps) {
   const chunks = [];
 
   const encoder = new VideoEncoder({
@@ -147,21 +149,32 @@ function init_encoder(ib) {
     width: ib.width,
     height: ib.height,
     bitrate: 250000,
-    framerate: 25,
+    framerate: fps,
   });
 
   return {encoder, chunks};
 }
 
-async function encode(encoder, ib, fps, frames) {
-  console.log('start encode', frames);
+async function encode(encoder, ibarray, fps, darray) {
+  console.log('start encode', darray);
+  let total = 0;
+  const farray = darray.map(v => {
+    total += v;
+    return total * fps;
+  });
+  console.log(farray);
   let cur = 0;
+  let index = 0;
+  const frames = farray.slice(-1)[0];
   async function next() {
     console.log('next called',frames,cur);
     const limit = cur + fps > frames ? frames : cur + fps;
     for (; cur < limit; cur++) {
+      if (cur > farray[index]) {
+        index += 1;
+      }
       const keyFrame = (cur % fps === 0);
-      const vf = new VideoFrame(ib, {
+      const vf = new VideoFrame(ibarray[index], {
         timestamp: cur * 1000000 / fps,
         duration:  1000000 / fps
       });
@@ -203,16 +216,16 @@ if (typeof window.Buffer === 'undefined') {
   window.Buffer = Buffer;
 }
 
-if (typeof window.process === 'undefined') {
-  window.process = process;
+async function getSoundDuration(data) {
+  const buf = Buffer.from(data);
+  const mmp = await mm.parseBuffer(buf);
+  return mmp.format.duration;
 }
 
 export async function readSoundFileTopic(topic) {
   for (const slide of topic.slides) {
     const data = await readFile(slide.audioFilename);
-    const blob = new Blob([data], {type: 'audio/mp3'});
-    const mmp = await mm.parseBlob(blob);
     slide.soundData = data;
-    slide.duration = mmp.format.duration;
+    slide.duration = await getSoundDuration(data);
   }
 }
