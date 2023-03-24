@@ -38,10 +38,10 @@ export async function openDir(dirname) {
 export async function getPptx(filename) {
   const buf = await readFile(filename);
   const pptx = await getPptxData(buf);
-  return {...pptx, prepare, createImportJson};
+  return {...pptx, init, createImportJson};
 }
 
-async function prepare() {
+async function init() {
   const {slides, sections} = await parse(this);
   this.slides = slides;
   this.sections = sections;
