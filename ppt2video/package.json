@@ -23,7 +23,6 @@
     "log4js": "^6.9.1",
     "minimist": "^1.2.8",
     "music-metadata-browser": "^2.5.9",
-    "process": "^0.11.10",
     "speechmarkdown-js": "https://github.com/npocccties/speechmarkdown-js#ties-with-dist",
     "stream": "^0.0.2",
     "timers": "^0.1.1",
