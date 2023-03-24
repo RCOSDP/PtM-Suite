@@ -165,7 +165,6 @@ async function encode(encoder, ib, fps, frames) {
         timestamp: cur * 1000000 / fps,
         duration:  1000000 / fps
       });
-      console.log(vf.timestamp);
       encoder.encode(vf, {keyFrame});
       vf.close();
     }
@@ -174,9 +173,9 @@ async function encode(encoder, ib, fps, frames) {
     }
   }
   encoder.addEventListener("dequeue",(ev) => {
-    console.log(encoder.encodeQueueSize, ev.type, ev.timeStamp, ev.eventPhase, ev.target.encodeQueueSize);
     if (encoder.encodeQueueSize === 0 && cur < frames){
-       next();
+      console.log("dequeue listener calls next()");
+      next();
     }
   });
   let saved_resolve;
