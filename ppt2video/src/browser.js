@@ -1,3 +1,7 @@
+import {Buffer} from 'buffer';
+import process from 'process';
+import mm from 'music-metadata-browser';
+
 import {getPptxData} from '../src/pptx.js';
 import {parse} from './parse.js';
 import {convert} from './convert.js';
@@ -107,10 +111,11 @@ async function prepare(filename, sections, vsuffix, asuffix) {
 //
 
 export async function encodeTopic(topic) {
-  const {audioFilename, imageFilename} = topic.slides[0];
+  const slide = topic.slides[0];
+  const {imageFilename, duration} = slide;
   const ib = await imageFile2ImageBitmap(imageFilename, "vuca");
   const {encoder, chunks} = init_encoder(ib);
-  await encode(encoder, ib, 25, 25 * 4.5);
+  await encode(encoder, ib, 25, 25 * duration);
   return chunks;
 }
 
@@ -185,4 +190,30 @@ async function encode(encoder, ib, fps, frames) {
   return new Promise(async (resolve) => {
     saved_resolve = resolve;
   });
+}
+
+//
+// mux
+//
+
+//
+// sound
+//
+
+if (typeof window.Buffer === 'undefined') {
+  window.Buffer = Buffer;
+}
+
+if (typeof window.process === 'undefined') {
+  window.process = process;
+}
+
+export async function readSoundFileTopic(topic) {
+  for (const slide of topic.slides) {
+    const data = await readFile(slide.audioFilename);
+    const blob = new Blob([data], {type: 'audio/mp3'});
+    const mmp = await mm.parseBlob(blob);
+    slide.soundData = data;
+    slide.duration = mmp.format.duration;
+  }
 }

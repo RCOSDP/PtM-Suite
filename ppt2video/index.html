@@ -57,6 +57,7 @@ async function test1() {
 }
 
 async function file4() {
+  await ppt2video.readSoundFileTopic(pptx.sections[2].topics[0]);
   const chunks = await ppt2video.encodeTopic(pptx.sections[2].topics[0]);
   const blob = new Blob(chunks, {type: "application/octet-stream"})
   const url = URL.createObjectURL(blob);
