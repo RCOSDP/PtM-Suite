@@ -46,10 +46,7 @@ async function file3() {
 }
 
 async function file4() {
-  const dir = await openDir("vuca");
-  const it = await dir.entries();
-  for await (const e of it) {
-    console.log(e);
-  }
+  const slides = await ppt2video.listSlideImages("vuca");
+  console.log(slides);
 }
 </script>
