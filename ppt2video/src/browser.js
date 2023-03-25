@@ -55,6 +55,8 @@ async function init() {
   await prepare("vuca", sections, "mp4", "mp3");
   this.slides = slides;
   this.sections = sections;
+  const ffmpeg = await createFFmpeg();
+  this.ffmpeg = ffmpeg;
 }
 
 function createImportJson() {
@@ -85,6 +87,7 @@ async function prepare(filename, sections, vsuffix, asuffix) {
 
   sections.forEach(section => {
     section.topics.forEach(topic => {
+      topic.inputFilename = `${filename}_${tnum}.h264`;
       topic.outputFilename = `${filename}_${tnum}.${vsuffix}`;
       topic.slides.forEach(slide => {
         slide.audioFilename = `${filename}_${tnum}_${snum}.${asuffix}`;
@@ -207,6 +210,61 @@ async function encode(encoder, ibarray, fps, darray) {
 //
 // mux
 //
+
+async function createFFmpeg() {
+  const ffmpeg = FFmpeg.createFFmpeg({
+    corePath: location.href + "node_modules/@ffmpeg/core/dist/ffmpeg-core.js",
+    log: true
+  });
+  await ffmpeg.load();
+  return ffmpeg;
+}
+
+async function ffrun(ffmpeg, cmdline) {
+  const cmdarray = cmdline.split(/ +/);
+  console.log("ffmpeg run ", cmdarray);
+  return ffmpeg.run(...cmdarray);
+}
+
+function ffwrite(ffmpeg, filename, data) {
+  if (!(data instanceof Uint8Array)) {
+    data = new Uint8Array(data);
+  }
+  ffmpeg.FS('writeFile', filename, data);
+}
+
+function ffread(ffmpeg, filename) {
+  const data = ffmpeg.FS('readFile', filename);
+  return data.buffer;
+}
+
+function concat(chunks) {
+  const total = chunks.reduce((acc, chunk) => acc + chunk.byteLength, 0);
+  const ret = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    const len = chunk.byteLength;
+    ret.set(new Uint8Array(chunk), offset);
+    offset += len;
+  }
+  return ret;
+}
+
+export async function muxTopic(pptx, topic, chunks) {
+  const {ffmpeg} = pptx;
+
+  ffwrite(ffmpeg, topic.inputFilename, concat(chunks));
+
+  if (topic.slides.length === 1) {
+    const slide = topic.slides[0];
+    ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
+    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -i ${slide.audioFilename} -c copy ${topic.outputFilename}`);
+  } else {
+    console.log('not yet');
+  }
+
+  return ffread(ffmpeg, topic.outputFilename);
+}
 
 //
 // sound

@@ -2,7 +2,6 @@
 
 <head>
   <title>test page</title>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -20,6 +19,7 @@
   <video id="video" width="640" height="400" controls></video>
 </body>
 
+<script src="node_modules/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"></script>
 <script src="browser.js"></script>
 
 <script>
@@ -57,11 +57,13 @@ async function test1() {
 }
 
 async function file4() {
-  await ppt2video.readSoundFileTopic(pptx.sections[0].topics[0]);
-  const chunks = await ppt2video.encodeTopic(pptx.sections[0].topics[0]);
-  const blob = new Blob(chunks, {type: "application/octet-stream"})
+  const snum = 2;
+  await ppt2video.readSoundFileTopic(pptx.sections[snum].topics[0]);
+  const chunks = await ppt2video.encodeTopic(pptx.sections[snum].topics[0]);
+  const data = await ppt2video.muxTopic(pptx, pptx.sections[snum].topics[0], chunks);
+  const blob = new Blob([data], {type: "application/octet-stream"})
   const url = URL.createObjectURL(blob);
   down.href = url;
-  down.download = "down.h264";
+  down.download = "down.mp4";
 }
 </script>
