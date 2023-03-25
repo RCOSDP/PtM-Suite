@@ -57,7 +57,7 @@ async function test1() {
 }
 
 async function file4() {
-  const snum = 2;
+  const snum = 0;
   await ppt2video.readSoundFileTopic(pptx.sections[snum].topics[0]);
   const chunks = await ppt2video.encodeTopic(pptx.sections[snum].topics[0]);
   const data = await ppt2video.muxTopic(pptx, pptx.sections[snum].topics[0], chunks);

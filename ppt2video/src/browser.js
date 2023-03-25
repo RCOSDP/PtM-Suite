@@ -101,7 +101,7 @@ async function prepare(filename, sections, vsuffix, asuffix) {
       });
       if (topic.slides.length > 1) {
         topic.listFilename = `${filename}_${tnum}.list`;
-        topic.list = topic.slides.map(slide => 'file ' + slide.audioFilename);
+        topic.listData = topic.slides.reduce((all,slide) => all + 'file ' + slide.audioFilename + '\n', '');
       }
       tnum = tnum + 1;
     });
@@ -238,6 +238,10 @@ function ffread(ffmpeg, filename) {
   return data.buffer;
 }
 
+function ffunlink(ffmpeg, filename) {
+  ffmpeg.FS('unlink', filename);
+}
+
 function concat(chunks) {
   const total = chunks.reduce((acc, chunk) => acc + chunk.byteLength, 0);
   const ret = new Uint8Array(total);
@@ -259,11 +263,26 @@ export async function muxTopic(pptx, topic, chunks) {
     const slide = topic.slides[0];
     ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
     await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -i ${slide.audioFilename} -c copy ${topic.outputFilename}`);
+    ffunlink(ffmpeg, slide.audioFilename);
   } else {
-    console.log('not yet');
+    const blob = new Blob([topic.listData]);
+    const ab = await blob.arrayBuffer();
+    ffwrite(ffmpeg, topic.listFilename, ab);
+    for (const slide of topic.slides) {
+      ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
+    }
+    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -f concat -i ${topic.listFilename} -c copy ${topic.outputFilename}`);
+    for (const slide of topic.slides) {
+      ffunlink(ffmpeg, slide.audioFilename);
+    }
+    ffunlink(ffmpeg, topic.listFilename);
   }
 
-  return ffread(ffmpeg, topic.outputFilename);
+  ffunlink(ffmpeg, topic.inputFilename);
+
+  const data = ffread(ffmpeg, topic.outputFilename);
+  ffunlink(ffmpeg, topic.outputFilename);
+  return data;
 }
 
 //
