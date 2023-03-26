@@ -1,5 +1,6 @@
 import {Buffer} from 'buffer';
 import mm from 'music-metadata-browser';
+import * as path from 'path-browserify';
 
 import {getPptxData} from '../src/pptx.js';
 import {parse} from './parse.js';
@@ -47,12 +48,13 @@ export async function openDir(dirname) {
 export async function getPptx(filename) {
   const buf = await readFile(filename);
   const pptx = await getPptxData(buf);
-  return {...pptx, init, createImportJson};
+  const filepath = path.parse(filename);
+  return {...pptx, filepath, init, createImportJson, encodeTopic, muxTopic, readSoundFileTopic};
 }
 
 async function init() {
   const {slides, sections} = await parse(this);
-  await prepare("vuca", sections, "mp4", "mp3");
+  await prepare(this.filepath.name, sections, "mp4", "mp3");
   this.slides = slides;
   this.sections = sections;
   const ffmpeg = await createFFmpeg();
@@ -112,11 +114,11 @@ async function prepare(filename, sections, vsuffix, asuffix) {
 // encode
 //
 
-export async function encodeTopic(topic) {
+async function encodeTopic(topic) {
   const ibarray = [];
   const darray = [];
   for (const slide of topic.slides) {
-    ibarray.push(await imageFile2ImageBitmap(slide.imageFilename, "vuca"));
+    ibarray.push(await imageFile2ImageBitmap(slide.imageFilename, this.filepath.name));
     darray.push(slide.duration);
   }
   const {encoder, chunks} = init_encoder(ibarray[0], 25);
@@ -124,7 +126,7 @@ export async function encodeTopic(topic) {
   return chunks;
 }
 
-export async function imageFile2ImageBitmap(filename, dirname) {
+async function imageFile2ImageBitmap(filename, dirname) {
   const data = await readFile(filename, dirname);
   const blob = new Blob([data], {type: "image/png"})
   return await createImageBitmap(blob);
@@ -254,8 +256,8 @@ function concat(chunks) {
   return ret;
 }
 
-export async function muxTopic(pptx, topic, chunks) {
-  const {ffmpeg} = pptx;
+async function muxTopic(topic, chunks) {
+  const {ffmpeg} = this;
 
   ffwrite(ffmpeg, topic.inputFilename, concat(chunks));
 
@@ -299,7 +301,7 @@ async function getSoundDuration(data) {
   return mmp.format.duration;
 }
 
-export async function readSoundFileTopic(topic) {
+async function readSoundFileTopic(topic) {
   for (const slide of topic.slides) {
     const data = await readFile(slide.audioFilename);
     slide.soundData = data;

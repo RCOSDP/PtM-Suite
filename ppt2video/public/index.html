@@ -58,9 +58,11 @@ async function test1() {
 
 async function file4() {
   const snum = 0;
-  await ppt2video.readSoundFileTopic(pptx.sections[snum].topics[0]);
-  const chunks = await ppt2video.encodeTopic(pptx.sections[snum].topics[0]);
-  const data = await ppt2video.muxTopic(pptx, pptx.sections[snum].topics[0], chunks);
+  const topic = pptx.sections[snum].topics[0];
+  await pptx.readSoundFileTopic(topic);
+  const chunks = await pptx.encodeTopic(topic);
+  const data = await pptx.muxTopic(topic, chunks);
+
   const blob = new Blob([data], {type: "application/octet-stream"})
   const url = URL.createObjectURL(blob);
   down.href = url;
