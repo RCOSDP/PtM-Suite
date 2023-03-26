@@ -45,7 +45,11 @@ const lib_config = {
   },
 
   devServer: {
-    static: "./",
+    static: [
+      "public",
+      "node_modules/@ffmpeg/ffmpeg/dist",
+      "node_modules/@ffmpeg/core/dist"
+    ],
     port: 8000,
     hot: true,
     headers: {
