@@ -45,11 +45,20 @@ export async function openDir(dirname) {
 // ppt2video API
 //
 
+const exports = {
+  init,
+  createImportJson,
+  encodeTopic,
+  muxTopic,
+  readSoundFileTopic,
+  writeVideoTopic
+};
+
 export async function getPptx(filename) {
   const buf = await readFile(filename);
   const pptx = await getPptxData(buf);
   const filepath = path.parse(filename);
-  return {...pptx, filepath, init, createImportJson, encodeTopic, muxTopic, readSoundFileTopic};
+  return {...pptx, filepath, ...exports};
 }
 
 async function init() {
@@ -285,6 +294,10 @@ async function muxTopic(topic, chunks) {
   const data = ffread(ffmpeg, topic.outputFilename);
   ffunlink(ffmpeg, topic.outputFilename);
   return data;
+}
+
+async function writeVideoTopic(topic, data) {
+  await writeFile(topic.outputFilename, data);
 }
 
 //

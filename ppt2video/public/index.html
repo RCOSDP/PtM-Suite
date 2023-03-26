@@ -62,10 +62,6 @@ async function file4() {
   await pptx.readSoundFileTopic(topic);
   const chunks = await pptx.encodeTopic(topic);
   const data = await pptx.muxTopic(topic, chunks);
-
-  const blob = new Blob([data], {type: "application/octet-stream"})
-  const url = URL.createObjectURL(blob);
-  down.href = url;
-  down.download = "down.mp4";
+  await pptx.writeVideoTopic(topic, data);
 }
 </script>
