@@ -7,7 +7,7 @@ import {config} from './config.js';
 import {log4js, logger} from './log.js';
 import {parse} from './parse.js';
 import {convert} from './convert.js';
-import {createAudioFiles} from './audio.js';
+import {createAudioFiles, updateParams} from './audio.js';
 
 const {libDir, outputDir, tempDir} = config;
 
@@ -234,6 +234,7 @@ export async function ppt2video(filename, getPptx) {
   // create audio files
   logger.trace('call createAudioFiles');
   try {
+    updateParams(slides);
     await createAudioFiles(slides);
   } catch(e) {
     fatalError(e, 'failed to create audio files', sections);

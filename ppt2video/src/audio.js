@@ -72,9 +72,8 @@ const polly_defaults = {
   VoiceId: config.voice,
 };
 
-export async function createAudioFiles(slides) {
+export function updateParams(slides) {
   const speech = new sm.SpeechMarkdown({platform: 'amazon-alexa'});
-  const polly = new PollyClient();
 
   const req = {
     ...polly_defaults
@@ -90,9 +89,20 @@ export async function createAudioFiles(slides) {
   };
 
   for(const slide of slides) {
-    // update request
     updateParam(prev, slide, req);
-    req.Text = speech.toSSML(slideText(slide));
+    slide.req = {
+      ...req,
+      Text: speech.toSSML(slideText(slide))
+    };
+    prev = slide;
+  }
+}
+
+export async function createAudioFiles(slides) {
+  const polly = new PollyClient();
+
+  for(const slide of slides) {
+    const {req} = slide;
 
     // call amazon polly
     let stream;
@@ -110,7 +120,5 @@ export async function createAudioFiles(slides) {
     }
     slide.duration = (await mm.parseBuffer(stream)).format.duration;
     fs.writeFileSync(slide.audioFilename, stream);
-
-    prev = slide;
   }
 }
