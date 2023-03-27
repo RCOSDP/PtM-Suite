@@ -50,7 +50,7 @@ const exports = {
   createImportJson,
   encodeTopic,
   muxTopic,
-  readSoundFileTopic,
+  readAudioFileTopic,
   writeVideoTopic
 };
 
@@ -314,7 +314,7 @@ async function getSoundDuration(data) {
   return mmp.format.duration;
 }
 
-async function readSoundFileTopic(topic) {
+async function readAudioFileTopic(topic) {
   for (const slide of topic.slides) {
     const data = await readFile(slide.audioFilename);
     slide.soundData = data;
