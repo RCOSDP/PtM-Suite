@@ -6,7 +6,7 @@ const stringOptions = {
   voice:       process.env.PPT2VIDEO_VOICE       || 'Takumi',
   loglevel:    process.env.PPT2VIDEO_LOGLEVEL    || 'info',
   sampleRate:  process.env.PPT2VIDEO_SAMPLERATE  || '22050',
-  pollyProxy:  process.env.PPT2VIDEO_POLLY_PROXY,
+  pollyProxy:  location.href + "polly",
 };
 
 function numberOption(env, value) {

@@ -59,7 +59,8 @@ async function test1() {
 async function file4() {
   const snum = 0;
   const topic = pptx.sections[snum].topics[0];
-  await pptx.readAudioFileTopic(topic);
+//  await pptx.readAudioFileTopic(topic);
+  await pptx.createAudioTopic(topic);
   const chunks = await pptx.encodeTopic(topic);
   const data = await pptx.muxTopic(topic, chunks);
   await pptx.writeVideoTopic(topic, data);

@@ -1,10 +1,13 @@
 import {Buffer} from 'buffer';
 import mm from 'music-metadata-browser';
+import axios from 'axios';
 import * as path from 'path-browserify';
 
-import {getPptxData} from '../src/pptx.js';
+import {config} from '#target/config.js';
+import {getPptxData} from './pptx.js';
 import {parse} from './parse.js';
 import {convert} from './convert.js';
+import {updateParams} from './audio.js';
 
 export {getPptxData}
 
@@ -51,7 +54,8 @@ const exports = {
   encodeTopic,
   muxTopic,
   readAudioFileTopic,
-  writeVideoTopic
+  writeVideoTopic,
+  createAudioTopic,
 };
 
 export async function getPptx(filename) {
@@ -68,6 +72,7 @@ async function init() {
   this.sections = sections;
   const ffmpeg = await createFFmpeg();
   this.ffmpeg = ffmpeg;
+  updateParams(slides);
 }
 
 function createImportJson() {
@@ -317,6 +322,17 @@ async function getSoundDuration(data) {
 async function readAudioFileTopic(topic) {
   for (const slide of topic.slides) {
     const data = await readFile(slide.audioFilename);
+    slide.soundData = data;
+    slide.duration = await getSoundDuration(data);
+  }
+}
+
+async function createAudioTopic(topic) {
+  const {slides} = topic;
+
+  for(const slide of slides) {
+    const res = await axios.post(config.pollyProxy, slide.req, {responseType: 'arraybuffer'});
+    const {data} = res;
     slide.soundData = data;
     slide.duration = await getSoundDuration(data);
   }
