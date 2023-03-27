@@ -1,11 +1,4 @@
-import fs from 'fs';
-
 import sm from 'speechmarkdown-js';
-import mm from 'music-metadata-browser';
-import axios from 'axios';
-
-import {PollyClient, SynthesizeSpeechCommand} from '@aws-sdk/client-polly';
-
 import {config} from '#target/config.js';
 
 function updateParam(prev, slide, req) {
@@ -95,30 +88,5 @@ export function updateParams(slides) {
       Text: speech.toSSML(slideText(slide))
     };
     prev = slide;
-  }
-}
-
-export async function createAudioFiles(slides) {
-  const polly = new PollyClient();
-
-  for(const slide of slides) {
-    const {req} = slide;
-
-    // call amazon polly
-    let stream;
-    if (config.pollyProxy) {
-      const res = await axios.post(config.pollyProxy, req, {responseType: 'arraybuffer'});
-      stream = res.data;
-    } else {
-      const command = new SynthesizeSpeechCommand(req);
-      const res = await polly.send(command);
-      const chunks = []
-      for await (let chunk of res.AudioStream) {
-        chunks.push(chunk)
-      }
-      stream = Buffer.concat(chunks);
-    }
-    slide.duration = (await mm.parseBuffer(stream)).format.duration;
-    fs.writeFileSync(slide.audioFilename, stream);
   }
 }

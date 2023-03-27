@@ -2,12 +2,14 @@ import {execaCommand} from 'execa';
 import fs from 'fs';
 import path from 'path';
 import {PollyClient, SynthesizeSpeechCommand} from '@aws-sdk/client-polly';
+import mm from 'music-metadata-browser';
+import axios from 'axios';
 
 import {config} from './config.js';
 import {log4js, logger} from './log.js';
 import {parse} from './parse.js';
 import {convert} from './convert.js';
-import {createAudioFiles, updateParams} from './audio.js';
+import {updateParams} from './audio.js';
 
 const {libDir, outputDir, tempDir} = config;
 
@@ -177,6 +179,32 @@ function fatalError(e, message, sections = null) {
   exitProcess(-1);
 }
 
+async function createAudioFiles(slides) {
+  updateParams(slides);
+  const polly = new PollyClient();
+
+  for(const slide of slides) {
+    const {req} = slide;
+
+    // call amazon polly
+    let stream;
+    if (config.pollyProxy) {
+      const res = await axios.post(config.pollyProxy, req, {responseType: 'arraybuffer'});
+      stream = res.data;
+    } else {
+      const command = new SynthesizeSpeechCommand(req);
+      const res = await polly.send(command);
+      const chunks = []
+      for await (let chunk of res.AudioStream) {
+        chunks.push(chunk)
+      }
+      stream = Buffer.concat(chunks);
+    }
+    slide.duration = (await mm.parseBuffer(stream)).format.duration;
+    fs.writeFileSync(slide.audioFilename, stream);
+  }
+}
+
 export async function ppt2video(filename, getPptx) {
   const filepath = path.parse(filename);
   let pptx, data;
@@ -234,7 +262,6 @@ export async function ppt2video(filename, getPptx) {
   // create audio files
   logger.trace('call createAudioFiles');
   try {
-    updateParams(slides);
     await createAudioFiles(slides);
   } catch(e) {
     fatalError(e, 'failed to create audio files', sections);
