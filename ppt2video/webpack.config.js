@@ -58,6 +58,11 @@ const lib_config = {
     },
     client: {
       overlay: false,
+    },
+    proxy: {
+      "/polly": {
+        target: "http://localhost:3003",
+      }
     }
   }
 };
