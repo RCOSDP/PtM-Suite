@@ -47,6 +47,7 @@ async function file2() {
 
 async function file3() {
   const ij = pptx.createImportJson();
+  await pptx.writeImportJson(ij);
   console.log(ij);
 }
 

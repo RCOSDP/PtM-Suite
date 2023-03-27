@@ -51,6 +51,7 @@ export async function openDir(dirname) {
 const exports = {
   init,
   createImportJson,
+  writeImportJson,
   encodeTopic,
   muxTopic,
   readAudioFileTopic,
@@ -79,6 +80,10 @@ function createImportJson() {
   return convert(this, this.slides, this.sections);
 }
 
+async function writeImportJson(data) {
+  await writeFile(this.filepath.name + ".json", JSON.stringify(data,null,2));
+}
+
 //
 // preparation
 //
@@ -104,7 +109,8 @@ async function prepare(filename, sections, vsuffix, asuffix) {
   sections.forEach(section => {
     section.topics.forEach(topic => {
       topic.inputFilename = `${filename}_${tnum}.h264`;
-      topic.outputFilename = `${filename}_${tnum}.${vsuffix}`;
+      topic.file = `${filename}_${tnum}.${vsuffix}`;
+      topic.outputFilename = topic.file;
       topic.slides.forEach(slide => {
         slide.audioFilename = `${filename}_${tnum}_${snum}.${asuffix}`;
         const imageFilename = imageFiles[snum];
