@@ -334,9 +334,7 @@ async function readAudioFileTopic(topic) {
 }
 
 async function createAudioTopic(topic) {
-  const {slides} = topic;
-
-  for(const slide of slides) {
+  for(const slide of topic.slides) {
     const res = await axios.post(config.pollyProxy, slide.req, {responseType: 'arraybuffer'});
     const {data} = res;
     slide.soundData = data;
