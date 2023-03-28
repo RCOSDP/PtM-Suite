@@ -21,16 +21,24 @@
 
 <script>
 let pptx;
+let dirHandle;
 
 const {setRoot, readFile, writeFile, openDir, getPptx} = ppt2video;
 
 async function openDirectory() {
-  const dirHandle = await window.showDirectoryPicker();
+  dirHandle = await window.showDirectoryPicker();
   setRoot(dirHandle);
 }
 
 async function listPptx() {
   // TODO
+  const re = /.(pptx|PPTX)/;
+  for await (const dirent of dirHandle.entries()) {
+    const match = dirent[0].match(re);
+    if (match) {
+      console.log(dirent[0]);
+    }
+  }
 }
 
 async function openPptx() {
