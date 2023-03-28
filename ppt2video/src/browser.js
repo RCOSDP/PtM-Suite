@@ -52,6 +52,7 @@ const exports = {
   init,
   createImportJson,
   writeImportJson,
+  process,
   encodeTopic,
   muxTopic,
   readAudioFileTopic,
@@ -82,6 +83,36 @@ function createImportJson() {
 
 async function writeImportJson(data) {
   await writeFile(this.filepath.name + ".json", JSON.stringify(data,null,2));
+}
+
+async function process(options = {}) {
+  const {sections} = this;
+  const {readAudioFile, videoOnly, importJsonOnly, targetTopic} = options;
+
+  if (!videoOnly) {
+    const ij = this.createImportJson();
+    await this.writeImportJson(ij);
+  }
+
+  if (importJsonOnly) {
+    return;
+  }
+
+  for (const section of sections) {
+    for (const topic of section.topics) {
+      if (targetTopic && topic !== targetTopic) {
+        continue;
+      }
+      if (readAudioFile) {
+        await this.readAudioFileTopic(topic);
+      } else {
+        await this.createAudioTopic(topic);
+      }
+      const chunks = await this.encodeTopic(topic);
+      const data = await this.muxTopic(topic, chunks);
+      await this.writeVideoTopic(topic, data);
+    }
+  }
 }
 
 //
