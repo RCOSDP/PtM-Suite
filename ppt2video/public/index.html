@@ -1,0 +1,148 @@
+<html>
+
+<head>
+  <title>chilospeech wasm version sample page</title>
+</head>
+
+<body>
+  <div id="react_app"></div>
+</body>
+
+<script src="ffmpeg.min.js"></script>
+<script src="browser.js"></script>
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+
+<script>
+let dirHandle = null;
+let filename = null;
+let pptx = null;
+
+const {setRoot, getPptx} = ppt2video;
+
+async function openDirectory() {
+  dirHandle = await window.showDirectoryPicker();
+  setRoot(dirHandle);
+}
+
+async function getPptxList() {
+  const ret = [];
+  const re = /.(pptx|PPTX)/;
+  for await (const dirent of dirHandle.entries()) {
+    const match = dirent[0].match(re);
+    if (match) {
+      ret.push(dirent[0]);
+    }
+  }
+  return ret;
+}
+
+async function openPptx(filename) {
+  pptx = await getPptx(filename);
+  await pptx.init();
+}
+
+async function createImportJson() {
+  const option = {
+    importJsonOnly: true,
+  };
+  await pptx.process(option);
+}
+
+function getTopicList() {
+  const ret = [];
+  for (const section of pptx.sections) {
+    ret.push(section.topics[0].name);
+  }
+  return ret;
+}
+
+async function oneTopic(num) {
+  const targetTopic = pptx.sections[num].topics[0];
+  const option = {
+    videoOnly: true,
+    targetTopic
+  };
+  await pptx.process(option);
+}
+</script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const steps = {
+  step1: 1,
+  step2: 2,
+  step3: 3,
+  step4: 4,
+};
+
+function App() {
+  const [step, setStep] = useState(steps.step1);
+  const [pptxList, setPptxList] = useState([]);
+  const [topicList, setTopicList] = useState([]);
+
+  async function handleButton1() {
+    await openDirectory();
+    const list = await getPptxList();
+    setPptxList(list);
+    setStep(steps.step2);
+  }
+
+  function handleFilename(e) {
+    filename = e.target.value;
+  }
+
+  async function handleButton2() {
+    console.log(filename);
+    if (filename !== null) {
+      await openPptx(filename);
+      const list = getTopicList();
+      setTopicList(list);
+      setStep(steps.step3);
+    }
+  }
+
+  async function handleButton3() {
+    setStep(steps.step4);
+    const list = getTopicList();
+    const len = list.length;
+    await createImportJson();
+    for (let i = 0; i < len; i++) {
+      await oneTopic(i);
+      const progress = list.map((filename, index) => (index <= i?'✓ ':'') + filename);
+      setTopicList(progress);
+    }
+  }
+
+  return (
+    <div>
+      <h2> step1: パワーポイントファイルを含むディレクトリを開きます。</h2>
+      <button onClick={handleButton1} disabled={step !== steps.step1}>ディレクトリを開く</button>
+      <h2> step2: パワーポイントファイルを選択します。</h2>
+      <form>
+        {pptxList.map((filename, index) =>
+          <div key={index}>
+            <input type="radio" value={filename} onClick={handleFilename} /> {filename}
+          </div>
+        )}
+      </form>
+      <button onClick={handleButton2} disabled={step !== steps.step2}>次へ</button>
+      <h2> step3: Import JSONファイル及び各トピックのビデオファイルを作成します。</h2>
+      {topicList.map((topicname, index) =>
+        <p key={index}>{topicname}</p>
+      )}
+      <button onClick={handleButton3} disabled={step !== steps.step3}>開始</button>
+    </div>
+  )
+}
+
+const domContainer = document.querySelector('#react_app');
+const root = ReactDOM.createRoot(domContainer);
+root.render(
+//  <MessageList />
+  <App />
+);
+
+</script>
