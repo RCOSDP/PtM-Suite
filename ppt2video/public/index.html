@@ -15,11 +15,11 @@
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
 
 <script>
+const {setRoot, getPptx} = ppt2video;
+
 let dirHandle = null;
 let filename = null;
 let pptx = null;
-
-const {setRoot, getPptx} = ppt2video;
 
 async function openDirectory() {
   dirHandle = await window.showDirectoryPicker();
@@ -141,7 +141,6 @@ function App() {
 const domContainer = document.querySelector('#react_app');
 const root = ReactDOM.createRoot(domContainer);
 root.render(
-//  <MessageList />
   <App />
 );
 
