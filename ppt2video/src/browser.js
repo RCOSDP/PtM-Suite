@@ -139,11 +139,12 @@ async function prepare(filename, sections, vsuffix, asuffix) {
 
   sections.forEach(section => {
     section.topics.forEach(topic => {
-      topic.inputFilename = `${filename}_${tnum}.h264`;
-      topic.file = `${filename}_${tnum}.${vsuffix}`;
-      topic.outputFilename = topic.file;
+      topic.inputFilename = `input_${tnum}.h264`;
+      topic.outputFilename = `output_${tnum}.${vsuffix}`;
+      topic.extOutputFilename = `${filename}_${tnum}.${vsuffix}`;
       topic.slides.forEach(slide => {
-        slide.audioFilename = `${filename}_${tnum}_${snum}.${asuffix}`;
+        slide.audioFilename = `audio_${tnum}_${snum}.${asuffix}`;
+        slide.extAudioFilename = `${filename}_${tnum}_${snum}.${asuffix}`;
         const imageFilename = imageFiles[snum];
         if (typeof imageFilename !== 'undefined') {
           slide.imageFilename = imageFilename;
@@ -153,7 +154,7 @@ async function prepare(filename, sections, vsuffix, asuffix) {
         snum = snum + 1;
       });
       if (topic.slides.length > 1) {
-        topic.listFilename = `${filename}_${tnum}.list`;
+        topic.listFilename = `list_${tnum}.list`;
         topic.listData = topic.slides.reduce((all,slide) => all + 'file ' + slide.audioFilename + '\n', '');
       }
       tnum = tnum + 1;
@@ -339,7 +340,7 @@ async function muxTopic(topic, chunks) {
 }
 
 async function writeVideoTopic(topic, data) {
-  await writeFile(topic.outputFilename, data);
+  await writeFile(topic.extOutputFilename, data);
 }
 
 //
@@ -358,7 +359,7 @@ async function getSoundDuration(data) {
 
 async function readAudioFileTopic(topic) {
   for (const slide of topic.slides) {
-    const data = await readFile(slide.audioFilename);
+    const data = await readFile(slide.extAudioFilename);
     slide.soundData = data;
     slide.duration = await getSoundDuration(data);
   }
