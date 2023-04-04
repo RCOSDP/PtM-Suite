@@ -8,6 +8,7 @@ import {getPptxData} from './pptx.js';
 import {parse} from './parse.js';
 import {convert} from './convert.js';
 import {updateParams} from './audio.js';
+import JSZip from 'jszip';
 
 export {getPptxData}
 
@@ -81,17 +82,43 @@ function createImportJson() {
   return convert(this, this.slides, this.sections);
 }
 
-async function writeImportJson(data) {
-  await writeFile(this.filepath.name + ".json", JSON.stringify(data,null,2));
+let zip = null;
+
+async function writeImportJson(data, useZip) {
+  if (useZip) {
+    zip.file(this.filepath.name + ".json", JSON.stringify(data,null,2));
+  } else {
+    await writeFile(this.filepath.name + ".json", JSON.stringify(data,null,2));
+  }
+}
+
+async function writeVideoTopic(topic, data, useZip) {
+  if (useZip) {
+    zip.file(topic.extOutputFilename, data, {binary: true});
+  } else {
+    await writeFile(topic.extOutputFilename, data);
+  }
 }
 
 async function process(options = {}) {
   const {sections} = this;
-  const {readAudioFile, videoOnly, importJsonOnly, targetTopic} = options;
+  const {readAudioFile, videoOnly, importJsonOnly, targetTopic, useZip, flushZip} = options;
+
+  if (useZip && zip === null) {
+    zip = new JSZip();
+  }
+
+  if (flushZip) {
+    if (zip) {
+      const data = await zip.generateAsync({type: "uint8array"});
+      await writeFile(this.filepath.name + ".zip", data);
+    }
+    return;
+  }
 
   if (!videoOnly) {
     const ij = this.createImportJson();
-    await this.writeImportJson(ij);
+    await this.writeImportJson(ij, useZip);
   }
 
   if (importJsonOnly) {
@@ -110,7 +137,7 @@ async function process(options = {}) {
       }
       const chunks = await this.encodeTopic(topic);
       const data = await this.muxTopic(topic, chunks);
-      await this.writeVideoTopic(topic, data);
+      await this.writeVideoTopic(topic, data, useZip);
     }
   }
 }
@@ -337,10 +364,6 @@ async function muxTopic(topic, chunks) {
   const data = ffread(ffmpeg, topic.outputFilename);
   ffunlink(ffmpeg, topic.outputFilename);
   return data;
-}
-
-async function writeVideoTopic(topic, data) {
-  await writeFile(topic.extOutputFilename, data);
 }
 
 //

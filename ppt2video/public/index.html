@@ -46,6 +46,7 @@ async function openPptx(filename) {
 async function createImportJson() {
   const option = {
     importJsonOnly: true,
+    useZip: true,
   };
   await pptx.process(option);
 }
@@ -62,9 +63,14 @@ async function oneTopic(num) {
   const targetTopic = pptx.sections[num].topics[0];
   const option = {
     videoOnly: true,
-    targetTopic
+    targetTopic,
+    useZip: true,
   };
   await pptx.process(option);
+}
+
+async function flushZip() {
+  await pptx.process({flushZip: true});
 }
 </script>
 
@@ -76,6 +82,7 @@ const steps = {
   step2: 2,
   step3: 3,
   step4: 4,
+  step5: 5,
 };
 
 function App() {
@@ -116,6 +123,11 @@ function App() {
     }
   }
 
+  async function handleButton4() {
+    setStep(steps.step5);
+    await flushZip();
+  }
+
   return (
     <div>
       <h2> step1: パワーポイントファイルを含むディレクトリを開きます。</h2>
@@ -134,6 +146,8 @@ function App() {
         <p key={index}>{topicname}</p>
       )}
       <button onClick={handleButton3} disabled={step !== steps.step3}>開始</button>
+      <h2> step4: zipファイルを保存します。</h2>
+      <button onClick={handleButton4} disabled={step !== steps.step4}>保存</button>
     </div>
   )
 }
