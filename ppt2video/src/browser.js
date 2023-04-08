@@ -374,6 +374,11 @@ if (typeof window.Buffer === 'undefined') {
   window.Buffer = Buffer;
 }
 
+const ltik = new URLSearchParams(window.location.search).get("ltik");
+if (ltik) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${ltik}`;
+}
+
 async function getSoundDuration(data) {
   const buf = Buffer.from(data);
   const mmp = await mm.parseBuffer(buf);
