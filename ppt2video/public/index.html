@@ -18,7 +18,6 @@
 const {setRoot, getPptx} = ppt2video;
 
 let dirHandle = null;
-let filename = null;
 let pptx = null;
 
 async function openDirectory() {
@@ -41,12 +40,12 @@ async function getPptxList() {
 async function openPptx(filename) {
   pptx = await getPptx(filename);
   await pptx.init();
+  pptx.zipControl('start');
 }
 
 async function createImportJson() {
   const option = {
     importJsonOnly: true,
-    useZip: true,
   };
   await pptx.process(option);
 }
@@ -64,13 +63,12 @@ async function oneTopic(num) {
   const option = {
     videoOnly: true,
     targetTopic,
-    useZip: true,
   };
   await pptx.process(option);
 }
 
 async function flushZip() {
-  await pptx.process({flushZip: true});
+  await pptx.zipControl('flush');
 }
 </script>
 
@@ -83,12 +81,14 @@ const steps = {
   step3: 3,
   step4: 4,
   step5: 5,
+  step6: 6,
 };
 
 function App() {
   const [step, setStep] = useState(steps.step1);
   const [pptxList, setPptxList] = useState([]);
   const [topicList, setTopicList] = useState([]);
+  const [filename, setFilename] = useState(null);
 
   async function handleButton1() {
     await openDirectory();
@@ -98,11 +98,10 @@ function App() {
   }
 
   function handleFilename(e) {
-    filename = e.target.value;
+    setFilename(e.target.value);
   }
 
   async function handleButton2() {
-    console.log(filename);
     if (filename !== null) {
       await openPptx(filename);
       const list = getTopicList();
@@ -118,14 +117,15 @@ function App() {
     await createImportJson();
     for (let i = 0; i < len; i++) {
       await oneTopic(i);
-      const progress = list.map((filename, index) => (index <= i?'✓ ':'') + filename);
+      const progress = list.map((name, index) => (index <= i?'✓ ':'') + name);
       setTopicList(progress);
     }
+    setStep(steps.step5);
   }
 
   async function handleButton4() {
-    setStep(steps.step5);
     await flushZip();
+    setStep(steps.step6);
   }
 
   return (
@@ -140,14 +140,14 @@ function App() {
           </div>
         )}
       </form>
-      <button onClick={handleButton2} disabled={step !== steps.step2}>次へ</button>
+      <button onClick={handleButton2} disabled={step !== steps.step2 || filename === null}>次へ</button>
       <h2> step3: Import JSONファイル及び各トピックのビデオファイルを作成します。</h2>
       {topicList.map((topicname, index) =>
         <p key={index}>{topicname}</p>
       )}
       <button onClick={handleButton3} disabled={step !== steps.step3}>開始</button>
       <h2> step4: zipファイルを保存します。</h2>
-      <button onClick={handleButton4} disabled={step !== steps.step4}>保存</button>
+      <button onClick={handleButton4} disabled={step !== steps.step5}>保存</button>
     </div>
   )
 }
