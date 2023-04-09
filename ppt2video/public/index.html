@@ -100,11 +100,17 @@ function App() {
   const [pptxList, setPptxList] = useState([]);
   const [topicList, setTopicList] = useState([]);
   const [filename, setFilename] = useState(null);
+  const [error1, setError1] = useState(null);
   const [error2, setError2] = useState(null);
 
   async function handleButton1() {
-    await openDirectory();
-    readDirectory();
+    try {
+      setError1(null);
+      await openDirectory();
+      readDirectory();
+    } catch(e) {
+      setError1('ディレクトリを開くことができませんでした。\n' + e.message);
+    }
   }
 
   async function readDirectory() {
@@ -154,6 +160,7 @@ function App() {
     <div>
       <h2> step1: パワーポイントファイルを含むディレクトリを開きます。</h2>
       <button onClick={handleButton1} disabled={step !== steps.step1}>ディレクトリを開く</button>
+      <Message msg={error1} />
       <h2> step2: パワーポイントファイルを選択します。</h2>
       <form>
         {pptxList.map((filename, index) =>
