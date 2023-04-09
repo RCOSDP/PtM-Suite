@@ -83,11 +83,24 @@ const steps = {
   step4: 5,
 };
 
+function Message(props) {
+  if (props.msg) {
+    return (
+      <div>
+        <br/>
+        <div>{props.msg}</div>
+      </div>
+    );
+  }
+  return null;
+}
+
 function App() {
   const [step, setStep] = useState(steps.step1);
   const [pptxList, setPptxList] = useState([]);
   const [topicList, setTopicList] = useState([]);
   const [filename, setFilename] = useState(null);
+  const [error2, setError2] = useState(null);
 
   async function handleButton1() {
     await openDirectory();
@@ -105,11 +118,14 @@ function App() {
   }
 
   async function handleButton2() {
-    if (filename !== null) {
+    try {
+      setError2(null);
       await openPptx(filename);
       const list = getTopicList();
       setTopicList(list);
       setStep(steps.step3);
+    } catch(e) {
+      setError2(e.toString());
     }
   }
 
@@ -147,6 +163,7 @@ function App() {
         )}
       </form>
       <button onClick={handleButton2} disabled={step !== steps.step2 || filename === null}>次へ</button>
+      <Message msg={error2} />
       <h2> step3: Import JSONファイル及び各トピックのビデオファイルを作成します。</h2>
       {topicList.map((topicname, index) =>
         <p key={index}>{topicname}</p>
