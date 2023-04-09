@@ -54,6 +54,7 @@ const exports = {
   createImportJson,
   writeImportJson,
   process,
+  zipControl,
   encodeTopic,
   muxTopic,
   readAudioFileTopic,
@@ -84,41 +85,47 @@ function createImportJson() {
 
 let zip = null;
 
-async function writeImportJson(data, useZip) {
-  if (useZip) {
+async function writeImportJson(data) {
+  if (zip) {
     zip.file(this.filepath.name + ".json", JSON.stringify(data,null,2));
   } else {
     await writeFile(this.filepath.name + ".json", JSON.stringify(data,null,2));
   }
 }
 
-async function writeVideoTopic(topic, data, useZip) {
-  if (useZip) {
+async function writeVideoTopic(topic, data) {
+  if (zip) {
     zip.file(topic.extOutputFilename, data, {binary: true});
   } else {
     await writeFile(topic.extOutputFilename, data);
   }
 }
 
+async function zipControl(cmd) {
+  switch(cmd) {
+    case 'start':
+      zip = new JSZip();
+      break;
+    case 'flush':
+      if (zip) {
+        const data = await zip.generateAsync({type: "uint8array"});
+        await writeFile(this.filepath.name + ".zip", data);
+        zip = null;
+      }
+      break;
+    case 'cancel':
+      zip = null;
+      break;
+  }
+}
+
 async function process(options = {}) {
   const {sections} = this;
-  const {readAudioFile, videoOnly, importJsonOnly, targetTopic, useZip, flushZip} = options;
-
-  if (useZip && zip === null) {
-    zip = new JSZip();
-  }
-
-  if (flushZip) {
-    if (zip) {
-      const data = await zip.generateAsync({type: "uint8array"});
-      await writeFile(this.filepath.name + ".zip", data);
-    }
-    return;
-  }
+  const {readAudioFile, videoOnly, importJsonOnly, targetTopic} = options;
 
   if (!videoOnly) {
     const ij = this.createImportJson();
-    await this.writeImportJson(ij, useZip);
+    await this.writeImportJson(ij);
   }
 
   if (importJsonOnly) {
@@ -137,7 +144,7 @@ async function process(options = {}) {
       }
       const chunks = await this.encodeTopic(topic);
       const data = await this.muxTopic(topic, chunks);
-      await this.writeVideoTopic(topic, data, useZip);
+      await this.writeVideoTopic(topic, data);
     }
   }
 }
