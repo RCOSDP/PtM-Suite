@@ -132,8 +132,12 @@ async function process(options = {}) {
   const {readAudioFile, videoOnly, importJsonOnly, targetTopic} = options;
 
   if (!videoOnly) {
-    const ij = this.createImportJson();
-    await this.writeImportJson(ij);
+    try {
+      const ij = this.createImportJson();
+      await this.writeImportJson(ij);
+    } catch(e){
+      throw new Error('can not create import json file.\n' + e.message);
+    }
   }
 
   if (importJsonOnly) {
@@ -151,8 +155,17 @@ async function process(options = {}) {
         await this.createAudioTopic(topic);
       }
       const chunks = await this.encodeTopic(topic);
-      const data = await this.muxTopic(topic, chunks);
-      await this.writeVideoTopic(topic, data);
+      let data;
+      try {
+        data = await this.muxTopic(topic, chunks);
+      } catch(e){
+        throw new Error('can not mux topic.\n' + e.message);
+      }
+      try {
+        await this.writeVideoTopic(topic, data);
+      } catch(e){
+        throw new Error('can not write video.\n' + e.message);
+      }
     }
   }
 }
@@ -164,7 +177,12 @@ async function process(options = {}) {
 async function listSlideImages(path) {
   const slides = {};
   const re = /(?<page>\d+).(png|PNG|jpg|JPG)/;
-  const dir = await openDir(path);
+  let dir;
+  try {
+    dir = await openDir(path);
+  } catch(e){
+    throw new Error('can not open slide image directory.\n' + e.message);
+  }
   for await (const dirent of dir.entries()) {
     const match = dirent[0].match(re);
     if (match != null) {
@@ -191,7 +209,7 @@ async function prepare(filename, sections, vsuffix, asuffix) {
         if (typeof imageFilename !== 'undefined') {
           slide.imageFilename = imageFilename;
         } else {
-          throw "can't find slide image file for slide number " + snum;
+          throw new Error('can not find slide image file for slide number ' + snum);
         }
         snum = snum + 1;
       });
@@ -215,15 +233,23 @@ async function encodeTopic(topic) {
     ibarray.push(await imageFile2ImageBitmap(slide.imageFilename, this.filepath.name));
     darray.push(slide.duration);
   }
-  const {encoder, chunks} = init_encoder(ibarray[0], 25);
-  await encode(encoder, ibarray, 25, darray);
-  return chunks;
+  try {
+    const {encoder, chunks} = init_encoder(ibarray[0], 25);
+    await encode(encoder, ibarray, 25, darray);
+    return chunks;
+  } catch(e){
+    throw new Error('can not encode.\n' + e.message);
+  }
 }
 
 async function imageFile2ImageBitmap(filename, dirname) {
-  const data = await readFile(filename, dirname);
-  const blob = new Blob([data], {type: "image/png"})
-  return await createImageBitmap(blob);
+  try {
+    const data = await readFile(filename, dirname);
+    const blob = new Blob([data], {type: "image/png"})
+    return await createImageBitmap(blob);
+  } catch(e){
+    throw new Error('can not read image file ' + filename + '\n' + e.message);
+  }
 }
 
 function init_encoder(ib, fps) {
@@ -401,10 +427,14 @@ async function getSoundDuration(data) {
 }
 
 async function readAudioFileTopic(topic) {
-  for (const slide of topic.slides) {
-    const data = await readFile(slide.extAudioFilename);
-    slide.soundData = data;
-    slide.duration = await getSoundDuration(data);
+  try {
+    for (const slide of topic.slides) {
+      const data = await readFile(slide.extAudioFilename);
+      slide.soundData = data;
+      slide.duration = await getSoundDuration(data);
+    }
+  } catch(e){
+    throw new Error('can not read audio file.\n' + e.message);
   }
 }
 
