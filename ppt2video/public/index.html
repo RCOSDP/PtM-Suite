@@ -142,7 +142,7 @@ function App() {
       <form>
         {pptxList.map((filename, index) =>
           <div key={index}>
-            <input type="radio" value={filename} onClick={handleFilename} /> {filename}
+            <input type="radio" name="pptx" value={filename} onClick={handleFilename} /> {filename}
           </div>
         )}
       </form>
