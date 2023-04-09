@@ -144,6 +144,9 @@ function App() {
 
   async function handleStep3Start() {
     try {
+      if (error3 !== null) {
+        await openPptx(filename);
+      }
       setError3(null);
       setStep(steps.step35);
       const list = getTopicList();
