@@ -102,8 +102,9 @@ function App() {
   const [filename, setFilename] = useState(null);
   const [error1, setError1] = useState(null);
   const [error2, setError2] = useState(null);
+  const [error4, setError4] = useState(null);
 
-  async function handleButton1() {
+  async function handleStep1OpenDirectory() {
     try {
       setError1(null);
       await openDirectory();
@@ -123,7 +124,7 @@ function App() {
     setFilename(e.target.value);
   }
 
-  async function handleButton2() {
+  async function handleStep2Next() {
     try {
       setError2(null);
       await openPptx(filename);
@@ -135,7 +136,7 @@ function App() {
     }
   }
 
-  async function handleButton3() {
+  async function handleStep3Start() {
     setStep(steps.step35);
     const list = getTopicList();
     const len = list.length;
@@ -148,18 +149,23 @@ function App() {
     setStep(steps.step4);
   }
 
-  async function handleButton4() {
-    await flushZip();
-    setPptxList([]);
-    setFilename(null);
-    setTopicList([]);
-    readDirectory();
+  async function handleStep4Save() {
+    try {
+      setError4(null);
+      await flushZip();
+      setPptxList([]);
+      setFilename(null);
+      setTopicList([]);
+      readDirectory();
+    } catch(e){
+      setError4('zipファイルの保存に失敗しました。\n' + e.message);
+    }
   }
 
   return (
     <div>
       <h2> step1: パワーポイントファイルを含むディレクトリを開きます。</h2>
-      <button onClick={handleButton1} disabled={step !== steps.step1}>ディレクトリを開く</button>
+      <button onClick={handleStep1OpenDirectory} disabled={step !== steps.step1}>ディレクトリを開く</button>
       <Message msg={error1} />
       <h2> step2: パワーポイントファイルを選択します。</h2>
       <form>
@@ -169,15 +175,16 @@ function App() {
           </div>
         )}
       </form>
-      <button onClick={handleButton2} disabled={step !== steps.step2 || filename === null}>次へ</button>
+      <button onClick={handleStep2Next} disabled={step !== steps.step2 || filename === null}>次へ</button>
       <Message msg={error2} />
       <h2> step3: Import JSONファイル及び各トピックのビデオファイルを作成します。</h2>
       {topicList.map((topicname, index) =>
         <p key={index}>{topicname}</p>
       )}
-      <button onClick={handleButton3} disabled={step !== steps.step3}>開始</button>
+      <button onClick={handleStep3Start} disabled={step !== steps.step3}>開始</button>
       <h2> step4: zipファイルを保存します。</h2>
-      <button onClick={handleButton4} disabled={step !== steps.step4}>保存</button>
+      <button onClick={handleStep4Save} disabled={step !== steps.step4}>保存</button>
+      <Message msg={error4} />
     </div>
   )
 }
