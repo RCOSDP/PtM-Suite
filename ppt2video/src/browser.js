@@ -63,10 +63,14 @@ const exports = {
 };
 
 export async function getPptx(filename) {
-  const buf = await readFile(filename);
-  const pptx = await getPptxData(buf);
-  const filepath = path.parse(filename);
-  return {...pptx, filepath, ...exports};
+  try {
+    const buf = await readFile(filename);
+    const pptx = await getPptxData(buf);
+    const filepath = path.parse(filename);
+    return {...pptx, filepath, ...exports};
+  } catch(e) {
+    throw new Error("PPTXファイルのオープンに失敗しました。\n" + e.message);
+  }
 }
 
 async function init() {
@@ -74,8 +78,12 @@ async function init() {
   await prepare(this.filepath.name, sections, "mp4", "mp3");
   this.slides = slides;
   this.sections = sections;
-  const ffmpeg = await createFFmpeg();
-  this.ffmpeg = ffmpeg;
+  try {
+    const ffmpeg = await createFFmpeg();
+    this.ffmpeg = ffmpeg;
+  } catch(e){
+    throw new Error("ffmpeg.wasmの初期化に失敗しました。\n" + e.message);
+  }
   updateParams(slides);
 }
 

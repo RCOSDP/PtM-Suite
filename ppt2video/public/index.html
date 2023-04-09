@@ -88,7 +88,7 @@ function Message(props) {
     return (
       <div>
         <br/>
-        <div>{props.msg}</div>
+        <textarea readOnly="readonly" rows="5" cols="80" defaultValue={props.msg}></textarea>
       </div>
     );
   }
