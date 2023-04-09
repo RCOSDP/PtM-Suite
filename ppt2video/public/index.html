@@ -102,6 +102,7 @@ function App() {
   const [filename, setFilename] = useState(null);
   const [error1, setError1] = useState(null);
   const [error2, setError2] = useState(null);
+  const [error3, setError3] = useState(null);
   const [error4, setError4] = useState(null);
 
   async function handleStep1OpenDirectory() {
@@ -136,17 +137,27 @@ function App() {
     }
   }
 
+  function progress(list, i) {
+    const progress = list.map((name, index) => (index <= i?'✓ ':'') + name);
+    setTopicList(progress);
+  }
+
   async function handleStep3Start() {
-    setStep(steps.step35);
-    const list = getTopicList();
-    const len = list.length;
-    await createImportJson();
-    for (let i = 0; i < len; i++) {
-      await oneTopic(i);
-      const progress = list.map((name, index) => (index <= i?'✓ ':'') + name);
-      setTopicList(progress);
+    try {
+      setError3(null);
+      setStep(steps.step35);
+      const list = getTopicList();
+      const len = list.length;
+      await createImportJson();
+      for (let i = 0; i < len; i++) {
+        await oneTopic(i);
+        progress(list, i);
+      }
+      setStep(steps.step4);
+    } catch(e){
+      setError3(e.message);
+      setStep(steps.step3);
     }
-    setStep(steps.step4);
   }
 
   async function handleStep4Save() {
@@ -182,6 +193,7 @@ function App() {
         <p key={index}>{topicname}</p>
       )}
       <button onClick={handleStep3Start} disabled={step !== steps.step3}>開始</button>
+      <Message msg={error3} />
       <h2> step4: zipファイルを保存します。</h2>
       <button onClick={handleStep4Save} disabled={step !== steps.step4}>保存</button>
       <Message msg={error4} />
