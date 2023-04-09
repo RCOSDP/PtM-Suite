@@ -199,10 +199,12 @@ async function prepare(filename, sections, vsuffix, asuffix) {
 
   sections.forEach(section => {
     section.topics.forEach(topic => {
+      topic.number = tnum;
       topic.inputFilename = `input_${tnum}.h264`;
       topic.outputFilename = `output_${tnum}.${vsuffix}`;
       topic.extOutputFilename = `${filename}_${tnum}.${vsuffix}`;
       topic.slides.forEach(slide => {
+        slide.number = snum;
         slide.audioFilename = `audio_${tnum}_${snum}.${asuffix}`;
         slide.extAudioFilename = `${filename}_${tnum}_${snum}.${asuffix}`;
         const imageFilename = imageFiles[snum];
@@ -440,9 +442,19 @@ async function readAudioFileTopic(topic) {
 
 async function createAudioTopic(topic) {
   for(const slide of topic.slides) {
-    const res = await axios.post(config.pollyProxy, slide.req, {responseType: 'arraybuffer'});
+    let res;
+    try {
+      res = await axios.post(config.pollyProxy, slide.req, {responseType: 'arraybuffer'});
+    } catch(e){
+      const response = String.fromCharCode.apply(null, new Uint8Array(e.response.data));
+      throw new Error(`polly error in slide ${slide.number} with request string:\n${slide.req.Text}\n\n${e.message}\n${response}`);
+    }
     const {data} = res;
     slide.soundData = data;
-    slide.duration = await getSoundDuration(data);
+    try {
+      slide.duration = await getSoundDuration(data);
+    } catch(e){
+      throw new Error('can not determine audio duration.\n' + e.message);
+    }
   }
 }
