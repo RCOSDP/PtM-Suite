@@ -92,6 +92,10 @@ function App() {
 
   async function handleButton1() {
     await openDirectory();
+    readDirectory();
+  }
+
+  async function readDirectory() {
     const list = await getPptxList();
     setPptxList(list);
     setStep(steps.step2);
@@ -125,7 +129,10 @@ function App() {
 
   async function handleButton4() {
     await flushZip();
-    setStep(steps.step6);
+    setPptxList([]);
+    setFilename(null);
+    setTopicList([]);
+    readDirectory();
   }
 
   return (
