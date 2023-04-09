@@ -137,6 +137,11 @@ function App() {
     }
   }
 
+  async function handleStep2Reload() {
+    setError2(null);
+    readDirectory();
+  }
+
   function progress(list, i) {
     const progress = list.map((name, index) => (index <= i?'✓ ':'') + name);
     setTopicList(progress);
@@ -161,6 +166,11 @@ function App() {
       setError3(e.message);
       setStep(steps.step3);
     }
+  }
+
+  async function handleStep3Cancel() {
+    setError3(null);
+    readDirectory();
   }
 
   async function handleStep4Save() {
@@ -190,12 +200,16 @@ function App() {
         )}
       </form>
       <button onClick={handleStep2Next} disabled={step !== steps.step2 || filename === null}>次へ</button>
+      &emsp;
+      <button onClick={handleStep2Reload} disabled={step !== steps.step2}>更新</button>
       <Message msg={error2} />
       <h2> step3: Import JSONファイル及び各トピックのビデオファイルを作成します。</h2>
       {topicList.map((topicname, index) =>
         <p key={index}>{topicname}</p>
       )}
       <button onClick={handleStep3Start} disabled={step !== steps.step3}>開始</button>
+      &emsp;
+      <button onClick={handleStep3Cancel} disabled={step !== steps.step3}>キャンセル</button>
       <Message msg={error3} />
       <h2> step4: zipファイルを保存します。</h2>
       <button onClick={handleStep4Save} disabled={step !== steps.step4}>保存</button>
