@@ -79,9 +79,8 @@ const steps = {
   step1: 1,
   step2: 2,
   step3: 3,
-  step4: 4,
-  step5: 5,
-  step6: 6,
+  step35: 4,
+  step4: 5,
 };
 
 function App() {
@@ -115,7 +114,7 @@ function App() {
   }
 
   async function handleButton3() {
-    setStep(steps.step4);
+    setStep(steps.step35);
     const list = getTopicList();
     const len = list.length;
     await createImportJson();
@@ -124,7 +123,7 @@ function App() {
       const progress = list.map((name, index) => (index <= i?'✓ ':'') + name);
       setTopicList(progress);
     }
-    setStep(steps.step5);
+    setStep(steps.step4);
   }
 
   async function handleButton4() {
@@ -154,7 +153,7 @@ function App() {
       )}
       <button onClick={handleButton3} disabled={step !== steps.step3}>開始</button>
       <h2> step4: zipファイルを保存します。</h2>
-      <button onClick={handleButton4} disabled={step !== steps.step5}>保存</button>
+      <button onClick={handleButton4} disabled={step !== steps.step4}>保存</button>
     </div>
   )
 }
