@@ -50,12 +50,56 @@ async function createImportJson() {
   await pptx.process(option);
 }
 
+const states = {
+  init: 1,
+  running: 2,
+  success: 3,
+  error: 4,
+};
+
+let topicList = null;
+let runningCount = 0;
+const runningChars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+
 function getTopicList() {
-  const ret = [];
+  const list = [];
   for (const section of pptx.sections) {
-    ret.push(section.topics[0].name);
+    list.push({
+      name: section.topics[0].name,
+      state: states.init,
+    });
   }
-  return ret;
+  topicList = list;
+  return curTopicState();
+}
+
+function topicState(i, state) {
+  if (i < 0) {
+    for (const e of topicList) {
+      if (e.state === states.running) {
+        e.state = states.error;
+      }
+    }
+  } else {
+    topicList[i].state = state;
+  }
+}
+
+function curTopicState() {
+  return topicList.map((topic, index) => {
+    let pre;
+    switch(topic.state) {
+      case states.init:    pre = '';break;
+      case states.running: pre = runningChars[runningCount] + ' ';break;
+      case states.success: pre = '✓ ';break;
+      case states.error:   pre = 'エラー!! ';break;
+    }
+    runningCount++;
+    if (runningCount >= runningChars.length) {
+      runningCount = 0;
+    }
+    return pre + topic.name;
+  });
 }
 
 async function oneTopic(num) {
@@ -125,11 +169,15 @@ function App() {
     setFilename(e.target.value);
   }
 
+  async function readPptx() {
+      await openPptx(filename);
+      return getTopicList();
+  }
+
   async function handleStep2Next() {
     try {
       setError2(null);
-      await openPptx(filename);
-      const list = getTopicList();
+      const list = await readPptx();
       setTopicList(list);
       setStep(steps.step3);
     } catch(e) {
@@ -142,27 +190,49 @@ function App() {
     readDirectory();
   }
 
-  function progress(list, i) {
-    const progress = list.map((name, index) => (index <= i?'✓ ':'') + name);
-    setTopicList(progress);
+  function updateTopicList() {
+    const list = curTopicState();
+    setTopicList(list);
+  }
+
+  function timerFunction() {
+    updateTopicList();
+  }
+
+  function finalTopicList(timerId) {
+    clearInterval(timerId);
+    topicState(-1, null);
+    updateTopicList();
   }
 
   async function handleStep3Start() {
-    try {
-      if (error3 !== null) {
-        await openPptx(filename);
+    if (error3 !== null) {
+      try {
+        const list = await readPptx();
+        setTopicList(list);
+      } catch(e){
+        setError3(e.message);
+        return;
       }
+    }
+
+    const numTopics = getTopicList().length;
+    let timerId;
+
+    try {
       setError3(null);
       setStep(steps.step35);
-      const list = getTopicList();
-      const len = list.length;
       await createImportJson();
-      for (let i = 0; i < len; i++) {
+      timerId = setInterval(timerFunction, 100);
+      for (let i = 0; i < numTopics; i++) {
+        topicState(i, states.running);
         await oneTopic(i);
-        progress(list, i);
+        topicState(i, states.success);
       }
+      finalTopicList(timerId);
       setStep(steps.step4);
     } catch(e){
+      finalTopicList(timerId);
       setError3(e.message);
       setStep(steps.step3);
     }
