@@ -169,6 +169,7 @@ function App() {
   }
 
   async function handleStep3Cancel() {
+    setTopicList([]);
     setError3(null);
     readDirectory();
   }
