@@ -7,7 +7,7 @@ router.use(bearerToken());
 const {loginRouter, check} = require('./login');
 router.use(check);
 
-const aws = require("aws-sdk");
+const {PollyClient, SynthesizeSpeechCommand} = require('@aws-sdk/client-polly');
 const config = require('../config');
 const access = require('../access');
 
@@ -25,7 +25,18 @@ if (
   });
 }
 
-var polly = new aws.Polly();
+var polly = new PollyClient();
+
+async function SynthesizeSpeech(input) {
+  const command = new SynthesizeSpeechCommand(input);
+  const res = await polly.send(command);
+  const chunks = []
+  for await (let chunk of res.AudioStream) {
+    chunks.push(chunk)
+  }
+  res.AudioStream = Buffer.concat(chunks);
+  return res;
+}
 
 // allow CORS with all pre-flight request and POST /polly request
 router.options("*", cors());
@@ -33,13 +44,15 @@ router.options("*", cors());
 router.post("/", cors(), async function (req, res, next) {
   try {
     if (config.authorization) access.validate();
-    const data = await polly.synthesizeSpeech(req.body).promise();
+    const data = await SynthesizeSpeech(req.body);
     res.setHeader("content-type", data.ContentType);
     const len = data.RequestCharacters;
     req.locals.len = len;
     if (config.authorization) access.processed(len);
     res.send(data.AudioStream);
   } catch (error) {
+    error.statusCode = error.$metadata.httpStatusCode;
+    error.code = error.name;
     next(error);
   }
 });
