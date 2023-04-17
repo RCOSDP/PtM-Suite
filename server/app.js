@@ -30,6 +30,12 @@ morgan.token('info', (req, res) => {
 
 app.use(morgan(':remote-addr :req[x-forwarded-for] :method :url :status :info'));
 
+app.use(function (req, res, next) {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
