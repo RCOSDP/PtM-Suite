@@ -12,6 +12,10 @@ import JSZip from 'jszip';
 
 export {getPptxData}
 
+export function setConfig(key, value) {
+  config[key] = value;
+}
+
 //
 // File System Access API
 //
