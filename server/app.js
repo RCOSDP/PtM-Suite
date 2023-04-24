@@ -3,9 +3,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 
-const {dialogStartUrl} = require('./config');
+const config = require('./config');
 const pollyRouter = require('./routes/polly');
-const {loginRouter, check} = require('./routes/login');
+const {loginRouter} = require('./routes/login');
+const wasmRouter = require('./routes/wasm');
 
 const app = express();
 
@@ -36,30 +37,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/dialog/start', function (req, res) {
-  res.redirect(dialogStartUrl);
+  res.redirect(config.dialogStartUrl);
 });
 
 app.use('/polly', pollyRouter);
 app.use('/login', loginRouter);
 
-//
-// app router for WASM version
-//
-const appRouter = express.Router();
-
-appRouter.use(function (req, res, next) {
-  if (req.token) {
-    delete req.token;
-  }
-  req.locals = {id: '-', len: 0};
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  next();
-});
-
-appRouter.use('/polly', pollyRouter);
-
-app.use('/app', appRouter);
+if (config.wasm) {
+  app.use('/app', wasmRouter);
+}
 
 app.use(pollyErrorHandler);
 
