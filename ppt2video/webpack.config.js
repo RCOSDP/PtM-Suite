@@ -26,7 +26,7 @@ const cmd_config = {
   ],
 };
 
-const lib_config = {
+const script_config = {
   entry: "./src/browser.js",
 
   output: {
@@ -67,4 +67,31 @@ const lib_config = {
   }
 };
 
-export default [lib_config, cmd_config]
+const lib_config = {
+  entry: "./src/browser.js",
+
+  experiments: {
+    outputModule: true,
+  },
+
+  output: {
+    filename: "lib.mjs",
+    library: {
+      type: 'module',
+    },
+  },
+
+  name: "lib",
+  target: "web",
+  mode: "development",
+
+  resolve: {
+    alias: {
+      "#target": "./browser"
+    }
+  },
+
+  devtool: false,
+};
+
+export default [cmd_config, script_config, lib_config]
