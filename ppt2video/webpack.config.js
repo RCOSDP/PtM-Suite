@@ -45,13 +45,11 @@ const script_config = {
   },
 
   devServer: {
-    static: [
-      "public",
-      "node_modules/@ffmpeg/ffmpeg/dist",
-      "node_modules/@ffmpeg/core/dist"
-    ],
     port: 8000,
     hot: true,
+    devMiddleware: {
+      publicPath: '/app',
+    },
     headers: {
       "Cross-Origin-Opener-Policy": "same-origin",
       "Cross-Origin-Embedder-Policy": "require-corp"
@@ -59,11 +57,12 @@ const script_config = {
     client: {
       overlay: false,
     },
-    proxy: {
-      "/polly": {
+    proxy: [
+      {
+        context: ["/app/polly", "/app", "/ffmpeg"],
         target: "http://localhost:3003",
       }
-    }
+    ]
   }
 };
 
