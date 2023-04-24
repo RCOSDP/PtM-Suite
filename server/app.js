@@ -34,7 +34,6 @@ app.use(morgan(':remote-addr :req[x-forwarded-for] :method :url :status :info'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/dialog/start', function (req, res) {
   res.redirect(config.dialogStartUrl);
@@ -46,6 +45,8 @@ app.use('/login', loginRouter);
 if (config.wasm) {
   app.use('/app', wasmRouter);
 }
+
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(pollyErrorHandler);
 
