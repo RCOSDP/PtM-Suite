@@ -4,6 +4,7 @@ const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
 
 const commonConfig = {
   reactStrictMode: true,
+  basePath: "/app",
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true }
     return config
@@ -32,6 +33,7 @@ const devConfig = {
     return {
       fallback: [
         {
+          basePath: false,
           source: '/:path*',
           destination: 'http://localhost:3003/:path*',
         }

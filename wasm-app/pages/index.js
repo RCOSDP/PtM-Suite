@@ -1,10 +1,12 @@
-import { serverRuntimeConfig } from '@/next.config';
 import { useState } from 'react';
 
 let setRoot, getPptx, setConfig;
 
 if (typeof window !== 'undefined') {
   ({ setRoot, getPptx, setConfig } = ppt2video);
+  const {origin} = location;
+  setConfig('pollyProxy', origin + '/app/polly');
+  setConfig('ffmpegDir', origin + '/ffmpeg');
 }
 
 let dirHandle = null;
