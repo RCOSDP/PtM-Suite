@@ -341,7 +341,7 @@ async function encode(encoder, ibarray, fps, darray) {
 
 async function createFFmpeg() {
   const ffmpeg = FFmpeg.createFFmpeg({
-    corePath: config.base + "/ffmpeg-core.js",
+    corePath: config.ffmpegDir + "/ffmpeg-core.js",
     log: true
   });
   await ffmpeg.load();

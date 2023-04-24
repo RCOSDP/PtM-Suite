@@ -2,16 +2,12 @@ import { boolean } from 'boolean';
 
 const process = {env: {}};
 
-const {href} = location;
-const li = href.lastIndexOf('/');
-const base = li > 0 ? href.slice(0, li): href;
-
 const stringOptions = {
   voice:       process.env.PPT2VIDEO_VOICE       || 'Takumi',
   loglevel:    process.env.PPT2VIDEO_LOGLEVEL    || 'info',
   sampleRate:  process.env.PPT2VIDEO_SAMPLERATE  || '22050',
-  pollyProxy:  base + "/polly",
-  base,
+  pollyProxy:  "/polly",
+  ffmpegDir:   "/ffmpeg",
 };
 
 function numberOption(env, value) {
