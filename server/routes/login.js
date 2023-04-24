@@ -53,6 +53,8 @@ function check(req, res, next) {
         issuer,
       });
       req.locals = {id: decoded.sub, len: 0};
+    }
+    if (req.locals) {
       if (req.body.Text) {
         next();
       } else {
