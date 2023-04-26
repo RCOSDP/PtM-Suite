@@ -78,7 +78,7 @@ function topicState(i, state) {
 }
 
 function curTopicState() {
-  return topicList.map((topic, index) => {
+  const ret = topicList.map((topic, index) => {
     let pre;
     switch(topic.state) {
       case states.init:    pre = '';break;
@@ -86,12 +86,13 @@ function curTopicState() {
       case states.success: pre = '✓ ';break;
       case states.error:   pre = 'エラー!! ';break;
     }
-    runningCount++;
-    if (runningCount >= runningChars.length) {
-      runningCount = 0;
-    }
     return pre + topic.name;
   });
+  runningCount++;
+  if (runningCount >= runningChars.length) {
+    runningCount = 0;
+  }
+  return ret;
 }
 
 async function oneTopic(num) {
