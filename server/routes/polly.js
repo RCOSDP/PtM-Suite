@@ -1,15 +1,15 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 const router = express.Router();
 
-const bearerToken = require('express-bearer-token');
+import bearerToken from 'express-bearer-token';
 router.use(bearerToken());
-const {loginRouter, check} = require('./login');
+import { check } from './login.js';
 router.use(check);
 
-const {PollyClient, SynthesizeSpeechCommand} = require('@aws-sdk/client-polly');
-const config = require('../config');
-const access = require('../access');
+import { PollyClient, SynthesizeSpeechCommand } from '@aws-sdk/client-polly';
+import config from '../config.js';
+import * as access from '../access.js';
 
 // vercel don't allow to set AWS_REGION env etc.
 // so we use AWS_REGION_POLLY instead and update aws sdk config
@@ -57,4 +57,4 @@ router.post("/", cors(), async function (req, res, next) {
   }
 });
 
-module.exports = router;
+export { router };

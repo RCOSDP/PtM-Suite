@@ -10,4 +10,4 @@ const config = {
   wasm: (process.env.POLLY_WASM === "true") || false,
 };
 
-module.exports = config;
+export default config;

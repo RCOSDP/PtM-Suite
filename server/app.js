@@ -1,12 +1,16 @@
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+import { fileURLToPath } from "url";
 
-const config = require('./config');
-const pollyRouter = require('./routes/polly');
-const {loginRouter} = require('./routes/login');
-const wasmRouter = require('./routes/wasm');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import config from './config.js';
+import { router as pollyRouter } from './routes/polly.js';
+import { router as loginRouter } from './routes/login.js';
+import { router as wasmRouter } from './routes/wasm.js';
 
 const app = express();
 
@@ -50,4 +54,4 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(pollyErrorHandler);
 
-module.exports = app;
+export default app;

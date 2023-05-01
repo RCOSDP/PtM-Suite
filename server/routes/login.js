@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-const {customAlphabet} = require('nanoid');
+import { customAlphabet } from 'nanoid';
 const nanoid = customAlphabet("1234567890abcdef", 10);
 
-const config = require('../config');
+import config from '../config.js';
 
 const secret = process.env.POLLY_SECRET || "secret";
 const cPassword = process.env.POLLY_PASSWORD || "chilo";
@@ -68,7 +68,7 @@ function check(req, res, next) {
   res.status(401).send('unauthorized');
 }
 
-module.exports = {
-  loginRouter: router,
+export {
+  router,
   check,
 };

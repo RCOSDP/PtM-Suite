@@ -1,7 +1,11 @@
 {
+  "type": "module",
   "name": "server",
   "version": "0.0.0",
   "private": true,
+  "bin": {
+    "www": "./bin/www.js"
+  },
   "scripts": {
     "start": "node ./bin/www",
     "copy": "run-s copy:addin copy:lib copy:ffmpeg copy:ffmpeg-core copy:app",
@@ -20,7 +24,7 @@
     "express-bearer-token": "^2.4.0",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
-    "nanoid": "^3.3.4"
+    "nanoid": "^4.0.2"
   },
   "devDependencies": {
     "cpx2": "^4.2.3",

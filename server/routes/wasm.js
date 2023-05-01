@@ -2,8 +2,8 @@
 // router for WASM version
 //
 
-const express = require("express");
-const pollyRouter = require('./polly');
+import express from "express";
+import { router as pollyRouter } from './polly.js';
 const router = express.Router();
 
 router.use(function (req, res, next) {
@@ -18,4 +18,4 @@ router.use(function (req, res, next) {
 
 router.use('/polly', pollyRouter);
 
-module.exports = router;
+export { router };
