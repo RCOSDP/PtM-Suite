@@ -107,9 +107,9 @@ async function writeImportJson(data) {
 
 async function writeVideoTopic(topic, data) {
   if (zip) {
-    zip.file(topic.extOutputFilename, data, {binary: true});
+    zip.file(topic.file, data, {binary: true});
   } else {
-    await writeFile(topic.extOutputFilename, data);
+    await writeFile(topic.file, data);
   }
 }
 
@@ -206,7 +206,7 @@ async function prepare(filename, sections, vsuffix, asuffix) {
       topic.number = tnum;
       topic.inputFilename = `input_${tnum}.h264`;
       topic.outputFilename = `output_${tnum}.${vsuffix}`;
-      topic.extOutputFilename = `${filename}_${tnum}.${vsuffix}`;
+      topic.file = `${filename}_${tnum}.${vsuffix}`;
       topic.slides.forEach(slide => {
         slide.number = snum;
         slide.audioFilename = `audio_${tnum}_${snum}.${asuffix}`;
