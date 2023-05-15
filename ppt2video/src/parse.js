@@ -4,7 +4,7 @@ import {logger} from '#target/log.js';
 const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords','engine'];
 const headerRE = /^\s*(?<key>\w+)\s*:\s*(?<value>.*)$/;
 const blockNames = ['description','text','caption'];
-const blockRE = /```\s*(?<blockname>.*)\s*$/;
+const blockRE = /^```\s*(?<blockname>\w*)\s*$/;
 
 function parseHeader(line) {
   const result = line.match(headerRE);
