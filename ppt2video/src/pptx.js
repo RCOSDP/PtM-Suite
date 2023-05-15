@@ -48,6 +48,9 @@ function getPropertyAll(key) {
   return props.map(prop => typeof prop === 'object'?prop._:prop);
 }
 
+//
+// parse text using xml2js
+//
 function extractLine(chunks) {
   const ret = [];
   for (const chunk of chunks) {
@@ -72,7 +75,7 @@ function block2lines(block) {
   return ret.flat();
 }
 
-async function getText(zip, type, filename) {
+async function getTextXml2js(zip, type, filename) {
   const ret = [];
   const xml = await zip2xml(zip, filename);
   if (xml === null) {
@@ -85,11 +88,73 @@ async function getText(zip, type, filename) {
   return ret.flat();
 }
 
+//
+// parse text using dom parser
+//
+let domparser;
+let xpathevaluator;
+let xpathresult;
+
+export function initPptx(JSDOM, xpath) {
+  const jsdom = new JSDOM();
+  domparser = new jsdom.window.DOMParser();
+  xpathevaluator = xpath;
+  xpathresult = xpath.XPathResult;
+}
+
+if (typeof window !== 'undefined') {
+  domparser = new DOMParser();
+  xpathevaluator = new XPathEvaluator();
+  xpathresult = XPathResult;
+}
+
+function getTextXpath(dom, type){
+  const resolver = xpathevaluator.createNSResolver(dom);
+  const lines = xpathevaluator.evaluate(
+    `/${type}/p:cSld/p:spTree/p:sp/p:txBody/a:p`,
+    dom,
+    resolver,
+    xpathresult.ANY_TYPE,
+    null
+  );
+  const ret = [];
+  let node = lines.iterateNext();
+  while (node) {
+    const line = [];
+    for (const chunk of node.children) {
+      switch (chunk.nodeName) {
+        case 'a:r':
+          const e = chunk.getElementsByTagName("a:t");
+          line.push(e[0].textContent);
+//          console.log(e[0].textContent);
+          break;
+        case 'a:br':
+          line.push("\r\n");
+//          console.log('found break');
+          break;
+      }
+    }
+    ret.push(line.join('').split('\r\n'));
+    node = lines.iterateNext();
+  }
+  return ret.flat();
+}
+
+async function getTextDOM(zip, type, filename) {
+  const file = zip.files[filename];
+  if (file) {
+    const str = await file.async("string");
+    const dom = domparser.parseFromString(str, "text/xml");
+    return getTextXpath(dom, type);
+  }
+  return [];
+}
+
 async function pptx2slide() {
   const ret = [];
   for (let i = 1; i <= this.numSlides; i++) {
-    const content = await getText(this.zip, 'p:sld', `ppt/slides/slide${i}.xml`);
-    const note = await getText(this.zip, 'p:notes', `ppt/notesSlides/notesSlide${i}.xml`);
+    const content = await getTextDOM(this.zip, 'p:sld', `ppt/slides/slide${i}.xml`);
+    const note = await getTextDOM(this.zip, 'p:notes', `ppt/notesSlides/notesSlide${i}.xml`);
     ret.push({content, note});
   }
   return ret;
