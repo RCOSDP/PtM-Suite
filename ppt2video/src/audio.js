@@ -17,12 +17,14 @@ function updateParam(prev, slide, req) {
   // voice
   if (typeof slide.voice !== 'undefined') {
     req.VoiceId = slide.voice.trim();
-  }
-  // Takumi default engine
-  if (req.VoiceId == 'Takumi') {
-    req.Engine = 'neural';
-  } else {
-    delete req.Engine;
+
+    if (typeof slide.engine === 'undefined') {
+      if (req.VoiceId === 'Mizuki') {
+        slide.engine = 'standard';
+      } else {
+        slide.engine = 'neural';
+      }
+    }
   }
   // engine
   if (typeof slide.engine !== 'undefined') {
@@ -63,6 +65,7 @@ const polly_defaults = {
   SampleRate: config.sampleRate,
   TextType: 'ssml',
   VoiceId: config.voice,
+  Engine: config.engine,
 };
 
 export function updateParams(slides) {

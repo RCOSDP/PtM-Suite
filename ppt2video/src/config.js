@@ -14,6 +14,7 @@ const stringOptions = {
   ffmpegCmd:   process.env.PPT2VIDEO_FFMPEG_CMD  || 'ffmpeg',
   libopenh264: process.env.PPT2VIDEO_LIBOPENH264 || 'libopenh264.so.6',
   voice:       process.env.PPT2VIDEO_VOICE       || 'Takumi',
+  engine:      process.env.PPT2VIDEO_ENGINE      || 'neural',
   vcodec:      process.env.PPT2VIDEO_VCODEC      || 'libopenh264',
   voption:     process.env.PPT2VIDEO_VOPTION,
   logfile:     process.env.PPT2VIDEO_LOGFILE     || 'ppt2video.log',

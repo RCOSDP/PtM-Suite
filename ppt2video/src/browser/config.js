@@ -4,6 +4,7 @@ const process = {env: {}};
 
 const stringOptions = {
   voice:       process.env.PPT2VIDEO_VOICE       || 'Takumi',
+  engine:      process.env.PPT2VIDEO_ENGINE      || 'neural',
   loglevel:    process.env.PPT2VIDEO_LOGLEVEL    || 'info',
   sampleRate:  process.env.PPT2VIDEO_SAMPLERATE  || '22050',
   pollyProxy:  "/polly",
