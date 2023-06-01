@@ -6,6 +6,13 @@
 
 Webサーバとして polly proxy (以下 server)を使用します。server が Amazon Polly を使って音声合成します。
 
+WASM版Webアプリは、以下の機能をサポートする Chrome 及び Edge ブラウザで動作します。
+
+- Fie System Access API
+- WebCodec
+- WebAssembly
+- SharedArrayBuffer
+
 ## 音声合成ビデオの作成手順
 
 ユーザは、以下の手順で音声合成ビデオを作成します。
