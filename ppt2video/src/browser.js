@@ -384,13 +384,14 @@ function concat(chunks) {
 
 async function muxTopic(topic, chunks) {
   const {ffmpeg} = this;
+  const coption = "-c:v copy -c:a aac";
 
   ffwrite(ffmpeg, topic.inputFilename, concat(chunks));
 
   if (topic.slides.length === 1) {
     const slide = topic.slides[0];
     ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
-    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -i ${slide.audioFilename} -c copy ${topic.outputFilename}`);
+    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -i ${slide.audioFilename} ${coption} ${topic.outputFilename}`);
     ffunlink(ffmpeg, slide.audioFilename);
   } else {
     const blob = new Blob([topic.listData]);
@@ -399,7 +400,7 @@ async function muxTopic(topic, chunks) {
     for (const slide of topic.slides) {
       ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
     }
-    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -f concat -i ${topic.listFilename} -c copy ${topic.outputFilename}`);
+    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -f concat -i ${topic.listFilename} ${coption} ${topic.outputFilename}`);
     for (const slide of topic.slides) {
       ffunlink(ffmpeg, slide.audioFilename);
     }

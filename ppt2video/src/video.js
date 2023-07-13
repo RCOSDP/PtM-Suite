@@ -80,7 +80,7 @@ function ffmegLocation() {
 
 const vfCommon = ['fps=25','format=yuv420p'];
 const vcodec = `-c:v ${config.vcodec} ${config.voption}`;
-const acodec = '-c:a copy';
+const acodec = `-c:a ${config.acodec} ${config.aoption}`;
 const ffmpeg = ffmegLocation();
 
 function getVfOption(duration, option = {}) {
@@ -104,7 +104,7 @@ async function createVideo(slide, filename, option = {}) {
 
 async function concatenateVideo(topic, option = {}) {
   const vfOption = getVfOption(topic.duration, option);
-  const cmd = `${ffmpeg} -y -f concat -i ${topic.listFilename} ${vcodec} ${vfOption} ${acodec} ${topic.outputFilename}`;
+  const cmd = `${ffmpeg} -y -f concat -i ${topic.listFilename} ${vcodec} ${vfOption} -c:a copy ${topic.outputFilename}`;
   logger.info(cmd);
   return execaCommand(cmd);
 }

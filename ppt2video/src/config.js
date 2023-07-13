@@ -17,6 +17,8 @@ const stringOptions = {
   engine:      process.env.PPT2VIDEO_ENGINE      || 'neural',
   vcodec:      process.env.PPT2VIDEO_VCODEC      || 'libopenh264',
   voption:     process.env.PPT2VIDEO_VOPTION,
+  acodec:      process.env.PPT2VIDEO_ACODEC      || 'aac',
+  aoption:     process.env.PPT2VIDEO_AOPTION     || '',
   logfile:     process.env.PPT2VIDEO_LOGFILE     || 'ppt2video.log',
   loglevel:    process.env.PPT2VIDEO_LOGLEVEL    || 'info',
   sampleRate:  process.env.PPT2VIDEO_SAMPLERATE  || '22050',

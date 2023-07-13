@@ -54,6 +54,8 @@ ppt2video ファイル名
 |--fade|0|PPT2VIDEO_FADE|
 |-v,--vcodec|libopenh264|PPT2VIDEO_VCODEC|
 |--voption||PPT2VIDEO_VOPTION|
+|--acodec|aac|PPT2VIDEO_ACODEC|
+|--aoption||PPT2VIDEO_AOPTION|
 |--logfile|ppt2video.log|PPT2VIDEO_LOGFILE|
 |--loglevel|info|PPT2VIDEO_LOGLEVEL|
 |-n, --novideo|false||
