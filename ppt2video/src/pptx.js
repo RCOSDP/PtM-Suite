@@ -32,7 +32,7 @@ export async function getPptxData(data) {
 }
 
 function getProperty(key) {
-  const props = getPropertyAll.bind(this)(key);
+  const props = getPropertyAll.bind(this)(bookProperties[key]);
   if (props.length > 0) {
     return props[0];
   }
@@ -41,7 +41,7 @@ function getProperty(key) {
 
 function getPropertyAll(key) {
   const coreProps = this.coreXml['cp:coreProperties'];
-  const props = coreProps[bookProperties[key]];
+  const props = coreProps[key];
   if (typeof props === 'undefined') {
     return [];
   }
