@@ -4,11 +4,14 @@
  * Module dependencies.
  */
 
-var config = require('../config');
-var access = require('../access');
-var app = require('../app');
-var debug = require('debug')('server:server');
-var http = require('http');
+import config from '../config.js';
+import * as access from '../access.js';
+import app from '../app.js';
+import debugPackage from 'debug';
+const debug = debugPackage('server:server');
+import http from 'http';
+import fs from 'fs';
+import https from 'https';
 
 /* initialize access */
 if (config.authorization) {
@@ -46,8 +49,6 @@ if (prot == 'http') {
  */
 
 if (prot == 'https') {
-  var fs = require('fs');
-  var https = require('https');
   var options = {
     ca:   fs.readFileSync('keys/ca.crt'),
     key:  fs.readFileSync('keys/localhost.key'),

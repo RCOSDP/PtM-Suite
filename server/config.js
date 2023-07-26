@@ -7,6 +7,7 @@ const config = {
   checkInterval: parseInt(process.env.POLLY_CHECK_INTERVAL) || 10,
   updateInterval: parseInt(process.env.POLLY_UPDATE_INTERVAL) || 600,
   logdir: process.env.POLLY_LOGDIR || "log",
+  wasm: (process.env.POLLY_WASM === "true") || false,
 };
 
-module.exports = config;
+export default config;

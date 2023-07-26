@@ -10,16 +10,11 @@ ppt2video は、AWS Polly を使って PowerPoint 文書から動画を生成す
 
 GitHub Actions 及び以下の環境で動作を確認しています。
 
-Ubuntu 16.04.7 LTS
+Ubuntu 20.04.5 LTS
 x86_64 アーキテクチャ
 
 $ node -v
-v14.11.0
-
-$ java -version
-openjdk version "1.8.0_275"
-OpenJDK Runtime Environment (build 1.8.0_275-8u275-b01-0ubuntu1~16.04-b01)
-OpenJDK 64-Bit Server VM (build 25.275-b01, mixed mode)
+v16.19.0
 
 ## 使い方
 
@@ -51,7 +46,6 @@ ppt2video ファイル名
 |-t,--tempDir|.|PPT2VIDEO_TEMP_DIR|
 |-o,--outputDir|.|PPT2VIDEO_OUTPUT_DIR|
 |--libDir|<インストール先>/lib|PPT2VIDEO_LIB_DIR|
-|--tikaJar|tika-app-1.26.jar|PPT2VIDEO_TIKA_JAR|
 |--ffmpegCmd|ffmpeg|PPT2VIDEO_FFMPEG_CMD|
 |--sampleRate|22010|PPT2VIDEO_SAMPLERATE|
 |--voice|Takumi|PPT2VIDEO_VOICE|
@@ -60,6 +54,8 @@ ppt2video ファイル名
 |--fade|0|PPT2VIDEO_FADE|
 |-v,--vcodec|libopenh264|PPT2VIDEO_VCODEC|
 |--voption||PPT2VIDEO_VOPTION|
+|--acodec|aac|PPT2VIDEO_ACODEC|
+|--aoption||PPT2VIDEO_AOPTION|
 |--logfile|ppt2video.log|PPT2VIDEO_LOGFILE|
 |--loglevel|info|PPT2VIDEO_LOGLEVEL|
 |-n, --novideo|false||
@@ -69,8 +65,6 @@ ppt2video ファイル名
 -o,--outputDir で出力ファイルを作成するディレクトリを指定します。
 
 --libDir で taka jar ファイルや OpenH264ライブラリを格納するディレクトリを指定します。デフォルトは、ppt2video コマンドのインストール先 lib ディレクトリです。
-
---tikaJar で、パワーポイントファイルからデータを抽出するのに使用する Apache Tika jar ファイルを指定します。
 
 --sampleRate, --voice で Amazon Polly で音声合成するパラメータを指定します。
 
@@ -98,7 +92,6 @@ lib ディレクトリに https://github.com/RCOSDP/GakuNinLMS-M-CMS/releases/ta
 
 - ffmpeg.bz2
 - libopenh264-2.1.1-linux64.6.so.bz2
-- tika-app-1.26.jar
 
 gz ファイルを展開し、ffmpeg に実行権を付与します。
 
@@ -137,11 +130,8 @@ GitHub Actions runner から以下のバイナリがダウンロードできる�
 
 - ffmpeg.bz2
 - libopenh264-2.1.1-linux64.6.so.bz2
-- tika-app-1.26.jar
 
 GitHub レポジトリの [Code]タブで、"binary" という Tag のリリースを作成し、上記のバイナリを Assets として登録します。リリース本体の Source code (zip)や Source code (tar.gz)は使用しません。
-
-tika-app-1.26.jar は、https://tika.apache.org からダウンロードします。
 
 libopenh264-2.1.1-linux64.6.so.bz2 は、https://github.com/cisco/openh264/releases からダウンロードします。
 
@@ -207,7 +197,7 @@ $ ldd ffmpeg
 
 GitHub Packages にパッケージを登録する場合は、次のようにします。
 
-- Personal Access Token(PAT)) とレジストリを ~/.npmrc ファイルに登録する
+- Personal Access Token(PAT) とレジストリを ~/.npmrc ファイルに登録する
 - または、レジストリにログインする
 - npm publish する
 

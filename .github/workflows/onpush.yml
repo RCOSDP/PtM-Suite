@@ -11,17 +11,22 @@ jobs:
     outputs:
       files: '${{ steps.findpptx.outputs.result }}'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - uses: trilom/file-changes-action@v1.2.4
+      - uses: tj-actions/changed-files@v36
         id: file_changes
+        with:
+          json: 'true'
+          escape_json: 'false'
 
       - name: find pptx files
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         id: findpptx
         env:
-          MODIFIED: '${{ steps.file_changes.outputs.files_modified }}'
-          ADDED: '${{ steps.file_changes.outputs.files_added }}'
+          MODIFIED: '${{ steps.file_changes.outputs.modified_files }}'
+          ADDED: '${{ steps.file_changes.outputs.added_files }}'
         with:
           script: |
             const fs = require('fs');
@@ -53,11 +58,11 @@ jobs:
     needs: changes
     if: needs.changes.outputs.files != '[]'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18
 
       - name: download binaries
         env:
@@ -76,7 +81,7 @@ jobs:
           ln -s $(basename ${LIBOPENH264} .bz2) libopenh264.so.6
           LD_LIBRARY_PATH=. ./ffmpeg -version
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -85,10 +90,10 @@ jobs:
 
       - name: npm install
         run: |
-          (cd ppt2video;npm install;npm i boolean)
+          (cd ppt2video;npm install)
 
       - name: ppt2video files
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         id: ppt2video
         env:
           FILES: '${{ needs.changes.outputs.files }}'
@@ -110,7 +115,7 @@ jobs:
             return require('path').parse(files[0]).name;
           result-encoding: string
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.ppt2video.outputs.result }}
           path: output

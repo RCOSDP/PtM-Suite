@@ -1,6 +1,6 @@
-const config = require('./config');
-const fs = require('fs');
-const path = require('path');
+import config from './config.js';
+import fs from 'fs';
+import path from 'path';
 
 let year, month, date;
 const usage = [];
@@ -138,7 +138,7 @@ function getNow() {
   return new Date();
 }
 
-module.exports = {
+export {
   init,
   validate,
   processed,

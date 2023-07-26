@@ -1,5 +1,10 @@
-const minimist = require('minimist');
-const { boolean } = require('boolean');
+import minimist from 'minimist';
+import { boolean } from 'boolean';
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const stringOptions = {
   tempDir:     process.env.PPT2VIDEO_TEMP_DIR    || './',
@@ -9,8 +14,11 @@ const stringOptions = {
   ffmpegCmd:   process.env.PPT2VIDEO_FFMPEG_CMD  || 'ffmpeg',
   libopenh264: process.env.PPT2VIDEO_LIBOPENH264 || 'libopenh264.so.6',
   voice:       process.env.PPT2VIDEO_VOICE       || 'Takumi',
+  engine:      process.env.PPT2VIDEO_ENGINE      || 'neural',
   vcodec:      process.env.PPT2VIDEO_VCODEC      || 'libopenh264',
   voption:     process.env.PPT2VIDEO_VOPTION,
+  acodec:      process.env.PPT2VIDEO_ACODEC      || 'aac',
+  aoption:     process.env.PPT2VIDEO_AOPTION     || '',
   logfile:     process.env.PPT2VIDEO_LOGFILE     || 'ppt2video.log',
   loglevel:    process.env.PPT2VIDEO_LOGLEVEL    || 'info',
   sampleRate:  process.env.PPT2VIDEO_SAMPLERATE  || '22050',
@@ -45,9 +53,10 @@ function boolOption(env, value) {
 const boolOptions = {
   novideo: false,
   sectionPerTopic: boolOption(process.env.PPT2VIDEO_SECTION_PER_TOPIC, true),
+  usetika: false,
 };
 
-const config = minimist(process.argv.slice(2), {
+export const config = minimist(process.argv.slice(2), {
   string: Object.keys(stringOptions),
   boolean: Object.keys(boolOptions),
   alias: {
@@ -77,8 +86,4 @@ const validLoglevel = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 if (!validLoglevel.includes(config.loglevel)) {
   console.log('invalid loglevel: ' + config.loglevel);
   process.exit(-1);
-}
-
-module.exports = {
-  config
 }

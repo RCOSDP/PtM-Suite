@@ -27,6 +27,10 @@ YoutubeやVimeoなどのインターネット上のビデオを管理し，そ�
 
 CHiBi-CHiLOの詳細は[CHiBi-CHiLO  Documentation](https://npocccties.github.io/chibichilo/)をご覧下さい．
 
+### (4) WASM版Webアプリ
+
+WASM版Webアプリについては、[wasm-app](wasm-app/)を参照してください。
+
 ## 2. Architecture
 
 ### (1) システム構成
@@ -47,6 +51,8 @@ CHiLO-Speechのシステム構成は，以下の通りです．
     * GitHub専用レポジトリからダウンロードした登録データをCHiBi-CHiLOに登録すると，ビデオ教材としてLMSで配信できます．
 7. VODサーバー
     * CHiBi-CHiLOでは，Youtube,Vimeo,Wowzaの3種類のVODサービスを利用できます．CHiLO-Speechでは，そのうちVimeo,Wowzaへビデオを登録することが可能です．
+8. WASM版Webアプリ
+    * ブラウザで音声合成ビデオを作成するWebアプリです。
 
 ![CHiLO-Speechのシステム構成](docs/assets/image02.png)
 
@@ -56,13 +62,14 @@ CHiLO-Speechのシステム構成は，以下の通りです．
 ```
 /
 + README.md このファイル
-+ documentation/spec/ 仕様書置き場
-  pptとマイクロコンテンツ のデータ項目のすり合わせなど。
-  + import.md
++ docs/spec/ 仕様書置き場
+  + access.md アクセス制限機能について
+  + import.md pptとマイクロコンテンツ のデータ項目のすり合わせなど。
 + ppt-addin-vue/ アドイン本体
 + server/ アドインを配布するサーバ兼 AWS Polly proxy
 + sample-login/ アクセス制限機能開発用サンプルプログラム
 + ppt2video/ パワーポイントを動画に変換するnode.jsプログラム
++ wasm-app/ WASM版Webアプリ
 + test/ テスト用パワーポイントファイル
 + misc/ サンプルスクリプト、ファイルなど
 + manifest/ アドインをパワーポイントに登録するために必要なmanifestファイル

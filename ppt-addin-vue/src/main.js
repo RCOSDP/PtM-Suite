@@ -1,16 +1,12 @@
 import axios from 'axios'
 import { SpeechMarkdown } from 'speechmarkdown-js'
-import Vue from 'vue'
+import { createApp } from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
-import ElementUI from 'element-ui'
-import locale from 'element-ui/lib/locale/lang/ja'
-import 'element-ui/lib/theme-chalk/index.css'
+import ElementUI from 'element-plus'
+import locale from 'element-plus/lib/locale/lang/ja'
+import 'element-plus/theme-chalk/index.css'
 import {pollyUrl, dialogStartUrl} from './config.js'
-
-Vue.use(Vuex);
-Vue.use(ElementUI, {locale});
-Vue.config.productionTip = false;
 
 /* global Office, OfficeExtension */
 
@@ -222,11 +218,10 @@ const store = new Vuex.Store({
 });
 
 window.Office.initialize = () => {
-  new Vue({
-    render: h => h(App),
-    store,
+  createApp({
+    ...App,
     created: async function() {
       await restoreToken();
     }
-  }).$mount('#app');
+  }).use(store).use(ElementUI, {locale}).mount('#app');
 };
