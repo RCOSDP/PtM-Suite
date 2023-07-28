@@ -132,6 +132,7 @@ function App() {
   const [step, setStep] = useState(steps.step1);
   const [pptxList, setPptxList] = useState([]);
   const [topicList, setTopicList] = useState([]);
+  const [topicCheckList, setTopicCheckList] = useState([]);
   const [filename, setFilename] = useState(null);
   const [error1, setError1] = useState(null);
   const [error2, setError2] = useState(null);
@@ -160,14 +161,16 @@ function App() {
 
   async function readPptx() {
       await openPptx(filename);
-      return getTopicList();
+      const list = await getTopicList();
+      setTopicList(list);
+      const checkList = new Array(list.length).fill(true);
+      setTopicCheckList(checkList);
   }
 
   async function handleStep2Next() {
     try {
       setError2(null);
-      const list = await readPptx();
-      setTopicList(list);
+      await readPptx();
       setStep(steps.step3);
     } catch(e) {
       setError2(e.toString());
@@ -177,6 +180,13 @@ function App() {
   async function handleStep2Reload() {
     setError2(null);
     readDirectory();
+  }
+
+  function handleChange(e) {
+    console.log(e, topicCheckList);
+    const list = [...topicCheckList];
+    list[e.target.id] = e.target.checked;
+    setTopicCheckList(list);
   }
 
   function updateTopicList() {
@@ -197,8 +207,7 @@ function App() {
   async function handleStep3Start() {
     if (error3 !== null) {
       try {
-        const list = await readPptx();
-        setTopicList(list);
+        await readPptx();
       } catch(e){
         setError3(e.message);
         return;
@@ -227,12 +236,6 @@ function App() {
     }
   }
 
-  async function handleStep3Cancel() {
-    setTopicList([]);
-    setError3(null);
-    readDirectory();
-  }
-
   async function handleStep4Save() {
     try {
       setError4(null);
@@ -248,10 +251,15 @@ function App() {
 
   return (
     <div>
-      <h2> step1: パワーポイントファイルを含むディレクトリを開きます。</h2>
-      <button onClick={handleStep1OpenDirectory} disabled={step !== steps.step1}>ディレクトリを開く</button>
+      <h2> step1: パワーポイントファイルを含むディレクトリを選択します。</h2>
+      <button onClick={handleStep1OpenDirectory} disabled={step !== steps.step1}>ディレクトリを選択する</button>
+      <div style={{ display: step === steps.step1 ? 'none' : '' }}>
+        <br/>
+        別のディレクトリを選択したいときはページをリロードしてください。
+        <br/>
+      </div>
       <Message msg={error1} />
-      <h2> step2: パワーポイントファイルを選択します。</h2>
+      <h2> step2: パワーポイントファイルを選択して開きます。</h2>
       <form>
         {pptxList.map((filename, index) =>
           <div key={index}>
@@ -259,20 +267,23 @@ function App() {
           </div>
         )}
       </form>
-      <button onClick={handleStep2Next} disabled={step !== steps.step2 || filename === null}>次へ</button>
+      <br/>
+      <button onClick={handleStep2Next} disabled={step === steps.step1 || step === steps.step35 || filename === null}>パワーポイントファイルを開く</button>
       &emsp;
-      <button onClick={handleStep2Reload} disabled={step !== steps.step2}>更新</button>
+      <button onClick={handleStep2Reload} disabled={step === steps.step1 || step === steps.step35}>ディレクトリの再読込み</button>
       <Message msg={error2} />
-      <h2> step3: Import JSONファイル及び各トピックのビデオファイルを作成します。</h2>
+      <h2> step3: CHiBi-CHiLO登録データ(zip形式)を作成します。</h2>
       {topicList.map((topicname, index) =>
-        <p key={index}>{topicname}</p>
+        <div key={index}>
+          <input type="checkbox" id={index} checked={topicCheckList[index]} onChange={handleChange} /> &nbsp;
+          {topicname}
+        </div>
       )}
-      <button onClick={handleStep3Start} disabled={step !== steps.step3}>開始</button>
-      &emsp;
-      <button onClick={handleStep3Cancel} disabled={step !== steps.step3}>キャンセル</button>
+      <br/>
+      <button onClick={handleStep3Start} disabled={step !== steps.step3}>データを作成する</button>
       <Message msg={error3} />
-      <h2> step4: zipファイルを保存します。</h2>
-      <button onClick={handleStep4Save} disabled={step !== steps.step4}>保存</button>
+      <h2> step4: CHiBi-CHiLO登録データ(zip形式)を保存します。</h2>
+      <button onClick={handleStep4Save} disabled={step !== steps.step4}>データを保存する</button>
       <Message msg={error4} />
     </div>
   )
