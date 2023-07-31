@@ -35,9 +35,10 @@ async function openPptx(filename) {
   pptx.zipControl('start');
 }
 
-async function createImportJson() {
+async function processImportJson(topicCheckList) {
   const option = {
     importJsonOnly: true,
+    topicCheckList,
   };
   await pptx.process(option);
 }
@@ -95,7 +96,7 @@ function curTopicState() {
   return ret;
 }
 
-async function oneTopic(num) {
+async function processTopic(num) {
   const targetTopic = pptx.sections[num].topics[0];
   const option = {
     videoOnly: true,
@@ -220,14 +221,16 @@ function App() {
     try {
       setError3(null);
       setStep(steps.step35);
-      await createImportJson();
       timerId = setInterval(timerFunction, 100);
       for (let i = 0; i < numTopics; i++) {
-        topicState(i, states.running);
-        await oneTopic(i);
-        topicState(i, states.success);
+        if (topicCheckList[i]) {
+          topicState(i, states.running);
+          await processTopic(i);
+          topicState(i, states.success);
+        }          
       }
       finalTopicList(timerId);
+      await processImportJson(topicCheckList);
       setStep(steps.step4);
     } catch(e){
       finalTopicList(timerId);
