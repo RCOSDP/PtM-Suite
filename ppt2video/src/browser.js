@@ -91,8 +91,9 @@ async function init() {
   updateParams(slides);
 }
 
-function createImportJson() {
-  return convert(this, this.slides, this.sections);
+function createImportJson(topicCheckList) {
+  const sections = topicCheckList ? this.sections.filter((_,i) => topicCheckList[i]) : this.sections;
+  return convert(this, this.slides, sections);
 }
 
 let zip = null;
@@ -133,11 +134,11 @@ async function zipControl(cmd) {
 
 async function process(options = {}) {
   const {sections} = this;
-  const {readAudioFile, videoOnly, importJsonOnly, targetTopic} = options;
+  const {readAudioFile, videoOnly, importJsonOnly, targetTopic, topicCheckList} = options;
 
   if (!videoOnly) {
     try {
-      const ij = this.createImportJson();
+      const ij = this.createImportJson(topicCheckList);
       await this.writeImportJson(ij);
     } catch(e){
       throw new Error('can not create import json file.\n' + e.message);
