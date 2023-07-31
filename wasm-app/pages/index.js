@@ -161,11 +161,11 @@ function App() {
   }
 
   async function readPptx() {
-      await openPptx(filename);
-      const list = await getTopicList();
-      setTopicList(list);
-      const checkList = new Array(list.length).fill(true);
-      setTopicCheckList(checkList);
+    await openPptx(filename);
+    const list = await getTopicList();
+    setTopicList(list);
+    const checkList = new Array(list.length).fill(true);
+    setTopicCheckList(checkList);
   }
 
   async function handleStep2Next() {
@@ -184,7 +184,6 @@ function App() {
   }
 
   function handleChange(e) {
-    console.log(e, topicCheckList);
     const list = [...topicCheckList];
     list[e.target.id] = e.target.checked;
     setTopicCheckList(list);
@@ -239,6 +238,19 @@ function App() {
     }
   }
 
+  function setTopicCheckListAll(flag) {
+    const checkList = new Array(topicCheckList.length).fill(flag);
+    setTopicCheckList(checkList);
+  }
+
+  function handleStep3SelectAll() {
+    setTopicCheckListAll(true);
+  }
+
+  function handleStep3Clear() {
+    setTopicCheckListAll(false);
+  }
+
   async function handleStep4Save() {
     try {
       setError4(null);
@@ -284,6 +296,10 @@ function App() {
       )}
       <br/>
       <button onClick={handleStep3Start} disabled={step !== steps.step3 || !topicCheckList.some((e) => e)}>データを作成する</button>
+      &emsp;
+      <button onClick={handleStep3SelectAll} disabled={step !== steps.step3}>全選択</button>
+      &emsp;
+      <button onClick={handleStep3Clear} disabled={step !== steps.step3}>クリア</button>
       <Message msg={error3} />
       <h2> step4: CHiBi-CHiLO登録データ(zip形式)を保存します。</h2>
       <button onClick={handleStep4Save} disabled={step !== steps.step4}>データを保存する</button>
