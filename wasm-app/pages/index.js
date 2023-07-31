@@ -283,7 +283,7 @@ function App() {
         </div>
       )}
       <br/>
-      <button onClick={handleStep3Start} disabled={step !== steps.step3}>データを作成する</button>
+      <button onClick={handleStep3Start} disabled={step !== steps.step3 || !topicCheckList.some((e) => e)}>データを作成する</button>
       <Message msg={error3} />
       <h2> step4: CHiBi-CHiLO登録データ(zip形式)を保存します。</h2>
       <button onClick={handleStep4Save} disabled={step !== steps.step4}>データを保存する</button>
