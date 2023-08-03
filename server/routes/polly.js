@@ -1,15 +1,15 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
 const router = express.Router();
 
-const bearerToken = require('express-bearer-token');
+import bearerToken from 'express-bearer-token';
 router.use(bearerToken());
-const {loginRouter, check} = require('./login');
+import { check } from './login.js';
 router.use(check);
 
-const aws = require("aws-sdk");
-const config = require('../config');
-const access = require('../access');
+import { PollyClient, SynthesizeSpeechCommand } from '@aws-sdk/client-polly';
+import config from '../config.js';
+import * as access from '../access.js';
 
 // vercel don't allow to set AWS_REGION env etc.
 // so we use AWS_REGION_POLLY instead and update aws sdk config
@@ -25,7 +25,18 @@ if (
   });
 }
 
-var polly = new aws.Polly();
+var polly = new PollyClient();
+
+async function SynthesizeSpeech(input) {
+  const command = new SynthesizeSpeechCommand(input);
+  const res = await polly.send(command);
+  const chunks = []
+  for await (let chunk of res.AudioStream) {
+    chunks.push(chunk)
+  }
+  res.AudioStream = Buffer.concat(chunks);
+  return res;
+}
 
 // allow CORS with all pre-flight request and POST /polly request
 router.options("*", cors());
@@ -33,15 +44,17 @@ router.options("*", cors());
 router.post("/", cors(), async function (req, res, next) {
   try {
     if (config.authorization) access.validate();
-    const data = await polly.synthesizeSpeech(req.body).promise();
+    const data = await SynthesizeSpeech(req.body);
     res.setHeader("content-type", data.ContentType);
     const len = data.RequestCharacters;
     req.locals.len = len;
     if (config.authorization) access.processed(len);
     res.send(data.AudioStream);
   } catch (error) {
+    error.statusCode = error.$metadata.httpStatusCode;
+    error.code = error.name;
     next(error);
   }
 });
 
-module.exports = router;
+export { router };

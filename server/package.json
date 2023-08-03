@@ -1,19 +1,33 @@
 {
+  "type": "module",
   "name": "server",
   "version": "0.0.0",
   "private": true,
+  "bin": {
+    "www": "./bin/www.js"
+  },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "copy": "run-s copy:addin copy:lib copy:ffmpeg copy:ffmpeg-core copy:app",
+    "copy:addin": "cpx '../ppt-addin-vue/dist/**/*' dist",
+    "copy:lib": "cpx '../ppt2video/dist/browser*' dist/app",
+    "copy:ffmpeg": "cpx '../ppt2video/node_modules/@ffmpeg/ffmpeg/dist/*' dist/ffmpeg",
+    "copy:ffmpeg-core": "cpx '../ppt2video/node_modules/@ffmpeg/core/dist/*' dist/ffmpeg",
+    "copy:app": "cpx '../wasm-app/dist/**' dist/app"
   },
   "dependencies": {
-    "aws-sdk": "",
+    "@aws-sdk/client-polly": "^3.321.1",
     "cookie-parser": "~1.4.4",
     "cors": "~2.8.5",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
+    "debug": "^4.3.4",
+    "express": "^4.18.2",
     "express-bearer-token": "^2.4.0",
-    "jsonwebtoken": "^8.5.1",
-    "morgan": "~1.9.1",
-    "nanoid": "^3.3.4"
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
+    "nanoid": "^4.0.2"
+  },
+  "devDependencies": {
+    "cpx2": "^4.2.3",
+    "npm-run-all": "^4.1.5"
   }
 }

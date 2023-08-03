@@ -1,53 +1,15 @@
-const xml2js = require('xml2js');
-const {config} = require('./config.js');
-const {logger} = require('./log.js');
-
-function p2strings(p){
-  if (typeof p === 'undefined'){
-    return [];
-  }
-
-  if (typeof p === 'string'){
-    return [p];
-  }
-
-  // empty object -> empty string
-  const ret = p.map(s => typeof s === 'string'?s.split('\n'):'').flat()
-
-  // check total number of characters
-  if (ret.reduce((ac,s) => ac + s.length,0) === 0){
-    return [];
-  }
-  return ret;
-}
-
-function tika2slide(tika) {
-  const ret = [];
-  const {div} = tika.html.body;
-  let content, note;
-  for (const e of div){
-    switch(e.class){
-      case 'slide-content':
-        content = p2strings(e.p);
-        break;
-      case 'slide-notes':
-        note = p2strings(e.p);
-        ret.push({content, note});
-        break;
-    }
-  }
-  return ret;
-}
+import {config} from '#target/config.js';
+import {logger} from '#target/log.js';
 
 const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords','engine'];
 const headerRE = /^\s*(?<key>\w+)\s*:\s*(?<value>.*)$/;
 const blockNames = ['description','text','caption'];
-const blockRE = /```\s*(?<blockname>.*)\s*$/;
+const blockRE = /^```\s*(?<blockname>\w*)\s*$/;
 
 function parseHeader(line) {
   const result = line.match(headerRE);
   if (result !== null) {
-    for (key of metaKeys) {
+    for (const key of metaKeys) {
       if (key.toLowerCase() === result.groups.key.toLowerCase()) {
         return {
           key,
@@ -196,14 +158,8 @@ function parseSectionsPerTopic(slides) {
   return sections;
 }
 
-async function parse(xml) {
-  const option = {
-    async: false,
-    explicitArray: false,
-    mergeAttrs: true,
-  };
-  const tika = await xml2js.parseStringPromise(xml, option);
-  const slides = tika2slide(tika);
+export async function parse(pptx) {
+  const slides = await pptx.pptx2slide();
 
   slides.forEach(slide => parseNote(slide));
 
@@ -214,9 +170,5 @@ async function parse(xml) {
     sections = parseSections(slides);
   }
 
-  return {tika, slides, sections};
-}
-
-module.exports = {
-  parse
+  return {slides, sections};
 }

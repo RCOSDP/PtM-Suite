@@ -1,6 +1,6 @@
-const path = require('path');
-const log4js =require('log4js');
-const {config} = require('./config.js');
+import path from 'path';
+import log4js from 'log4js';
+import {config} from './config.js';
 
 const {_, loglevel} = config;
 let {logfile} = config;
@@ -20,9 +20,6 @@ log4js.configure({
   }
 });
 
-const logger = log4js.getLogger('ppt2video');
+export const logger = log4js.getLogger('ppt2video');
 
-module.exports = {
-  log4js,
-  logger
-};
+export {log4js}

@@ -1,11 +1,16 @@
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const morgan = require('morgan');
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+import { fileURLToPath } from "url";
 
-const {dialogStartUrl} = require('./config');
-const pollyRouter = require('./routes/polly');
-const {loginRouter, check} = require('./routes/login');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import config from './config.js';
+import { router as pollyRouter } from './routes/polly.js';
+import { router as loginRouter } from './routes/login.js';
+import { router as wasmRouter } from './routes/wasm.js';
 
 const app = express();
 
@@ -33,14 +38,20 @@ app.use(morgan(':remote-addr :req[x-forwarded-for] :method :url :status :info'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/dialog/start', function (req, res) {
-  res.redirect(dialogStartUrl);
+  res.redirect(config.dialogStartUrl);
 });
 
 app.use('/polly', pollyRouter);
 app.use('/login', loginRouter);
+
+if (config.wasm) {
+  app.use('/app', wasmRouter);
+}
+
+app.use(express.static(path.join(__dirname, 'dist')));
+
 app.use(pollyErrorHandler);
 
-module.exports = app;
+export default app;

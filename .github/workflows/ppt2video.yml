@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: FedericoCarboni/setup-ffmpeg@v1
+      - uses: FedericoCarboni/setup-ffmpeg@v2
         id: setup-ffmpeg
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18
 
       - name: download binaries
         env:
@@ -34,7 +34,7 @@ jobs:
           ln -s $(basename ${LIBOPENH264} .bz2) libopenh264.so.6
           LD_LIBRARY_PATH=. ./ffmpeg -version
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -43,7 +43,7 @@ jobs:
 
       - name: npm install
         run: |
-          (cd ppt2video;npm install;npm i boolean)
+          (cd ppt2video;npm install)
 
       - name: run ppt2video
         env:
@@ -57,7 +57,7 @@ jobs:
           mkdir $PPT2VIDEO_TEMP_DIR
           node ppt2video/bin/ppt2video.js test/vuca.pptx
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: vuca
           path: output
