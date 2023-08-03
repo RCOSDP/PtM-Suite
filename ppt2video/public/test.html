@@ -1,0 +1,69 @@
+<html>
+
+<head>
+  <title>test page</title>
+</head>
+
+<body>
+  <button onclick="openDirectory()">ディレクトリを開く</button>
+  <button onclick="listPptx()">PPTX一覧</button>
+  <button onclick="openPptx()">vuca.pptxを開く</button>
+  <button onclick="importJson()">Import JSON生成</button>
+  <button onclick="oneTopic()">トピック1生成</button>
+  <button onclick="generateAll()">すべて生成</button>
+  <br><br>
+  <textarea id="msgbox" rows=5 cols=80></textarea>
+  <br><br>
+</body>
+
+<script src="ffmpeg.min.js"></script>
+<script src="browser.js"></script>
+
+<script>
+let pptx;
+let dirHandle;
+
+const {setRoot, readFile, writeFile, openDir, getPptx} = ppt2video;
+
+async function openDirectory() {
+  dirHandle = await window.showDirectoryPicker();
+  setRoot(dirHandle);
+}
+
+async function listPptx() {
+  // TODO
+  const re = /.(pptx|PPTX)/;
+  for await (const dirent of dirHandle.entries()) {
+    const match = dirent[0].match(re);
+    if (match) {
+      console.log(dirent[0]);
+    }
+  }
+}
+
+async function openPptx() {
+  pptx = await getPptx('vuca.pptx');
+  await pptx.init();
+}
+
+async function importJson() {
+  const option = {
+    importJsonOnly: true,
+  };
+  await pptx.process(option);
+}
+
+async function oneTopic() {
+  const targetTopic = pptx.sections[0].topics[0];
+  const option = {
+    videoOnly: true,
+    targetTopic
+  };
+  await pptx.process(option);
+}
+
+async function generateAll() {
+  await pptx.process();
+}
+
+</script>

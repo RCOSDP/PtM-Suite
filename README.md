@@ -30,13 +30,14 @@ PowerPoint の中に、WebPageを表示させて、自分のコンピュータ�
 ```
 /
 + README.md このファイル
-+ documentation/spec/ 仕様書置き場
-  pptとマイクロコンテンツ のデータ項目のすり合わせなど。
-  + import.md
++ docs/spec/ 仕様書置き場
+  + access.md アクセス制限機能について
+  + import.md pptとマイクロコンテンツ のデータ項目のすり合わせなど。
 + ppt-addin-vue/ アドイン本体
 + server/ アドインを配布するサーバ兼 aws polly proxy
 + ppt2video/ パワーポイントを動画に変換するnode.jsプログラム
-+ test/ サンプルパワーポイントファイル
++ wasm-app/ WASM版Webアプリ
++ test/ テスト用パワーポイントファイル
 + misc/ サンプルスクリプト、ファイルなど
 + .github/workflows ワークフローファイル
 ```

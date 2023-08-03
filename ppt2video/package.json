@@ -1,21 +1,37 @@
 {
+  "type": "module",
   "name": "@rcosdp/ppt2video",
   "version": "1.0.0",
   "private": false,
   "main": "bin/ppt2video.js",
-  "scripts": {},
+  "scripts": {
+    "watch": "webpack --watch",
+    "start": "webpack serve",
+    "build": "webpack"
+  },
   "bin": {
     "ppt2video": "bin/ppt2video.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.922.0",
-    "axios": "^0.21.1",
-    "execa": "^5.1.1",
-    "log4js": "^6.3.0",
-    "minimist": "^1.2.5",
-    "music-metadata": "^7.8.6",
+    "@aws-sdk/client-polly": "^3.290.0",
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.6",
+    "aws-crt": "^1.15.9",
+    "axios": "^1.3.4",
+    "boolean": "^3.2.0",
+    "buffer": "^6.0.3",
+    "execa": "^7.1.1",
+    "jsdom": "^22.0.0",
+    "jszip": "^3.10.1",
+    "log4js": "^6.9.1",
+    "minimist": "^1.2.8",
+    "music-metadata-browser": "^2.5.9",
+    "path-browserify": "^1.0.1",
     "speechmarkdown-js": "https://github.com/npocccties/speechmarkdown-js#ties-with-dist",
-    "xml2js": "^0.4.23"
+    "stream": "^0.0.2",
+    "timers": "^0.1.1",
+    "xml2js": "^0.5.0",
+    "xpath": "^0.0.32"
   },
   "repository": {
     "type": "git",
@@ -27,6 +43,10 @@
   "devDependencies": {
     "shebang-loader": "0.0.1",
     "webpack": "^5.40.0",
-    "webpack-cli": "^4.7.2"
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.12.0"
+  },
+  "imports": {
+    "#target/*": "./src/*"
   }
 }
