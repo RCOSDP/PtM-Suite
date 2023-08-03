@@ -1,15 +1,15 @@
 # manifest.xml
 
-## 1. CHiLO-Speechアドイン
-manifest.xmlは，マイクロソフト社製パワーポイントにCHiLO-Speech用アドインを登録するために必要なファイルです．
+## 1. GakuNinLMS-M-CMSアドイン
+manifest.xmlは，マイクロソフト社製パワーポイントにGakuNinLMS-M-CMS用アドインを登録するために必要なファイルです．
 
-CHiLO-Speechアドインを登録すると，実際の人工音声を聞きながら，パワーポイントにナレーションスクリプトを記述することができます．
+GakuNinLMS-M-CMSアドインを登録すると，実際の人工音声を聞きながら，パワーポイントにナレーションスクリプトを記述することができます．
 
 * アドインの登録方法は，[こちら](https://docs.cccties.org/chilospeech/prepare/powerpoint-1)　をご覧下さい．
 
 ## 2. ナレーションスクリプト
 
-CHiLO-Speechは，Speech MarkdownとSSMLに対応しています．パワーポイントのナレーションスクリプトは，Speech MarkdownあるいはSSMLで記述して下さい．
+GakuNinLMS-M-CMSは，Speech MarkdownとSSMLに対応しています．パワーポイントのナレーションスクリプトは，Speech MarkdownあるいはSSMLで記述して下さい．
 
 * ナレーションスクリプトの記載方法は，[こちら](https://docs.cccties.org/chilospeech/narration/describe#2narshonsukuriputono)をご覧下さい．
 

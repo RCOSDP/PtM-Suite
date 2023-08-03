@@ -1,8 +1,8 @@
 # ppt-addin-vue
 
-## 1. CHiLO-Speechアドインの利用設定
+## 1. GakuNinLMS-M-CMSアドインの利用設定
 
-CHiLO-Speechアドインを利用するために，システム管理者は以下を行って下さい．
+GakuNinLMS-M-CMSアドインを利用するために，システム管理者は以下を行って下さい．
 
 > 1. ppt-addin-vueを Vercel などにデプロイ
 > 2. manifestファイルの設定
