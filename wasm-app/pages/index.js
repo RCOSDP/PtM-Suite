@@ -96,11 +96,13 @@ function curTopicState() {
   return ret;
 }
 
-async function processTopic(num) {
+async function processTopic(num, fps, bitrate) {
   const targetTopic = pptx.sections[num].topics[0];
   const option = {
     videoOnly: true,
     targetTopic,
+    fps,
+    bitrate,
   };
   await pptx.process(option);
 }
@@ -129,6 +131,24 @@ function Message(props) {
   return null;
 }
 
+const FPSList = [5, 10, 12.5, 15, 25, 30];
+const FPSDefault = 12.5;
+const bitrateList = [250000, 500000, 750000];
+const bitrateDefault = 250000;
+
+function OptionSelector({label, list, defaultValue, handler}) {
+  return (
+    <label>
+      {label}:
+      <select value={defaultValue} onChange={handler}>
+        {list.map((v) => (
+          <option value={v}>{v}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function App() {
   const [step, setStep] = useState(steps.step1);
   const [pptxList, setPptxList] = useState([]);
@@ -139,6 +159,8 @@ function App() {
   const [error2, setError2] = useState(null);
   const [error3, setError3] = useState(null);
   const [error4, setError4] = useState(null);
+  const [FPS, setFPS] = useState(FPSDefault);
+  const [bitrate, setBitrate] = useState(bitrateDefault);
 
   async function handleStep1OpenDirectory() {
     try {
@@ -224,7 +246,7 @@ function App() {
       for (let i = 0; i < numTopics; i++) {
         if (topicCheckList[i]) {
           topicState(i, states.running);
-          await processTopic(i);
+          await processTopic(i, FPS, bitrate);
           topicState(i, states.success);
         }          
       }
@@ -264,6 +286,14 @@ function App() {
     }
   }
 
+  function FPSHandler(e) {
+    setFPS(Number(e.target.value));
+  }
+
+  function bitrateHandler(e) {
+    setBitrate(Number(e.target.value));
+  }
+
   return (
     <div>
       <h2> step1: パワーポイントファイルを含むディレクトリを選択します。</h2>
@@ -301,6 +331,21 @@ function App() {
       &emsp;
       <button onClick={handleStep3Clear} disabled={step !== steps.step3}>クリア</button>
       <Message msg={error3} />
+      <br/>
+      <br/>
+      <OptionSelector
+        label={"フレームレート(FPS)"}
+        list={FPSList}
+        defaultValue={FPS}
+        handler={FPSHandler}
+      />
+      &emsp;
+      <OptionSelector
+        label={"ビットレート(bps)"}
+        list={bitrateList}
+        defaultValue={bitrate}
+        handler={bitrateHandler}
+      />
       <h2> step4: CHiBi-CHiLO登録データ(zip形式)を保存します。</h2>
       <button onClick={handleStep4Save} disabled={step !== steps.step4}>データを保存する</button>
       <Message msg={error4} />
