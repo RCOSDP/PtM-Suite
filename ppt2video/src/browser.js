@@ -82,6 +82,7 @@ async function init() {
   await prepare(this.filepath.name, sections, "mp4", "mp3");
   this.slides = slides;
   this.sections = sections;
+  this.importJson = convert(this, slides, sections);
   try {
     const ffmpeg = await createFFmpeg();
     this.ffmpeg = ffmpeg;
@@ -92,8 +93,9 @@ async function init() {
 }
 
 function createImportJson(topicCheckList) {
-  const sections = topicCheckList ? this.sections.filter((_,i) => topicCheckList[i]) : this.sections;
-  return convert(this, this.slides, sections);
+  const ret = {...this.importJson};
+  ret.sections = topicCheckList ? this.importJson.sections.filter((_,i) => topicCheckList[i]) : this.importJson.sections;
+  return ret;
 }
 
 let zip = null;

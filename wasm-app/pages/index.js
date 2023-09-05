@@ -141,12 +141,37 @@ function OptionSelector({label, list, defaultValue, handler}) {
     <label>
       {label}:
       <select value={defaultValue} onChange={handler}>
-        {list.map((v) => (
-          <option value={v}>{v}</option>
+        {list.map((v, index) => (
+          <option value={v} key={index}>{v}</option>
         ))}
       </select>
     </label>
   );
+}
+
+function getVoiceList() {
+  const list = [];
+  for (const section of pptx.sections) {
+    const voiceList = [];
+    for (const topic of section.topics) {
+      for (const slide of topic.slides) {
+        if (slide.voice) {
+          voiceList.push(slide.voice);
+        }
+      }
+    }
+    list.push(voiceList);
+  }
+  return list;
+}
+
+function getKeywordList() {
+  const list = [];
+  for (const section of pptx.importJson.sections) {
+    const keywords = section.topics[0].keywords;
+    list.push(keywords ? keywords.join() : "");
+  }
+  return list;
 }
 
 function App() {
@@ -161,6 +186,8 @@ function App() {
   const [error4, setError4] = useState(null);
   const [FPS, setFPS] = useState(FPSDefault);
   const [bitrate, setBitrate] = useState(bitrateDefault);
+  const [voiceList, setVoiceList] = useState([]);
+  const [keywordList, setKeywordList] = useState([]);
 
   async function handleStep1OpenDirectory() {
     try {
@@ -188,6 +215,8 @@ function App() {
     setTopicList(list);
     const checkList = new Array(list.length).fill(true);
     setTopicCheckList(checkList);
+    setVoiceList(getVoiceList());
+    setKeywordList(getKeywordList());
   }
 
   async function handleStep2Next() {
@@ -318,12 +347,29 @@ function App() {
       <button onClick={handleStep2Reload} disabled={step === steps.step1 || step === steps.step35}>ディレクトリの再読込み</button>
       <Message msg={error2} />
       <h2> step3: CHiBi-CHiLO登録データ(zip形式)を作成します。</h2>
-      {topicList.map((topicname, index) =>
-        <div key={index}>
-          <input type="checkbox" id={index} checked={topicCheckList[index]} onChange={handleChange} /> &nbsp;
-          {topicname}
-        </div>
-      )}
+      {step === steps.step3 && <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>トピック</th>
+            <th>話者</th>
+            <th>キーワード</th>
+          </tr>
+        </thead>
+        <tbody>
+          {topicList.map((topicname, index) =>
+          <tr key={index}>
+            <td>
+              <input type="checkbox" id={index} checked={topicCheckList[index]} onChange={handleChange} />
+            </td>
+            <td>{topicname}</td>
+            <td>{voiceList[index]}</td>
+            <td>{keywordList[index]}</td>
+          </tr>
+        )}
+        </tbody>
+      </table>
+      }
       <br/>
       <button onClick={handleStep3Start} disabled={step !== steps.step3 || !topicCheckList.some((e) => e)}>データを作成する</button>
       &emsp;
