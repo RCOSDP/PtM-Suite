@@ -165,11 +165,14 @@ function getVoiceList() {
   return list;
 }
 
-function getKeywordList() {
+function getImportJsonList() {
   const list = [];
   for (const section of pptx.importJson.sections) {
-    const keywords = section.topics[0].keywords;
-    list.push(keywords ? keywords.join() : "");
+    const {keywords, license} = section.topics[0];
+    list.push({
+      keywords: keywords ? keywords.join() : "",
+      license,
+    });
   }
   return list;
 }
@@ -187,7 +190,7 @@ function App() {
   const [FPS, setFPS] = useState(FPSDefault);
   const [bitrate, setBitrate] = useState(bitrateDefault);
   const [voiceList, setVoiceList] = useState([]);
-  const [keywordList, setKeywordList] = useState([]);
+  const [importJsonList, setImportJsonList] = useState([]);
 
   async function handleStep1OpenDirectory() {
     try {
@@ -216,7 +219,7 @@ function App() {
     const checkList = new Array(list.length).fill(true);
     setTopicCheckList(checkList);
     setVoiceList(getVoiceList());
-    setKeywordList(getKeywordList());
+    setImportJsonList(getImportJsonList());
   }
 
   async function handleStep2Next() {
@@ -353,6 +356,7 @@ function App() {
             <th></th>
             <th>トピック</th>
             <th>話者</th>
+            <th>ライセンス</th>
             <th>キーワード</th>
           </tr>
         </thead>
@@ -364,7 +368,8 @@ function App() {
             </td>
             <td>{topicname}</td>
             <td>{voiceList[index]}</td>
-            <td>{keywordList[index]}</td>
+            <td>{importJsonList[index].license}</td>
+            <td>{importJsonList[index].keywords}</td>
           </tr>
         )}
         </tbody>
