@@ -205,6 +205,10 @@ function App() {
   async function readDirectory() {
     const list = await getPptxList();
     setPptxList(list);
+    setTopicList([]);
+    setTopicCheckList([]);
+    setVoiceList([]);
+    setImportJsonList([]);
     setStep(steps.step2);
   }
 
@@ -350,7 +354,7 @@ function App() {
       <button onClick={handleStep2Reload} disabled={step === steps.step1 || step === steps.step35}>ディレクトリの再読込み</button>
       <Message msg={error2} />
       <h2> step3: CHiBi-CHiLO登録データ(zip形式)を作成します。</h2>
-      {step === steps.step3 && <table>
+      {topicList.length > 0 && <table>
         <thead>
           <tr>
             <th></th>
