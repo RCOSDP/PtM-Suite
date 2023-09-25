@@ -177,6 +177,10 @@ function getImportJsonList() {
   return list;
 }
 
+async function processAuthorized() {
+  return await pptx.process({authorized: true});
+}
+
 function App() {
   const [step, setStep] = useState(steps.step1);
   const [pptxList, setPptxList] = useState([]);
@@ -270,6 +274,12 @@ function App() {
         setError3(e.message);
         return;
       }
+    }
+
+    const authorized = await processAuthorized();
+    if (authorized !== "noauthorize" && authorized !== "authorized") {
+      setError3("GakuNinLMS-M-CMSを利用するため、所属機関で認証する必要があります。ページをリロードしてください。");
+      return;
     }
 
     const numTopics = getTopicList().length;

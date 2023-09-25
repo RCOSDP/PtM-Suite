@@ -136,7 +136,11 @@ async function zipControl(cmd) {
 
 async function process(options = {}) {
   const {sections} = this;
-  const {readAudioFile, videoOnly, importJsonOnly, targetTopic, topicCheckList, fps, bitrate} = options;
+  const {readAudioFile, videoOnly, importJsonOnly, targetTopic, topicCheckList, fps, bitrate, authorized} = options;
+
+  if (authorized) {
+    return await checkPolly();
+  }
 
   if (!videoOnly) {
     try {
@@ -473,4 +477,14 @@ async function createAudioTopic(topic) {
       throw new Error('can not determine audio duration.\n' + e.message);
     }
   }
+}
+
+async function checkPolly() {
+  let res;
+  try {
+    res = await axios.post(config.pollyProxy, {});
+  } catch(e){
+    return e.message;
+  }
+  return res.data;
 }
