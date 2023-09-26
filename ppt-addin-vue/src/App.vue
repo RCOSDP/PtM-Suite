@@ -35,7 +35,6 @@
         <hr>
         <div class="padding">
           <span class="heading">よく使うタグ</span><br>
-          <span class="description">クリックしてペーストできます</span>
           <br>
           <div class="center">
             <dl>
