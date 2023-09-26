@@ -177,6 +177,9 @@ async function process(options = {}) {
       } catch(e){
         throw new Error('can not write video.\n' + e.message);
       }
+      // update timeRequired in json
+      const sum = topic.slides.reduce((acc,slide) => acc + slide.duration,0);
+      topic.importJson.timeRequired = Math.floor(sum);
     }
   }
 }

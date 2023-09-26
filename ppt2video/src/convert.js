@@ -69,6 +69,7 @@ function convertTopics(topics) {
       }
     };
     addTopicProperty(ret, topic.slides[0]);
+    topic.importJson = ret;
     return ret;
   });
 }
