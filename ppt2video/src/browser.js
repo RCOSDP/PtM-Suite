@@ -179,7 +179,7 @@ async function process(options = {}) {
       }
       // update timeRequired in json
       const sum = topic.slides.reduce((acc,slide) => acc + slide.duration,0);
-      topic.importJson.timeRequired = Math.floor(sum);
+      topic.importJson.timeRequired = sum > 1 ? Math.floor(sum) : 1;
     }
   }
 }
