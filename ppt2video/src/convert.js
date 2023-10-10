@@ -69,7 +69,12 @@ function convertTopics(topics) {
       }
     };
     addTopicProperty(ret, topic.slides[0]);
-    topic.importJson = ret;
+    if (topic.slides[0].duration) {
+      const sum = topic.slides.reduce((acc,slide) => acc + slide.duration,0);
+      ret.timeRequired = sum > 1 ? Math.floor(sum) : 1;
+    } else {
+      topic.importJson = ret;
+    }
     return ret;
   });
 }
