@@ -79,6 +79,16 @@ function convertTopics(topics) {
   });
 }
 
+function getBookKeywords(slides) {
+  let ret = [];
+  for (const slide of slides) {
+    if (slide.bookkeywords) {
+      ret.push(slide.bookkeywords);
+    }
+  }
+  return ret.flat();
+}
+
 export function convert(pptx, slides, sections) {
   const book = {};
   const language = getLanguage(slides);
@@ -90,8 +100,8 @@ export function convert(pptx, slides, sections) {
   if (language !== null){
     book.language = language;
   }
-  const keywords = pptx.getPropertyAll('dc:subject');
-  book.keywords = keywords.concat(pptx.getPropertyAll('cp:keywords'));
+
+  book.keywords = getBookKeywords(slides);
 
   adjustMetaKey(slides, book);
 
