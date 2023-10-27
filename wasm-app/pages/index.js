@@ -375,7 +375,7 @@ function App() {
       <h2 className="header" >音声合成ビデオ作成システム
       </h2>
       <div className="help">
-        <a href="#">
+        <a target="_blank" href="https://nii-rcos.gitbook.io/tts-mc-help/">
           <button className="popup-button" id="myButton">？
           </button>
         <div className="popup" id="myPopup">詳細なマニュアルを表示します．
@@ -390,13 +390,13 @@ function App() {
         </ul>
       </div>
       <div  id="__step0" className="contents" >	
-        <h2 className="step-title">Step0：音声合成ビデオ作成の流れ</h2>
+        <h2 className="step-title">STEP0：音声合成ビデオ作成の流れ</h2>
         <p class="text note">※ FirefoxとSafariでは使用できませんのでご注意ください。<br/>Google Chrome・Microsoft Edgeのみ使用できます。
         </p>
         <hr className="hr" />
         <div className="container">
           <div className="column">
-            <span className="step-part">step1</span>
+            <span className="step-part">STEP1</span>
           </div>
           <div className="column">
             <div className="note">
@@ -407,7 +407,7 @@ function App() {
         <hr className="hr" />
         <div className="container">
           <div className="column">
-            <span className="step-part">step2</span>
+            <span className="step-part">STEP2</span>
           </div>
           <div className="column">
             <div className="note">
@@ -421,7 +421,7 @@ function App() {
         </div>
       </div>
       <div  id="__step1" className="contents is-hide" >
-        <h2 className="step-title">Step1：使用するパワーポイントファイルを選択する</h2>
+        <h2 className="step-title">STEP1：使用するパワーポイントファイルを選択する</h2>
         <div className="text" style={{ display: step === steps.step1 ? 'none' : '' }}>
           別のディレクトリを選択したいときはページをリロードしてください。
         </div>
@@ -442,8 +442,8 @@ function App() {
             </div>
           )}
         </form>
-        <div className="text" style={{ display: step === steps.step15 ? '' : 'none' }}>
-          読み込み中
+        <div className="text loading" style={{ display: step === steps.step15 ? '' : 'none' }}>
+          <div>読み込み中<span></span></div>
         </div>
         <hr className="hr" />
         <div className="text">
@@ -453,7 +453,7 @@ function App() {
         </div>
       </div>
       <div  id="__step2" className="contents is-hide" >
-        <h2 className="step-title"> Step2：音声合成ビデオを作成する</h2>
+        <h2 className="step-title"> STEP2：音声合成ビデオを作成する</h2>
           <div className="info">
             スライドを選択する
           </div>
