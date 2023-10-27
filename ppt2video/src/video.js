@@ -243,37 +243,34 @@ export async function ppt2video(filename, getPptx) {
     return;
   }
 
+  if (!config.novideo) {
+    // create audio files
+    logger.trace('call createAudioFiles');
+    try {
+      await createAudioFiles(slides);
+    } catch(e) {
+      fatalError(e, 'failed to create audio files', sections);
+      return;
+    }
+
+    // create video files
+    logger.trace('call createVideoFiles');
+    try {
+      await createVideoFiles(sections);
+    } catch(e) {
+      fatalError(e, 'failed to create video files', sections);
+      return;
+    }
+  }
+
   // convert to import-json
   logger.trace('call convert');
   try {
     const ij = convert(pptx, slides, sections);
     fs.writeFileSync(path.join(outputDir, filepath.name + '.json'), JSON.stringify(ij,null,2));
+    logger.info('success to craete import json file');
   } catch(e) {
     fatalError(e, 'failed to create import json file', sections);
-    return;
-  }
-
-  if (config.novideo) {
-    logger.info('success to craete import json file');
-    removeTempFiles(sections);
-    return;
-  }
-
-  // create audio files
-  logger.trace('call createAudioFiles');
-  try {
-    await createAudioFiles(slides);
-  } catch(e) {
-    fatalError(e, 'failed to create audio files', sections);
-    return;
-  }
-
-  // create video files
-  logger.trace('call createVideoFiles');
-  try {
-    await createVideoFiles(sections);
-  } catch(e) {
-    fatalError(e, 'failed to create video files', sections);
     return;
   }
 

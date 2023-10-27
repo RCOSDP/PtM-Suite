@@ -82,6 +82,7 @@ async function init() {
   await prepare(this.filepath.name, sections, "mp4", "mp3");
   this.slides = slides;
   this.sections = sections;
+  this.importJson = convert(this, slides, sections);
   try {
     const ffmpeg = await createFFmpeg();
     this.ffmpeg = ffmpeg;
@@ -92,8 +93,9 @@ async function init() {
 }
 
 function createImportJson(topicCheckList) {
-  const sections = topicCheckList ? this.sections.filter((_,i) => topicCheckList[i]) : this.sections;
-  return convert(this, this.slides, sections);
+  const ret = {...this.importJson};
+  ret.sections = topicCheckList ? this.importJson.sections.filter((_,i) => topicCheckList[i]) : this.importJson.sections;
+  return ret;
 }
 
 let zip = null;
@@ -134,7 +136,11 @@ async function zipControl(cmd) {
 
 async function process(options = {}) {
   const {sections} = this;
-  const {readAudioFile, videoOnly, importJsonOnly, targetTopic, topicCheckList} = options;
+  const {readAudioFile, videoOnly, importJsonOnly, targetTopic, topicCheckList, fps, bitrate, authorized} = options;
+
+  if (authorized) {
+    return await checkPolly();
+  }
 
   if (!videoOnly) {
     try {
@@ -159,10 +165,10 @@ async function process(options = {}) {
       } else {
         await this.createAudioTopic(topic);
       }
-      const chunks = await this.encodeTopic(topic);
+      const chunks = await this.encodeTopic(topic, fps, bitrate);
       let data;
       try {
-        data = await this.muxTopic(topic, chunks);
+        data = await this.muxTopic(topic, chunks, fps);
       } catch(e){
         throw new Error('can not mux topic.\n' + e.message);
       }
@@ -171,6 +177,9 @@ async function process(options = {}) {
       } catch(e){
         throw new Error('can not write video.\n' + e.message);
       }
+      // update timeRequired in json
+      const sum = topic.slides.reduce((acc,slide) => acc + slide.duration,0);
+      topic.importJson.timeRequired = sum > 1 ? Math.floor(sum) : 1;
     }
   }
 }
@@ -233,7 +242,7 @@ async function prepare(filename, sections, vsuffix, asuffix) {
 // encode
 //
 
-async function encodeTopic(topic) {
+async function encodeTopic(topic, fps = 25, bitrate = 250000) {
   const ibarray = [];
   const darray = [];
   for (const slide of topic.slides) {
@@ -241,8 +250,8 @@ async function encodeTopic(topic) {
     darray.push(slide.duration);
   }
   try {
-    const {encoder, chunks} = init_encoder(ibarray[0], 25);
-    await encode(encoder, ibarray, 25, darray);
+    const {encoder, chunks} = init_encoder(ibarray[0], fps, bitrate);
+    await encode(encoder, ibarray, fps, darray);
     return chunks;
   } catch(e){
     throw new Error('can not encode.\n' + e.message);
@@ -259,7 +268,8 @@ async function imageFile2ImageBitmap(filename, dirname) {
   }
 }
 
-function init_encoder(ib, fps) {
+function init_encoder(ib, fps, bitrate) {
+  console.log("init_encoder: ", fps, bitrate);
   const chunks = [];
 
   const encoder = new VideoEncoder({
@@ -280,7 +290,7 @@ function init_encoder(ib, fps) {
     },
     width: ib.width,
     height: ib.height,
-    bitrate: 250000,
+    bitrate,
     framerate: fps,
   });
 
@@ -297,6 +307,8 @@ async function encode(encoder, ibarray, fps, darray) {
   console.log(farray);
   let cur = 0;
   let index = 0;
+  let gop = -1;
+  let keyFrame = true;
   const frames = farray.slice(-1)[0];
   async function next() {
     console.log('next called',frames,cur);
@@ -305,7 +317,12 @@ async function encode(encoder, ibarray, fps, darray) {
       if (cur > farray[index]) {
         index += 1;
       }
-      const keyFrame = (cur % fps === 0);
+      if (Math.floor(cur / fps) > gop) {
+        keyFrame = true;
+        gop++;
+      } else {
+        keyFrame = false;
+      }
       const vf = new VideoFrame(ibarray[index], {
         timestamp: cur * 1000000 / fps,
         duration:  1000000 / fps
@@ -383,7 +400,7 @@ function concat(chunks) {
   return ret;
 }
 
-async function muxTopic(topic, chunks) {
+async function muxTopic(topic, chunks, fps = 25) {
   const {ffmpeg} = this;
   const coption = "-c:v copy -c:a aac";
 
@@ -392,7 +409,7 @@ async function muxTopic(topic, chunks) {
   if (topic.slides.length === 1) {
     const slide = topic.slides[0];
     ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
-    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -i ${slide.audioFilename} ${coption} ${topic.outputFilename}`);
+    await ffrun(ffmpeg, `-r ${fps} -i ${topic.inputFilename} -i ${slide.audioFilename} ${coption} ${topic.outputFilename}`);
     ffunlink(ffmpeg, slide.audioFilename);
   } else {
     const blob = new Blob([topic.listData]);
@@ -401,7 +418,7 @@ async function muxTopic(topic, chunks) {
     for (const slide of topic.slides) {
       ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
     }
-    await ffrun(ffmpeg, `-r 25 -i ${topic.inputFilename} -f concat -i ${topic.listFilename} ${coption} ${topic.outputFilename}`);
+    await ffrun(ffmpeg, `-r ${fps} -i ${topic.inputFilename} -f concat -i ${topic.listFilename} ${coption} ${topic.outputFilename}`);
     for (const slide of topic.slides) {
       ffunlink(ffmpeg, slide.audioFilename);
     }
@@ -463,4 +480,14 @@ async function createAudioTopic(topic) {
       throw new Error('can not determine audio duration.\n' + e.message);
     }
   }
+}
+
+async function checkPolly() {
+  let res;
+  try {
+    res = await axios.post(config.pollyProxy, {});
+  } catch(e){
+    return e.message;
+  }
+  return res.data;
 }

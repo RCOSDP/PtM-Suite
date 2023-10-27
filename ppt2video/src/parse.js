@@ -1,7 +1,7 @@
 import {config} from '#target/config.js';
 import {logger} from '#target/log.js';
 
-const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','keywords','engine'];
+const metaKeys = ['delay','pad','fade','language','voice','sampleRate','section','topic','license','createdAt','updatedAt','bookkeywords', 'keywords','engine'];
 const headerRE = /^\s*(?<key>\w+)\s*:\s*(?<value>.*)$/;
 const blockNames = ['description','text','caption'];
 const blockRE = /^```\s*(?<blockname>\w*)\s*$/;
@@ -30,6 +30,10 @@ function parseBlock(line) {
   return null;
 }
 
+function splitKeywords(value) {
+  return value.split(/,+/).filter(s => s.length > 0).map(s => s.trim());
+}
+
 function parseNote(slide) {
   slide.blocks = [];
 
@@ -40,8 +44,8 @@ function parseNote(slide) {
     if (inHeader) {
       const kv = parseHeader(line);
       if (kv !== null) {
-        if (kv.key === 'keywords') {
-          slide[kv.key] = kv.value.split(/[,\s]+/).filter(s => s.length > 0);
+        if (kv.key === 'bookkeywords' || kv.key === 'keywords') {
+          slide[kv.key] = splitKeywords(kv.value);
         } else if (typeof kv.key !== 'undefined'){
           slide[kv.key] = kv.value;
         }
