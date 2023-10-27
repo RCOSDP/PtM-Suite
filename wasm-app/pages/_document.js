@@ -6,7 +6,6 @@ export default function Document() {
       <Head>
         <script src="/ffmpeg/ffmpeg.min.js"></script>
         <script src="/app/browser.js"></script>
-        <style>{`body {font-family: system-ui;}`}</style>
       </Head>
       <body>
         <Main />

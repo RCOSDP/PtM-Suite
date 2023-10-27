@@ -1,0 +1,395 @@
+/* ===================
+共通
+====================== */
+.header {
+  background: #443e9e;
+  color: #fff;
+  padding: 50px 0px;
+  margin: -10px;
+  font-size: 3rem;
+  text-align: center;
+}
+
+body {
+  font-family: system-ui;
+}
+
+.hr {
+  margin: 30px 0px;
+  border-color: #f2f2f2;
+}
+
+.is-hide {
+  display: none;
+}
+
+.contents {
+  max-width: 1280px;
+  margin: 30px auto 50px;
+}
+
+/* 簡易説明のスタイル設定 */
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0px;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* パワーポイント選択のスタイル設定 */
+.form {
+  margin: auto;
+  font-size: 1.5rem;
+  margin-bottom: 50px;
+}
+
+.note {
+  font-size: 1.1rem;
+}
+
+.info {
+  color: #999;
+  margin: 0px 0px 10px 35%;
+}
+
+.text {
+  text-align: center;
+}
+
+/* STEP1，2のリストエリア */
+.radio {
+  margin: 5px auto 5px 35%;
+}
+
+/* ボタン
+---------------------- */
+.move {
+  color: #fff;
+  background-color: #443e9e;
+  border: 0px;
+  padding: 10px 50px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.move:not(:disabled):hover {
+  background-color: #2a2393;
+}
+
+.move:disabled {
+  background-color: #9d9dc6;
+}
+
+.choice,
+.decide {
+  color: #333;
+  background-color: #dedede;
+  border: 0px;
+  padding: 10px 25px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+}
+
+.decide:not(:disabled):hover {
+  background-color: #c7c7c7;
+}
+
+.decide:disabled {
+  color: #fff;
+}
+
+.transition {
+  margin: 20px;
+}
+
+/* マニュアル誘導
+---------------------- */
+.help {
+  position: relative;
+  text-align: right;
+  margin-top: 20px;
+}
+
+.popup-button {
+  font-weight: bolder;
+  font-size: 1.5rem;
+  background-color: #443e9e;
+  color: #ffffff;
+  border-radius: 100px;
+  border: 0px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.popup {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  top: -30px;
+  right: 0px;
+  z-index: 1;
+}
+
+.popup-button:hover {
+  background-color: #3d378b;
+}
+
+.popup-button:hover + .popup {
+  display: block;
+}
+
+/* STEPフロー
+---------------------- */
+.step-arrow {
+  margin: -30px auto 40px;
+  color: #fff;
+}
+
+.step {
+  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+li {
+  position: relative;
+  padding: 20px 10px 20px 40px;
+  margin: 0 30px 0 0;
+  background: #9d9dc6;
+}
+
+li::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -80px;
+  border-width: 60px 40px;
+  border-color: transparent transparent transparent #9d9dc6;
+  border-style: solid;
+  z-index: 10;
+}
+
+li::after {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -95px;
+  border-width: 60px 40px;
+  border-color: transparent transparent transparent #fff;
+  border-style: solid;
+  z-index: 5;
+}
+
+li.is-current {
+  background: #443e9e;
+}
+
+li.is-current::before {
+  border-color: transparent transparent transparent #443e9e;
+}
+
+li:last-child:before,
+li:last-child:after {
+  display: none;
+}
+
+li:last-child {
+  padding-right: 30px;
+}
+
+/* ===================
+STEP0
+====================== */
+
+/* コンテンツ幅・配置 */
+.column {
+  flex: 0 0 calc(20%);
+}
+
+.column:nth-child(1) {
+  text-align: center;
+}
+
+.column:nth-child(2) {
+  flex: 0 0 calc(80%);
+  margin: 10px 30px;
+}
+
+/* フォント設定 */
+.step-part {
+  color: #fff;
+  background-color: #443e9e;
+  border: 0px;
+  padding: 35px 15px;
+  border-radius: 10px;
+  font-size: 2rem;
+  margin: auto;
+}
+
+.step-title {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 2rem;
+}
+
+.centered,
+.output {
+  margin: 30px auto;
+  display: block;
+}
+
+.centered {
+  margin-top: 50px;
+}
+
+.output {
+  margin-bottom: 5px;
+}
+
+/* ===================
+STEP1
+====================== */
+
+/* 読み込み中
+---------------------- */
+
+div.loading {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+div.loading div {
+    position: absolute;
+}
+
+div.loading span {
+    position: absolute;
+    display: inline-block;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: 2px;
+    background-position: 0 0;
+    background-image:-webkit-gradient(linear, left top, right top, from(#000), to(transparent) );
+    background-image:-webkit-linear-gradient(left,#000,transparent);
+    background-image: linear-gradient(to right,#000,transparent);
+    -webkit-animation: animation 2s linear infinite;
+    animation: animation 2s linear infinite;
+}
+
+@-webkit-keyframes animation {
+    0% {
+        width: 0;
+        background-color: transparent;
+    }
+    40% {
+        width: 100%;
+        background-color: transparent;
+    }
+    80% {
+        width: 100%;
+        background-color: #000;
+    }
+    100% {
+        width: 100%;
+        background-color: #000;
+    }
+}
+
+@keyframes animation {
+    0% {
+        width: 0;
+        background-color: transparent;
+    }
+    40% {
+        width: 100%;
+        background-color: transparent;
+    }
+    80% {
+        width: 100%;
+        background-color: #000;
+    }
+    100% {
+        width: 100%;
+        background-color: #000;
+    }
+}
+
+
+/* ===================
+STEP2
+====================== */
+
+/* セレクター
+---------------------- */
+.selector {
+  margin: 5px auto 15px 35%;
+  text-align: left
+}
+
+.custom-selector {
+  height: 40px;
+  color: #333;
+  font-size: 16px;
+  width: 30%;
+  border: 3px solid #E6E6E6;
+  padding-left: 15px;
+}
+
+.custom-selector:hover {
+  border: 3px solid #9d9dc6;
+}
+
+/* tooltip */
+.tooltip {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.tooltip p {
+  margin: 0px;
+  padding: 0px;
+}
+
+.description {
+  display: none;
+  position: absolute;
+  padding: 15px;
+  font-size: 12px;
+  line-height: 1.6em;
+  color: #333;
+  border-radius: 5px;
+  border: #9d9dc6 0.8px solid;
+  background: #ffffff;
+  width: 300px;
+  z-index: 1;
+}
+
+.description:before {
+  content: "";
+  position: absolute;
+  top: 0%;
+  right: 95%;
+  border: 15px solid transparent;
+  border-top: 15px solid rgba(255, 255, 255, 0);
+  margin-left: -15px;
+  transform: rotateZ(90deg);
+}
+
+.tooltip:hover .description {
+  display: inline-block;
+  top: 0px;
+  left: 100%;
+}
+
+.fps {
+  margin-bottom: 10px;
+}

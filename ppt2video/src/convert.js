@@ -69,8 +69,24 @@ function convertTopics(topics) {
       }
     };
     addTopicProperty(ret, topic.slides[0]);
+    if (topic.slides[0].duration) {
+      const sum = topic.slides.reduce((acc,slide) => acc + slide.duration,0);
+      ret.timeRequired = sum > 1 ? Math.floor(sum) : 1;
+    } else {
+      topic.importJson = ret;
+    }
     return ret;
   });
+}
+
+function getBookKeywords(slides) {
+  let ret = [];
+  for (const slide of slides) {
+    if (slide.bookkeywords) {
+      ret.push(slide.bookkeywords);
+    }
+  }
+  return ret.flat();
 }
 
 export function convert(pptx, slides, sections) {
@@ -84,8 +100,8 @@ export function convert(pptx, slides, sections) {
   if (language !== null){
     book.language = language;
   }
-  const keywords = pptx.getPropertyAll('dc:subject');
-  book.keywords = keywords.concat(pptx.getPropertyAll('cp:keywords'));
+
+  book.keywords = getBookKeywords(slides);
 
   adjustMetaKey(slides, book);
 
