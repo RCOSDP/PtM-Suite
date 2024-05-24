@@ -111,7 +111,7 @@ if (typeof window !== 'undefined') {
 function getTextXpath(dom, type){
   const resolver = xpathevaluator.createNSResolver(dom);
   const lines = xpathevaluator.evaluate(
-    `/${type}/p:cSld/p:spTree/p:sp/p:txBody/a:p`,
+    `/${type}/p:cSld/p:spTree//p:sp/p:txBody/a:p`,
     dom,
     resolver,
     xpathresult.ANY_TYPE,
@@ -134,7 +134,9 @@ function getTextXpath(dom, type){
           break;
       }
     }
-    ret.push(line.join('').split('\r\n'));
+    if (node.parentNode.parentNode.parentNode.nodeName !== "mc:Fallback") {
+      ret.push(line.join('').split('\r\n'));
+    }
     node = lines.iterateNext();
   }
   return ret.flat();
