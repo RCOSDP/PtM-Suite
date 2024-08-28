@@ -32,9 +32,14 @@ body {
 .container {
   display: flex;
   justify-content: space-between;
-  margin: 40px 0px;
   flex-direction: row;
   align-items: center;
+}
+.container.first {
+  margin: 40px 0px;
+}
+.container.second {
+  margin: 50px 0px;
 }
 
 /* パワーポイント選択のスタイル設定 */

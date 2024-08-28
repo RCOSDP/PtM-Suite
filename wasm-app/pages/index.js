@@ -372,10 +372,10 @@ function App() {
 
   return (
     <div id="__next">
-      <h2 className="header" >音声合成ビデオ作成システム
+      <h2 className="header" >PtM：合成音声付き動画教材作成システム
       </h2>
       <div className="help">
-        <a target="_blank" href="https://nii-rcos.gitbook.io/tts-mc-help/">
+        <a target="_blank" href="https://nii-rcos.gitbook.io/ptm-help/">
           <button className="popup-button" id="myButton">？
           </button>
         <div className="popup" id="myPopup">詳細なマニュアルを表示します．
@@ -386,32 +386,32 @@ function App() {
         <ul className="step">
           <li className="is-current">STEP0：作成の流れ</li>
           <li>STEP1：PPTの選択</li>
-          <li>STEP2：ビデオの作成</li>
+          <li>STEP2：動画教材の作成</li>
         </ul>
       </div>
       <div  id="__step0" className="contents" >	
-        <h2 className="step-title">STEP0：音声合成ビデオ作成の流れ</h2>
+        <h2 className="step-title">STEP0：合成音声付き動画教材作成の流れ</h2>
         <p class="text note">※ FirefoxとSafariでは使用できませんのでご注意ください。<br/>Google Chrome・Microsoft Edgeのみ使用できます。
         </p>
         <hr className="hr" />
-        <div className="container">
+        <div className="container first">
           <div className="column">
             <span className="step-part">STEP1</span>
           </div>
           <div className="column">
             <div className="note">
-              パワーポイントファイルを含むディレクトリを選択し、使用するパワーポイントを選択します。
+              パワーポイントファイルを含むディレクトリを選択し、使用するパワーポイントを選択します。<br/>事前にパワーポイントの全ページをPNG画像として出力しておいてください。
             </div>
           </div>
         </div>
         <hr className="hr" />
-        <div className="container">
+        <div className="container second">
           <div className="column">
             <span className="step-part">STEP2</span>
           </div>
           <div className="column">
             <div className="note">
-              音声合成ビデオを作成します。
+              合成音声付き動画教材を作成します。
             </div>
           </div>
         </div>
@@ -448,12 +448,12 @@ function App() {
         <hr className="hr" />
         <div className="text">
           <button className="decide transition" onClick={handleStep1Back} >STEP0に戻る</button>
-          <button className="move transition" onClick={handleStep2Next} disabled={step === steps.step1 || step === steps.step35 || filename === null}>STEP2：ビデオの作成へ</button>
+          <button className="move transition" onClick={handleStep2Next} disabled={step === steps.step1 || step === steps.step35 || filename === null}>STEP2：動画教材の作成へ</button>
           <Message msg={error2} />
         </div>
       </div>
       <div  id="__step2" className="contents is-hide" >
-        <h2 className="step-title"> STEP2：音声合成ビデオを作成する</h2>
+        <h2 className="step-title"> STEP2：合成音声付き動画教材を作成する</h2>
           <div className="info">
             スライドを選択する
           </div>
@@ -501,18 +501,18 @@ function App() {
           /> bps
         </div>
         <div className="text">
-          <button className="decide output" onClick={handleStep3Start} disabled={step !== steps.step3 || !topicCheckList.some((e) => e)}>ビデオを出力する</button>
+          <button className="decide output" onClick={handleStep3Start} disabled={step !== steps.step3 || !topicCheckList.some((e) => e)}>動画教材を出力する</button>
           <Message msg={error3} />
         </div>
         <div className="text" style={{ display: step === steps.step4 ? '' : 'none' }}>
-          ビデオが出力できました
+          動画教材が出力できました
         </div>
         <div className="text">
-          <button className="decide output" onClick={handleStep4Save} disabled={step !== steps.step4}>ビデオを保存する</button>
+          <button className="decide output" onClick={handleStep4Save} disabled={step !== steps.step4}>動画教材を保存する</button>
           <Message msg={error4} />
         </div>
         <div className="text" style={{ display: step === steps.step2 ? '' : 'none' }}>
-          ビデオを保存しました
+          動画教材を保存しました
         </div>
         <hr className="hr" />
         <div className="text">
