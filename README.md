@@ -27,7 +27,7 @@ GitHubレポジトリ上の workフォルダ上で、GitHub Action を用いて�
 
 ## システムのコンポーネント（Wasm版）
 
-Amazon Polly による合成音声を用いて動画教材を生成する機能の Wasm 版コンポーネントです。現行版 PtMサーバでは、このコンポーネントが動作しています。
+Amazon Polly による合成音声を用いて動画教材を生成する機能の Wasm 版コンポーネントです。現行版 [PtMサーバ](https://ptm.nii.ac.jp/)では、このコンポーネントが動作しています。
 
 - wasm-app (Wasm版PtMアプリ) 
 
