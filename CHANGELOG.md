@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2025]
+
+### Added
+- WebAssembly (Wasm) based log storage and aggregation functionality (NII)
+
 ## [2023]
 
 ### Added
