@@ -8,6 +8,9 @@ const config = {
   updateInterval: parseInt(process.env.POLLY_UPDATE_INTERVAL) || 600,
   logdir: process.env.POLLY_LOGDIR || "log",
   wasm: (process.env.POLLY_WASM === "true") || false,
+  appStartUrl: process.env.POLLY_APP_START_URL || 'https://localhost:3006/dialog/start',
+  httplogdir: process.env.POLLY_HTTPLOGDIR || "httplog",
+  teeToStdout: (process.env.POLLY_TEETOSTDOUT === "true") || false,
 };
 
 export default config;

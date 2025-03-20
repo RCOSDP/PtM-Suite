@@ -3,6 +3,8 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { fileURLToPath } from "url";
+import moment from 'moment';
+import { createStream } from 'rotating-file-stream';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,17 +25,40 @@ function pollyErrorHandler (err, req, res, next) {
   }
 }
 
-morgan.token('info', (req, res) => {
-  if (!req.locals) return "- -";
-  let {id, user_id, len, message} = req.locals;
-  if (message) return "- " + message;
-  if (!id) id = "-";
-  if (user_id) return `${id} ${user_id}`;
-  if (!len) len = 0;
-  return `${id} ${len}`;
+const logStream = createStream('log.txt',{
+  interval: '1d',
+  path: config.httplogdir,
+  immutable: true,
+  teeToStdout: config.teeToStdout,
 });
 
-app.use(morgan(':remote-addr :req[x-forwarded-for] :method :url :status :info'));
+morgan.token('info', (req, res) => {
+  if (!req.locals) return "- -";
+  let {id, user_id, len, message, log, mp3size} = req.locals;
+
+  // POST /login error
+  if (message) return "- error " + message;
+
+  // POST /login
+  if (!id) id = "-";
+  if (user_id) return `${id} ${user_id}`;
+
+  // POST /log
+  if (log) return `${id} ` + log.join(' ');
+
+  // POST /app/polly
+  if (!len) len = 0;
+  if (!mp3size) mp3size = 0;
+  return `${id} ${len} ${mp3size}`;
+});
+
+morgan.token('iso8601local', (req, res) => {
+  return moment().toISOString(true);
+})
+
+app.use(morgan(':iso8601local :remote-addr :req[x-forwarded-for] :method :url :status :info', {
+  stream: logStream,
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -48,6 +73,9 @@ app.use('/login', loginRouter);
 
 if (config.wasm) {
   app.use('/app', wasmRouter);
+  app.get('/app/start', function (req, res) {
+    res.redirect(config.appStartUrl);
+  });
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));

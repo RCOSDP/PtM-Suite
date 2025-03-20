@@ -8,24 +8,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: FedericoCarboni/setup-ffmpeg@v2
+      - uses: FedericoCarboni/setup-ffmpeg@v3
         id: setup-ffmpeg
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
 
       - name: download binaries
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ env.GITHUB_REPOSITORY }}
-          TIKA_JAR: tika-app-1.26.jar
           LIBOPENH264: libopenh264-2.1.1-linux64.6.so.bz2
         run: |
           cd ppt2video/lib
-          gh release download binary -p $TIKA_JAR
           gh release download binary -p 'ffmpeg.bz2'
           bunzip2 ffmpeg.bz2
           chmod +x ffmpeg
@@ -34,7 +32,7 @@ jobs:
           ln -s $(basename ${LIBOPENH264} .bz2) libopenh264.so.6
           LD_LIBRARY_PATH=. ./ffmpeg -version
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -57,7 +55,7 @@ jobs:
           mkdir $PPT2VIDEO_TEMP_DIR
           node ppt2video/bin/ppt2video.js test/vuca.pptx
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: vuca
           path: output

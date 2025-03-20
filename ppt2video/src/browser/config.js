@@ -9,6 +9,7 @@ const stringOptions = {
   sampleRate:  process.env.PPT2VIDEO_SAMPLERATE  || '22050',
   pollyProxy:  "/polly",
   ffmpegDir:   "/ffmpeg",
+  submitLog:   "/log",
 };
 
 function numberOption(env, value) {

@@ -15,7 +15,16 @@ const option = {
   expiresIn: "7d",
 };
 
-router.post('/', function(req, res, next) {
+async function anonymize(user_id) {
+  const s = user_id.split('@');
+  if (s[0].length > 0) {
+    const h = await crypto.subtle.digest('sha-256', new TextEncoder().encode(s[0]));
+    s[0] = btoa(String.fromCharCode.apply(null, new Uint8Array(h)));
+  }
+  return s.join('@');
+}
+
+router.post('/', async function(req, res, next) {
   const {user_id, password} = req.body;
   if (password === cPassword) {
     const id = nanoid();
@@ -27,7 +36,8 @@ router.post('/', function(req, res, next) {
       secure: false,
       httpOnly: false,
     });
-    req.locals = {id, user_id};
+    const au = await anonymize(user_id);
+    req.locals = {id, user_id: au};
     res.send('OK');
   } else {
     res.status(401).send('unauthorized');
@@ -37,11 +47,7 @@ router.post('/', function(req, res, next) {
 function check(req, res, next) {
   if (!config.authorization) {
     req.locals = {id: '-', len: 0};
-    if (req.body.Text) {
-      next();
-    } else {
-      res.send('noauthorize');
-    }
+    next();
     return;
   }
 
@@ -55,20 +61,36 @@ function check(req, res, next) {
       req.locals = {id: decoded.sub, len: 0};
     }
     if (req.locals) {
-      if (req.body.Text) {
-        next();
-      } else {
-        res.send('authorized');
-      }
+      next();
       return;
     }
+    req.locals = {message: 'token not found'};
   } catch (err) {
     req.locals = {message: err.message};
   }
   res.status(401).send('unauthorized');
 }
 
+function auth(req, res, next) {
+  const result = config.authorization?'authorized':'noauthorize';
+  if (req.body.Text) {
+    next();
+    return;
+  } else {
+    res.send(result);
+  }
+}
+
+import bearerToken from 'express-bearer-token';
+const bearer = bearerToken({
+  cookie: {
+    key: 'session_cookie'
+  }
+});
+
 export {
   router,
   check,
+  auth,
+  bearer,
 };
