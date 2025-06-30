@@ -1,5 +1,3 @@
-import { boolean } from 'boolean';
-
 const process = {env: {}};
 
 const stringOptions = {
@@ -26,8 +24,8 @@ const numberOptions = {
 };
 
 function boolOption(env, value) {
-  if (typeof env !== 'undefined') {
-    value = boolean(env);
+  if (typeof env === 'string') {
+    value = env.toLowerCase() === 'true';
   }
   return value;
 }

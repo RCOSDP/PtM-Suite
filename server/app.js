@@ -78,6 +78,12 @@ if (config.wasm) {
   });
 }
 
+app.use('/ffmpeg', function (req, res, next) {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(pollyErrorHandler);

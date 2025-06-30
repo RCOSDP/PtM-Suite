@@ -15,7 +15,7 @@ function print_days() {
     const cur_str = cur.toISOString().slice(0,10);
     const end_str = (cend <= end ?cend:end).toISOString().slice(0,10);
 
-    console.log('node aggregate.js', cur_str, end_str, params.join(' '), '>', cur_str + '_' + end_str + '.txt');
+    console.log('node aggregate.js', cur_str, end_str, params.join(' '));
 
     cur.setUTCDate(cur.getUTCDate() + days);
   }

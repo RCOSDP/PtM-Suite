@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 
 let setRoot, getPptx, setConfig, checkPolly, submitLog;
-let authorized;
 let loginUrl;
 
 if (typeof window !== 'undefined') {
@@ -10,7 +9,6 @@ if (typeof window !== 'undefined') {
   setConfig('pollyProxy', origin + '/app/polly');
   setConfig('ffmpegDir', origin + '/ffmpeg');
   setConfig('submitLog', origin + '/app/log');
-  authorized = await checkPolly();
   loginUrl = origin + '/app/start';
 }
 
@@ -218,9 +216,21 @@ function App() {
   const [voiceList, setVoiceList] = useState([]);
   const [importJsonList, setImportJsonList] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
-  
+
+  async function initAuthorized() {
+    try {
+      const authorized = await checkPolly();
+      if (authorized === 'noauthorize' || authorized === 'authorized'){
+        return;
+      }
+    } catch(e) {
+      console.log('exception: calling checkProxy');
+    }
+    setShowLogin(true);
+  }
+
   useEffect(() => {
-    setShowLogin(authorized !== 'noauthorize' && authorized !== 'authorized');
+    initAuthorized();
   }, [])
  
   function chengeStep(e) {

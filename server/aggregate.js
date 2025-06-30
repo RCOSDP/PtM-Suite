@@ -3,6 +3,7 @@ import process from 'node:process'
 
 let in_range;
 let files;
+let start_end;
 
 //
 // 集計
@@ -187,11 +188,11 @@ function check_active() {
 //
 
 function write_header() {
-  console.log('category,open-directory,open-pptx,output-video,save-video,polly-num,polly-chars,user-num,login-num');
+  console.log('start,end,category,open-directory,open-pptx,output-video,save-video,polly-num,polly-chars,user-num,login-num');
 }
 
 function write_array(ar) {
-  console.log(ar.join(','));
+  console.log(start_end + ar.join(','));
 }
 
 function write_dict(dict) {
@@ -223,12 +224,14 @@ function parse_args() {
       return words[0].startsWith(process.argv[2]);
     };
     files = process.argv.slice(3);
+    start_end = process.argv[2] + ',,';
   } else if (process.argv[2].length == 10) {
     in_range = (words) => {
       const date = words[0].slice(0,10);
       return process.argv[2] <= date && date <= process.argv[3];
     };
     files = process.argv.slice(4);
+    start_end = process.argv[2] + ',' + process.argv[3] + ',';
   }
 }
 

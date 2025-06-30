@@ -6,7 +6,7 @@ const commonConfig = {
   reactStrictMode: true,
   basePath: "/app",
   webpack(config) {
-    config.experiments = { ...config.experiments, topLevelAwait: true }
+    config.experiments = { ...config.experiments, topLevelAwait: false }
     return config
   },
 }

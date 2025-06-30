@@ -11,25 +11,25 @@
     "copy": "run-s copy:addin copy:lib copy:ffmpeg copy:ffmpeg-core copy:app",
     "copy:addin": "cpx '../ppt-addin-vue/dist/**/*' dist",
     "copy:lib": "cpx '../ppt2video/dist/browser*' dist/app",
-    "copy:ffmpeg": "cpx '../ppt2video/node_modules/@ffmpeg/ffmpeg/dist/*' dist/ffmpeg",
-    "copy:ffmpeg-core": "cpx '../ppt2video/node_modules/@ffmpeg/core/dist/*' dist/ffmpeg",
+    "copy:ffmpeg": "cpx '../ppt2video/node_modules/@ffmpeg/ffmpeg/dist/umd/*' dist/ffmpeg",
+    "copy:ffmpeg-core": "cpx '../ppt2video/node_modules/@ffmpeg/core/dist/umd/*' dist/ffmpeg",
     "copy:app": "cpx '../wasm-app/dist/**' dist/app"
   },
   "dependencies": {
-    "@aws-sdk/client-polly": "^3.321.1",
-    "cookie-parser": "~1.4.4",
+    "@aws-sdk/client-polly": "^3.777.0",
+    "cookie-parser": "~1.4.7",
     "cors": "~2.8.5",
-    "debug": "^4.3.4",
-    "express": "^4.18.2",
-    "express-bearer-token": "^2.4.0",
-    "jsonwebtoken": "^9.0.0",
+    "debug": "^4.4.0",
+    "express": "^4.21.2",
+    "express-bearer-token": "^3.0.0",
+    "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
     "morgan": "^1.10.0",
-    "nanoid": "^4.0.2",
+    "nanoid": "^5.1.5",
     "rotating-file-stream": "^3.2.6"
   },
   "devDependencies": {
-    "cpx2": "^4.2.3",
+    "cpx2": "^8.0.0",
     "npm-run-all": "^4.1.5"
   }
 }

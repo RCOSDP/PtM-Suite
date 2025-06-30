@@ -16,8 +16,6 @@ router.use(function (req, res, next) {
     }
     req.locals = {id: '-', len: 0};
   }
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
   next();
 });
 
