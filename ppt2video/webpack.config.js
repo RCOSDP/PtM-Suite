@@ -1,8 +1,11 @@
+import webpack from 'webpack';
+
 const cmd_config = {
   entry: "./bin/ppt2video.js",
 
   output: {
-    filename: "ppt2video.js"
+    filename: "ppt2video.js",
+    asyncChunks: false,
   },
 
   name: "node",
@@ -20,10 +23,22 @@ const cmd_config = {
 
   ignoreWarnings: [
     {
-      module: /log4js|aws-crt/,
+      module: /log4js/,
       message: /Critical dependency: the request of a dependency is an expression/,
     },
   ],
+
+  plugins: [
+    new webpack.IgnorePlugin({
+      resourceRegExp: /canvas/,
+      contextRegExp: /jsdom$/,
+    }),
+  ],
+
+  externals: {
+    bufferutil: "bufferutil",
+    "utf-8-validate": "utf-8-validate",
+  },
 };
 
 const script_config = {
@@ -32,6 +47,7 @@ const script_config = {
   output: {
     filename: "browser.js",
     library: "ppt2video",
+    asyncChunks: false,
   },
 
   name: "web",
@@ -78,6 +94,7 @@ const lib_config = {
     library: {
       type: 'module',
     },
+    asyncChunks: false,
   },
 
   name: "lib",

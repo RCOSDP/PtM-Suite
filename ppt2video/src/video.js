@@ -2,7 +2,7 @@ import {execaCommand} from 'execa';
 import fs from 'fs';
 import path from 'path';
 import {PollyClient, SynthesizeSpeechCommand} from '@aws-sdk/client-polly';
-import mm from 'music-metadata-browser';
+import {parseBuffer} from 'music-metadata';
 import axios from 'axios';
 
 import {config} from './config.js';
@@ -200,7 +200,7 @@ async function createAudioFiles(slides) {
       }
       stream = Buffer.concat(chunks);
     }
-    slide.duration = (await mm.parseBuffer(stream)).format.duration;
+    slide.duration = (await parseBuffer(stream)).format.duration;
     fs.writeFileSync(slide.audioFilename, stream);
   }
 }

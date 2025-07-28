@@ -1,12 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-let setRoot, getPptx, setConfig;
+let setRoot, getPptx, setConfig, checkPolly, submitLog;
+let loginUrl;
 
 if (typeof window !== 'undefined') {
-  ({ setRoot, getPptx, setConfig } = ppt2video);
+  ({ setRoot, getPptx, setConfig, checkPolly, submitLog } = ppt2video);
   const {origin} = location;
   setConfig('pollyProxy', origin + '/app/polly');
   setConfig('ffmpegDir', origin + '/ffmpeg');
+  setConfig('submitLog', origin + '/app/log');
+  loginUrl = origin + '/app/start';
 }
 
 let dirHandle = null;
@@ -182,6 +185,22 @@ async function processAuthorized() {
   return await pptx.process({authorized: true});
 }
 
+function getStatistics() {
+  let totalFileSize = 0;
+  let totalDuration = 0;
+  for (const section of pptx.sections) {
+    const {fileSize, duration} = section.topics[0];
+    if (fileSize) totalFileSize += fileSize;
+    if (duration) totalDuration += duration;
+  }
+  return {size: totalFileSize, duration: totalDuration};
+}
+
+async function anonymize(s) {
+  const h = await crypto.subtle.digest('sha-256', new TextEncoder().encode(s));
+  return btoa(String.fromCharCode.apply(null, new Uint8Array(h)));
+}
+
 function App() {
   const [step, setStep] = useState(steps.step1);
   const [pptxList, setPptxList] = useState([]);
@@ -196,7 +215,24 @@ function App() {
   const [bitrate, setBitrate] = useState(bitrateDefault);
   const [voiceList, setVoiceList] = useState([]);
   const [importJsonList, setImportJsonList] = useState([]);
+  const [showLogin, setShowLogin] = useState(false);
 
+  async function initAuthorized() {
+    try {
+      const authorized = await checkPolly();
+      if (authorized === 'noauthorize' || authorized === 'authorized'){
+        return;
+      }
+    } catch(e) {
+      console.log('exception: calling checkProxy');
+    }
+    setShowLogin(true);
+  }
+
+  useEffect(() => {
+    initAuthorized();
+  }, [])
+ 
   function chengeStep(e) {
     let stepList = document.querySelectorAll(".step li");
     stepList.forEach((step) => {
@@ -228,8 +264,10 @@ function App() {
       setError1(null);
       await openDirectory();
       readDirectory();
+      await submitLog({type: 'open-directory'});
     } catch(e) {
       setError1('ディレクトリを開くことができませんでした。\n' + e.message);
+      await submitLog({type: 'error', message: 'open-directory'});
     }
   }
 
@@ -262,11 +300,14 @@ function App() {
     try {
       setError2(null);
       await readPptx();
+      const filename_hash = await anonymize(filename);
+      await submitLog({type: 'open-pptx', filename: filename_hash, size: pptx.pptxSize, numslides: pptx.numSlides});
       setStep(steps.step3);
       chengeStep(2);
     } catch(e) {
       setError2(e.toString());
       setStep(steps.step3);
+      await submitLog({type: 'error', message: 'open-pptx'});
     }
   }
 
@@ -319,20 +360,25 @@ function App() {
       setError3(null);
       setStep(steps.step35);
       timerId = setInterval(timerFunction, 100);
+      let count = 0;
       for (let i = 0; i < numTopics; i++) {
         if (topicCheckList[i]) {
           topicState(i, states.running);
           await processTopic(i, FPS, bitrate);
           topicState(i, states.success);
+          count = count + 1;
         }          
       }
       finalTopicList(timerId);
       await processImportJson(topicCheckList);
+      const filename_hash = await anonymize(filename);
+      await submitLog({type: 'output-video', filename: filename_hash, numtopics: count});
       setStep(steps.step4);
     } catch(e){
       finalTopicList(timerId);
       setError3(e.message);
       setStep(steps.step3);
+      await submitLog({type: 'error', message: 'output-video'});
     }
   }
 
@@ -353,12 +399,15 @@ function App() {
     try {
       setError4(null);
       await flushZip();
+      const filename_hash = await anonymize(filename);
+      await submitLog({type: 'save-video', filename: filename_hash, ...getStatistics()});
       setPptxList([]);
       setFilename(null);
       setTopicList([]);
       readDirectory();
     } catch(e){
       setError4('zipファイルの保存に失敗しました。\n' + e.message);
+      await submitLog({type: 'error', message: 'save-video'});
     }
   }
 
@@ -368,6 +417,10 @@ function App() {
 
   function bitrateHandler(e) {
     setBitrate(Number(e.target.value));
+  }
+
+  function handleLogin() {
+    window.location.href = loginUrl;
   }
 
   return (
@@ -391,7 +444,12 @@ function App() {
       </div>
       <div  id="__step0" className="contents" >	
         <h2 className="step-title">STEP0：合成音声付き動画教材作成の流れ</h2>
-        <p class="text note">※ FirefoxとSafariでは使用できませんのでご注意ください。<br/>Google Chrome・Microsoft Edgeのみ使用できます。
+        {showLogin &&
+          <h3 className="step-title">
+            始めにログインしてください
+          </h3>
+        }
+        <p className="text note">※ FirefoxとSafariでは使用できませんのでご注意ください。<br/>Google Chrome・Microsoft Edgeのみ使用できます。
         </p>
         <hr className="hr" />
         <div className="container first">
@@ -416,9 +474,16 @@ function App() {
           </div>
         </div>
         <hr className="hr" />
-        <div>
-          <button className="move centered" onClick={handleStep0Next} >STEP1：PPTの選択へ</button>
-        </div>
+        {showLogin &&
+          <div>
+            <button className="move centered" onClick={handleLogin} >ログイン</button>
+          </div>
+        }
+        {!showLogin &&
+          <div>
+            <button className="move centered" onClick={handleStep0Next} >STEP1：PPTの選択へ</button>
+          </div>
+        }
       </div>
       <div  id="__step1" className="contents is-hide" >
         <h2 className="step-title">STEP1：使用するパワーポイントファイルを選択する</h2>

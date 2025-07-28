@@ -1,5 +1,4 @@
 import minimist from 'minimist';
-import { boolean } from 'boolean';
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -44,8 +43,8 @@ const numberOptions = {
 };
 
 function boolOption(env, value) {
-  if (typeof env !== 'undefined') {
-    value = boolean(env);
+  if (typeof env === 'string') {
+    value = env.toLowerCase() === 'true';
   }
   return value;
 }

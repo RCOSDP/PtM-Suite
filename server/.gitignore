@@ -4,3 +4,4 @@ dist
 keys/
 .vscode/
 log/
+httplog/

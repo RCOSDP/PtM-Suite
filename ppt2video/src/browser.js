@@ -1,5 +1,5 @@
 import {Buffer} from 'buffer';
-import mm from 'music-metadata-browser';
+import {parseBuffer} from 'music-metadata';
 import axios from 'axios';
 import * as path from 'path-browserify';
 
@@ -69,9 +69,10 @@ const exports = {
 export async function getPptx(filename) {
   try {
     const buf = await readFile(filename);
+    const pptxSize = buf.byteLength;
     const pptx = await getPptxData(buf);
     const filepath = path.parse(filename);
-    return {...pptx, filepath, ...exports};
+    return {...pptx, pptxSize, filepath, ...exports};
   } catch(e) {
     throw new Error("PPTXファイルのオープンに失敗しました。\n" + e.message);
   }
@@ -169,6 +170,7 @@ async function process(options = {}) {
       let data;
       try {
         data = await this.muxTopic(topic, chunks, fps);
+        topic.fileSize = data.byteLength;
       } catch(e){
         throw new Error('can not mux topic.\n' + e.message);
       }
@@ -179,6 +181,7 @@ async function process(options = {}) {
       }
       // update timeRequired in json
       const sum = topic.slides.reduce((acc,slide) => acc + slide.duration,0);
+      topic.duration = sum;
       topic.importJson.timeRequired = sum > 1 ? Math.floor(sum) : 1;
     }
   }
@@ -358,34 +361,34 @@ async function encode(encoder, ibarray, fps, darray) {
 //
 
 async function createFFmpeg() {
-  const ffmpeg = FFmpeg.createFFmpeg({
-    corePath: config.ffmpegDir + "/ffmpeg-core.js",
-    log: true
-  });
-  await ffmpeg.load();
+  const ffmpeg = new FFmpegWASM.FFmpeg();
+  await ffmpeg.load({
+    coreURL: config.ffmpegDir + '/ffmpeg-core.js',
+    wasmURL: config.ffmpegDir + '/ffmpeg-core.wasm',
+  })
   return ffmpeg;
 }
 
 async function ffrun(ffmpeg, cmdline) {
   const cmdarray = cmdline.split(/ +/);
   console.log("ffmpeg run ", cmdarray);
-  return ffmpeg.run(...cmdarray);
+  return ffmpeg.exec(cmdarray);
 }
 
-function ffwrite(ffmpeg, filename, data) {
+async function ffwrite(ffmpeg, filename, data) {
   if (!(data instanceof Uint8Array)) {
     data = new Uint8Array(data);
   }
-  ffmpeg.FS('writeFile', filename, data);
+  await ffmpeg.writeFile(filename, data);
 }
 
-function ffread(ffmpeg, filename) {
-  const data = ffmpeg.FS('readFile', filename);
+async function ffread(ffmpeg, filename) {
+  const data = await ffmpeg.readFile(filename);
   return data.buffer;
 }
 
-function ffunlink(ffmpeg, filename) {
-  ffmpeg.FS('unlink', filename);
+async function ffunlink(ffmpeg, filename) {
+  await ffmpeg.deleteFile(filename);
 }
 
 function concat(chunks) {
@@ -404,31 +407,31 @@ async function muxTopic(topic, chunks, fps = 25) {
   const {ffmpeg} = this;
   const coption = "-c:v copy -c:a aac";
 
-  ffwrite(ffmpeg, topic.inputFilename, concat(chunks));
+  await ffwrite(ffmpeg, topic.inputFilename, concat(chunks));
 
   if (topic.slides.length === 1) {
     const slide = topic.slides[0];
-    ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
+    await ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
     await ffrun(ffmpeg, `-r ${fps} -i ${topic.inputFilename} -i ${slide.audioFilename} ${coption} ${topic.outputFilename}`);
-    ffunlink(ffmpeg, slide.audioFilename);
+    await ffunlink(ffmpeg, slide.audioFilename);
   } else {
     const blob = new Blob([topic.listData]);
     const ab = await blob.arrayBuffer();
-    ffwrite(ffmpeg, topic.listFilename, ab);
+    await ffwrite(ffmpeg, topic.listFilename, ab);
     for (const slide of topic.slides) {
-      ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
+      await ffwrite(ffmpeg, slide.audioFilename, slide.soundData);
     }
     await ffrun(ffmpeg, `-r ${fps} -i ${topic.inputFilename} -f concat -i ${topic.listFilename} ${coption} ${topic.outputFilename}`);
     for (const slide of topic.slides) {
-      ffunlink(ffmpeg, slide.audioFilename);
+      await ffunlink(ffmpeg, slide.audioFilename);
     }
-    ffunlink(ffmpeg, topic.listFilename);
+    await ffunlink(ffmpeg, topic.listFilename);
   }
 
-  ffunlink(ffmpeg, topic.inputFilename);
+  await ffunlink(ffmpeg, topic.inputFilename);
 
-  const data = ffread(ffmpeg, topic.outputFilename);
-  ffunlink(ffmpeg, topic.outputFilename);
+  const data = await ffread(ffmpeg, topic.outputFilename);
+  await ffunlink(ffmpeg, topic.outputFilename);
   return data;
 }
 
@@ -447,7 +450,7 @@ if (ltik) {
 
 async function getSoundDuration(data) {
   const buf = Buffer.from(data);
-  const mmp = await mm.parseBuffer(buf);
+  const mmp = await parseBuffer(buf);
   return mmp.format.duration;
 }
 
@@ -482,10 +485,20 @@ async function createAudioTopic(topic) {
   }
 }
 
-async function checkPolly() {
+export async function checkPolly() {
   let res;
   try {
     res = await axios.post(config.pollyProxy, {});
+  } catch(e){
+    return e.message;
+  }
+  return res.data;
+}
+
+export async function submitLog(data) {
+  let res;
+  try {
+    res = await axios.post(config.submitLog, data);
   } catch(e){
     return e.message;
   }

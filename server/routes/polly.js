@@ -2,10 +2,8 @@ import express from "express";
 import cors from "cors";
 const router = express.Router();
 
-import bearerToken from 'express-bearer-token';
-router.use(bearerToken());
-import { check } from './login.js';
-router.use(check);
+import { bearer, check, auth } from './login.js';
+router.use(bearer, check, auth);
 
 import { PollyClient, SynthesizeSpeechCommand } from '@aws-sdk/client-polly';
 import config from '../config.js';
@@ -47,8 +45,9 @@ router.post("/", cors(), async function (req, res, next) {
     const data = await SynthesizeSpeech(req.body);
     res.setHeader("content-type", data.ContentType);
     const len = data.RequestCharacters;
-    req.locals.len = len;
     if (config.authorization) access.processed(len);
+    req.locals.len = len;
+    req.locals.mp3size = data.AudioStream.length;
     res.send(data.AudioStream);
   } catch (error) {
     error.statusCode = error.$metadata.httpStatusCode;

@@ -62,59 +62,99 @@ $ npm install
 $ npm run copy
 ```
 
-## server 及び Web アプリの起動方法
+## server 及び Web アプリの起動方法 (アクセス制限なし)
 
-- アクセス制限なしで動作確認する
+アクセス制限なしで動作確認する場合は、次のようにします。
+
+- polly proxy を起動する
   - AWS用環境変数を適切に設定する
     - AWS_REGION
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
-
-  - polly proxy の起動
 
 ```
 $ cd server
 $ PROT=http POLLY_WASM=true node bin/www
 ```
 
-  - chrome ブラウザで http://localhost:3000/app にアクセスする
+- chrome ブラウザで http://localhost:3000/app にアクセスする
 
-- アクセス制限あり、アドイン用サイトに機能追加する場合
-  - ビルド、npm run copy 済みの server 以下すべてをコピー
-  - Apache の設定を変更して /app を SP配下にする
-  - /ffmpeg を配布する
-  - 環境変数 POLLY_WASM=true を追加して polly proxy を起動する
+## server 及び Web アプリの起動方法 (アクセス制限あり,sample-login 使用)
+
+アクセス制限あり、sample-login を使用して動作確認する場合は、次のようにします。
+
+- sample-login を起動する
+
+```
+$ export POLLY_PASSWORD=chilo
+$ export POLLY_LOGIN_URL=http://localhost:3000/login
+$ export POLLY_DIALOG_FINISHED_URL=http://localhost:3000/app
+
+$ cd sample-login
+$ PORT=3006 PROT=http bin/www
+```
+
+- polly proxy を起動する
+  - AWS用環境変数を適切に設定する
+
+```
+$ export POLLY_APP_START_URL=http://localhost:3006/dialog/start
+
+$ cd server
+$ PROT=http POLLY_WASM=true POLLY_AUTHORIZATION=true node bin/www
+```
+
+- chrome ブラウザで http://localhost:3000/app にアクセスする
 
 ## server の仕様
 
-- POLLY_WASM 環境変数が true のとき WASM版がサポートされる
-  - デフォルトは false
+- POLLY_WASM 環境変数が true のとき WASM版がサポートされる (デフォルト false)
+  - /app, /app/polly などへのアクセスが有効になる
+  - アドイン、WASM版を同時にサポートする
 
-- アドイン、WASM版を同時にサポートする
-
-- 学認SP と組み合わせてアクセス制限機能に対応する
-  - 認証されたユーザだけが WASM版を使用できる
+- POLLY_AUTHORIZATION 環境変数が true のとき、アドイン,WASM版ともにトークンを使ったアクセス制限を行う
+  - sample-login, sample-gakunin と組み合わせてアクセス制限機能に対応する
+  - 認証されたユーザだけが アドイン,WASM版を使用できる
   - 使用量制限や使用量ログの記録が行える
-
-- ログ
-  - アドインとはパスが異なる
-  - ユーザは記録されない
-
-```
-::1 - POST /app/polly 200 - 24
-::1 - POST /app/polly 200 - 35
-::1 - POST /app/polly 200 - 46
-```
+  - アクセス制限の詳細は docs/spec/access.md に記載
 
 - パス
 
+アドインとWASM版が使用するパスは、以下のとおりです。
+
 |用途      |パス              |サーバ |
 |----------|------------------|------------------------- |
-|addin     |/polly            |polly proxy |
+|addin     |/polly            |polly proxy (トークン) |
 |addin     |/login            |polly proxy |
 |addin     |/index.html       |Apache または polly proxy |
 |addin     |/finished.html    |Apache または polly proxy |
-|addin     |/dialog/start     |学認SP |
-|WASM版    |/app/index.html   |学認SP |
-|WASM版    |/app/polly        |学認SP |
-|WASM版    |/ffmpeg/...       |Apache または polly proxy |
+|addin     |/dialog/start     |学認SP, sample-gakunin    |
+|WASM版*1  |/app/start        |学認SP, sample-gakunin    |
+|WASM版*2  |/app/index.html   |polly proxy |
+|WASM版*3  |/app/polly        |polly proxy (トークン) |
+|WASM版*4  |/app/log          |polly proxy (トークン) |
+|WASM版    |/ffmpeg/...       |polly proxy |
+
+*1 sample-gakunin を addin 用とは別設定でもう1つ追加で動作させる
+*2 WASM版 /app/index.html は SP 配下に入れない
+*3 WASM版 /app/polly 呼び出しは SP 配下に入れない、トークンをチェックする
+*4 WASM版 /app/log ログ保存 API を追加、トークンをチェックする
+
+sample-gakunin 実行後に redirect する先は /app にします。index.php の以下の設定が変更になります。
+
+```
+$POLLY_DIALOG_FINISHED_URL = 'https://localhost:3000/finished.html';
+```
+
+sample-gakunin を配置するパス /app/start を、server の環境変数 POLLY_APP_START_URL で指定します。
+server の動作に必要な環境変数については、以下の表を参考にしてください。
+
+| 環境変数              | 設定値 |
+|-----------------------|--------|
+| AWS_REGION            | 適切な値 |
+| AWS_ACCESS_KEY_ID     | 適切な値 |
+| AWS_SECRET_ACCESS_KEY | 適切な値 |
+| POLLY_WASM            | true |
+| POLLY_AUTHORIZATION   | true |
+| POLLY_LOGDIR その他   | docs/spec/ascess.md 参照 |
+| POLLY_APP_START_URL   | 例: https://host/app/start |
